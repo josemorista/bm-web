@@ -42,18 +42,15 @@ const Container = styled.main`
 
 			> * {
 				& + * {
-					margin-top: 1rem;
+					margin-top: 1.5rem;
 				}
 			}
 
 			a {
 				display: block;
-				color: ${({ theme }) => theme.colors.blue500};
+				color: ${({ theme }) => theme.colors.white};
 				text-align: center;
-
-				&:hover {
-					text-decoration: underline;
-				}
+				text-decoration: underline;	
 			}
 		}
 	}

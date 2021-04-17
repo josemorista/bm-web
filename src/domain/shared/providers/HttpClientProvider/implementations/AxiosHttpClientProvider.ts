@@ -3,16 +3,31 @@ import { httpClientConfig } from '../../../../config/httpClient';
 import { AppError } from '../../../errors/AppError';
 import { IHttpResponseDTO, IDeleteMethodDTO, IGetMethodDTO, IHttpClientProvider, IPatchMethodDTO, IPostMethodDTO, IPutMethodDTO } from '../models/IHttpClientProvider';
 
+let instance: AxiosHttpClientProvider | null = null;
 export class AxiosHttpClientProvider implements IHttpClientProvider {
 
 	private api: AxiosInstance;
 
-
-
 	constructor() {
-		this.api = axios.create({
-			timeout: httpClientConfig.timeout
-		});
+		if (!instance) {
+			this.api = axios.create({
+				timeout: httpClientConfig.timeout
+			});
+			instance = this;
+			return instance;
+		} else {
+			return instance;
+		}
+	}
+
+	addDefaultHeader(name: string, value: unknown): void {
+		this.api.defaults.headers[name] = value;
+	}
+
+	removeDefaultHeader(name: string): void {
+		if (this.api.defaults.headers[name]) {
+			delete this.api.defaults.headers[name];
+		}
 	}
 
 

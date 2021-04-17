@@ -11,7 +11,7 @@ export default class MyDocument extends Document<any> {
 			// wraps the collectStyles provider around our <App />.
 			ctx.renderPage = () =>
 				originalRenderPage({
-					enhanceApp: App => props => sheet.collectStyles(<App {...props} />),
+					enhanceApp: (App: React.ElementType) => (props: Record<string, unknown>) => sheet.collectStyles(<App {...props} />),
 				});
 
 			// extract the initial props that may be present.
@@ -37,7 +37,7 @@ export default class MyDocument extends Document<any> {
 			<Html>
 				<Head>
 					<link rel="preconnect" href="https://fonts.gstatic.com" />
-					<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600&display=swap" rel="stylesheet" />
+					<link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap" rel="stylesheet" />
 					{this.props.styleTags /*rendering the actually stylesheet*/}
 				</Head>
 				<body>

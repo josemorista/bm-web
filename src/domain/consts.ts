@@ -6,5 +6,5 @@ export const API_ROUTES = {
 };
 
 export const CACHE_KEYS = {
-	USER: 'user'
+	USER_TOKEN: 'token'
 };

@@ -33,7 +33,7 @@ export const GlobalStyles = createGlobalStyle`
 	input,
 	textarea,
 	legend {
-		font-family: 'Raleway', Ubuntu, sans-serif;
+		font-family: Ubuntu, sans-serif;
 		font-size: 1.6rem;
 		font-weight: 400;
 	}
@@ -45,7 +45,7 @@ export const GlobalStyles = createGlobalStyle`
 	h5,
 	h6,
 	strong {
-		font-weight: 600;
+		font-weight: 700;
 	}
 
 	h1 {
@@ -78,7 +78,7 @@ export const GlobalStyles = createGlobalStyle`
 
 	button {
 		cursor: pointer;
-		font-weight: 600;
+		font-weight: 700;
 	}
 
 `;

@@ -6,12 +6,33 @@ import { HomeStyles } from './_styles';
 import { Input } from '../components/Input';
 import { Button } from '../components/Button';
 import { ROUTES } from '../consts';
+import { useToastMessage } from '../hooks/useToastMessage';
+import { useForm } from 'react-hook-form';
+import { useCallback } from 'react';
+import { useAuthentication } from '../hooks/useAuthentication';
+
 
 export default function Home() {
+
+	const { signIn } = useAuthentication();
+	const { setToastMessage } = useToastMessage();
+	const { register, handleSubmit } = useForm();
+
+	const onSubmit = useCallback(async (data) => {
+		try {
+			signIn(data);
+		} catch (error) {
+			setToastMessage({
+				message: error.message,
+				type: 'error'
+			});
+		}
+	}, [setToastMessage, signIn]);
+
 	return (
 		<div>
 			<Head>
-				<title>Bem vindo | Bone metastasis</title>
+				<title>Welcome | Bone metastasis</title>
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 			<HomeStyles.Container>
@@ -20,13 +41,13 @@ export default function Home() {
 						<img src="/assets/imgs/png/uffLogo.png" alt="UFF" />
 						<img src="/assets/imgs/png/huapLogo.png" alt="HUAP" />
 					</header>
-					<form>
-						<Input placeholder="Digite seu email" />
-						<Input placeholder="Digite sua senha" />
-						<Button type='submit'>Entrar</Button>
+					<form onSubmit={handleSubmit(onSubmit)}>
+						<Input {...register('email')} type="email" placeholder="Email" />
+						<Input {...register('password')} type="password" placeholder="Password" />
 						<Link href={ROUTES.REGISTER} prefetch>
-							<a>Não possui uma conta? Registre-se aqui</a>
+							<a>Does not have an account? SignIn</a>
 						</Link>
+						<Button type='submit'>SignIn</Button>
 					</form>
 				</section>
 				<section className="bg"></section>

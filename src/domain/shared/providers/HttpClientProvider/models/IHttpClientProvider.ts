@@ -10,7 +10,10 @@ export interface IHttpResponseDTO<Response> {
 	data: Response;
 	status: number
 }
+
 export interface IHttpClientProvider {
+	addDefaultHeader(name: string, value: unknown): void;
+	removeDefaultHeader(name: string): void;
 	post<Response>(data: IPostMethodDTO): Promise<IHttpResponseDTO<Response>>;
 	get<Response>(data: IGetMethodDTO): Promise<IHttpResponseDTO<Response>>;
 	put<Response>(data: IPutMethodDTO): Promise<IHttpResponseDTO<Response>>;

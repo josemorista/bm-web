@@ -15,14 +15,14 @@ export class CreateUserSessionService {
 		private cacheProvider: ICacheProvider
 	) { }
 
-	async execute({ email, password }: ICreateUserSessionServiceDTO): Promise<IUser> {
+	async execute({ email, password }: ICreateUserSessionServiceDTO): Promise<void> {
 
 		if (!this.formValidationProvider.isEmail(email)) {
-			throw new FormValidationError('Email inválido', 'email');
+			throw new FormValidationError('Invalid email', 'email');
 		}
 
 		if (!this.formValidationProvider.isSafePassword(password)) {
-			throw new FormValidationError('Senha inválida', 'password');
+			throw new FormValidationError('Password is not strong enough', 'password');
 		}
 
 		const { data: { user, token } } = await this.httpClientProvider.post<{ user: IUser; token: string }>({
@@ -33,9 +33,9 @@ export class CreateUserSessionService {
 			}
 		});
 
-		await this.cacheProvider.set(CACHE_KEYS.USER, { user, token });
+		this.httpClientProvider.addDefaultHeader('Authorization', `Bearer ${token}`);
 
-		return user;
+		await this.cacheProvider.set(CACHE_KEYS.USER_TOKEN, { token, userId: user.id });
 
 	}
 }

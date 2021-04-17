@@ -24,7 +24,7 @@ export default function Register() {
 		try {
 			await createUserService.execute(data);
 			setToastMessage({
-				message: 'Usuário criado com sucesso',
+				message: 'User created',
 				type: 'success'
 			});
 			router.push(ROUTES.HOME);
@@ -39,7 +39,7 @@ export default function Register() {
 	return (
 		<div>
 			<Head>
-				<title>Registre-se | Bone metastasis</title>
+				<title>SignUp | Bone metastasis</title>
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 			<RegisterStyles.Container>
@@ -50,16 +50,16 @@ export default function Register() {
 						<img src="/assets/imgs/png/huapLogo.png" alt="HUAP" />
 					</header>
 					<form onSubmit={handleSubmit(onSubmit)}>
-						<Input {...register('email')} placeholder="Digite seu email" type="email" />
-						<Input {...register('password')} placeholder="Digite sua senha" type="password" />
-						<Input {...register('firstName')} placeholder="Digite seu nome" type="text" />
-						<Input {...register('lastName')} placeholder="Digite seu sobrenome" type="text" />
-						<Input {...register('relatedInstitution')} placeholder="Digite sua instituição" type="text" />
-						<Input {...register('job')} placeholder="Digite sua ocupação" />
-						<Button type='submit'>Registrar</Button>
+						<Input {...register('email')} placeholder="Email" type="email" />
+						<Input {...register('password')} placeholder="Password" type="password" />
+						<Input {...register('firstName')} placeholder="Firstname" type="text" />
+						<Input {...register('lastName')} placeholder="Lastname" type="text" />
+						<Input {...register('relatedInstitution')} placeholder="Institution" type="text" />
+						<Input {...register('job')} placeholder="Job" />
 						<Link href={ROUTES.HOME} prefetch>
-							<a>Já possui uma conta? Entre aqui</a>
+							<a>Already have an account? SignIn</a>
 						</Link>
+						<Button type='submit'>SignUp</Button>
 					</form>
 				</section>
 			</RegisterStyles.Container>

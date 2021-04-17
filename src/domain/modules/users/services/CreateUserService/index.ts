@@ -13,14 +13,16 @@ export class CreateUserService {
 		private formValidationProvider: IFormValidationProvider
 	) { }
 
-	async execute({ email, password, ...rest }: ICreateUserServiceDTO): Promise<void> {
+	async execute(data: ICreateUserServiceDTO): Promise<void> {
+
+		const { email, password } = data;
 
 		if (!this.formValidationProvider.isEmail(email)) {
-			throw new FormValidationError('Email inválido', 'email');
+			throw new FormValidationError('Invalid email', 'email');
 		}
 
 		if (!this.formValidationProvider.isSafePassword(password)) {
-			throw new FormValidationError('Senha muito fraca', 'password');
+			throw new FormValidationError('Password is not strong enough', 'password');
 		}
 
 		const requiredFields: Array<keyof ICreateUserServiceDTO> = [
@@ -31,18 +33,14 @@ export class CreateUserService {
 		];
 
 		for (const field of requiredFields) {
-			if (!this.formValidationProvider.hasLength(rest[field], 1)) {
-				throw new FormValidationError('Campo requerido', field);
+			if (!this.formValidationProvider.hasLength(data[field] || '', 1)) {
+				throw new FormValidationError('Missing required field', field);
 			}
 		}
 
 		await this.httpClientProvider.post({
 			url: API_ROUTES.USERS,
-			body: {
-				email,
-				password,
-				...rest
-			}
+			body: data
 		});
 	}
 }
