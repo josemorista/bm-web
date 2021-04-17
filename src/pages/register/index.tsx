@@ -1,4 +1,4 @@
-import Head from 'next/head'
+import Head from 'next/head';
 import Link from 'next/link';
 
 import { RegisterStyles } from './_styles';
@@ -6,8 +6,20 @@ import { RegisterStyles } from './_styles';
 import { Input } from '../../components/Input';
 import { Button } from '../../components/Button';
 import { ROUTES } from '../../consts';
+import { useToastMessage } from '../../hooks/useToastMessage';
+import { useCallback } from 'react';
+import { useForm } from 'react-hook-form';
 
-export default function Home() {
+export default function Register() {
+
+	const { setToastMessage } = useToastMessage();
+	const { register, handleSubmit } = useForm();
+
+	const onSubmit = useCallback((data) => {
+		console.log(data);
+		//createUserService.execute(data);
+	}, []);
+
 	return (
 		<div>
 			<Head>
@@ -21,13 +33,13 @@ export default function Home() {
 						<img src="/assets/imgs/png/uffLogo.png" alt="UFF" />
 						<img src="/assets/imgs/png/huapLogo.png" alt="HUAP" />
 					</header>
-					<form>
-						<Input placeholder="Digite seu email" />
-						<Input placeholder="Digite sua senha" />
-						<Input placeholder="Digite seu nome" />
-						<Input placeholder="Digite seu sobrenome" />
-						<Input placeholder="Digite sua instituição" />
-						<Input placeholder="Digite sua ocupação" />
+					<form onSubmit={handleSubmit(onSubmit)}>
+						<Input {...register('email')} placeholder="Digite seu email" />
+						<Input {...register('password')} placeholder="Digite sua senha" />
+						<Input {...register('firstname')} placeholder="Digite seu nome" />
+						<Input {...register('lastname')} placeholder="Digite seu sobrenome" />
+						<Input {...register('institution')} placeholder="Digite sua instituição" />
+						<Input {...register('job')} placeholder="Digite sua ocupação" />
 						<Button type='submit'>Registrar</Button>
 						<Link href={ROUTES.HOME} prefetch>
 							<a>Já possui uma conta? Entre aqui</a>
@@ -36,5 +48,5 @@ export default function Home() {
 				</section>
 			</RegisterStyles.Container>
 		</div>
-	)
+	);
 }

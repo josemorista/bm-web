@@ -1,4 +1,3 @@
-import { inject, injectable } from 'tsyringe';
 import { API_ROUTES } from '../../../../consts';
 import { FormValidationError } from '../../../../shared/errors/FormValidationError';
 import { IFormValidationProvider } from '../../../../shared/providers/FormValidationProvider/models/IFormValidationProvider';
@@ -8,12 +7,9 @@ import { IUser } from '../../entities/IUser';
 
 type ICreateUserServiceDTO = Pick<IUser, 'email' | 'firstName' | 'lastName' | 'job' | 'password' | 'relatedInstitution'>;
 
-@injectable()
 export class CreateUserService {
 	constructor(
-		@inject('HttpClientProvider')
 		private httpClientProvider: IHttpClientProvider,
-		@inject('FormValidationProvider')
 		private formValidationProvider: IFormValidationProvider
 	) { }
 
