@@ -10,9 +10,9 @@ import { useToastMessage } from '../hooks/useToastMessage';
 import { useForm } from 'react-hook-form';
 import { useCallback } from 'react';
 import { useAuthentication } from '../hooks/useAuthentication';
+import { withAuth } from '../hocs';
 
-
-export default function Home() {
+function Home() {
 
 	const { signIn } = useAuthentication();
 	const { setToastMessage } = useToastMessage();
@@ -20,7 +20,7 @@ export default function Home() {
 
 	const onSubmit = useCallback(async (data) => {
 		try {
-			signIn(data);
+			await signIn(data);
 		} catch (error) {
 			setToastMessage({
 				message: error.message,
@@ -55,3 +55,5 @@ export default function Home() {
 		</div>
 	);
 }
+
+export default withAuth(Home, { strictPublic: true, strictPrivate: false });

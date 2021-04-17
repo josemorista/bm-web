@@ -11,10 +11,11 @@ import { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { CreateUserServiceFactory } from '../../domain/modules/users/factories/CreateUserServiceFactory';
 import { useRouter } from 'next/router';
+import { withAuth } from '../../hocs';
 
 const createUserService = CreateUserServiceFactory.create();
 
-export default function Register() {
+function Register() {
 
 	const router = useRouter();
 	const { setToastMessage } = useToastMessage();
@@ -66,3 +67,5 @@ export default function Register() {
 		</div>
 	);
 }
+
+export default withAuth(Register, { strictPrivate: false, strictPublic: true });

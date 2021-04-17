@@ -42,7 +42,7 @@ export class AxiosHttpClientProvider implements IHttpClientProvider {
 			return { data: data as Response, status };
 		} catch (error) {
 			if (error.response) {
-				throw new AppError(error.response.data.error, error.response.status);
+				throw new AppError(error.response.data.message, error.response.status);
 			}
 			throw error;
 		}
@@ -59,7 +59,7 @@ export class AxiosHttpClientProvider implements IHttpClientProvider {
 			return { data: data as Response, status };
 		} catch (error) {
 			if (error.response) {
-				throw new AppError(error.response.data.error, error.response.status);
+				throw new AppError(error.response.data.message, error.response.status);
 			}
 			throw error;
 		}
@@ -76,7 +76,7 @@ export class AxiosHttpClientProvider implements IHttpClientProvider {
 			return { data: data as Response, status };
 		} catch (error) {
 			if (error.response) {
-				throw new AppError(error.response.data.error, error.response.status);
+				throw new AppError(error.response.data.message, error.response.status);
 			}
 			throw error;
 		}
@@ -93,7 +93,7 @@ export class AxiosHttpClientProvider implements IHttpClientProvider {
 			return { data: data as Response, status };
 		} catch (error) {
 			if (error.response) {
-				throw new AppError(error.response.data.error, error.response.status);
+				throw new AppError(error.response.data.message, error.response.status);
 			}
 			throw error;
 		}
@@ -110,7 +110,7 @@ export class AxiosHttpClientProvider implements IHttpClientProvider {
 			return { data: data as Response, status };
 		} catch (error) {
 			if (error.response) {
-				throw new AppError(error.response.data.error, error.response.status);
+				throw new AppError(error.response.data.message, error.response.status);
 			}
 			throw error;
 		}

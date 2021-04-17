@@ -18,9 +18,9 @@ export class GetUserFromSessionService {
 
 		if (!credentials) return null;
 
-		const { data: { isValid } } = await this.httpClientProvider.get<{ isValid: boolean }>({
+		const { data: { isValid } } = await this.httpClientProvider.post<{ isValid: boolean }>({
 			url: `${API_ROUTES.SESSIONS}/verify-token`,
-			params: {
+			body: {
 				token: credentials.token
 			}
 		});
