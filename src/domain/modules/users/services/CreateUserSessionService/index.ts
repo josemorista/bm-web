@@ -1,4 +1,4 @@
-import { API_ROUTES } from '../../../../consts';
+import { API_ROUTES, CACHE_KEYS } from '../../../../consts';
 import { FormValidationError } from '../../../../shared/errors/FormValidationError';
 import { ICacheProvider } from '../../../../shared/providers/CacheProvider/models/ICacheProvider';
 import { IFormValidationProvider } from '../../../../shared/providers/FormValidationProvider/models/IFormValidationProvider';
@@ -33,7 +33,7 @@ export class CreateUserSessionService {
 			}
 		});
 
-		await this.cacheProvider.set('user', { user, token });
+		await this.cacheProvider.set(CACHE_KEYS.USER, { user, token });
 
 		return user;
 
