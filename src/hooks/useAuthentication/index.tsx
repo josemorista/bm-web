@@ -36,6 +36,8 @@ export const AuthenticationProvider = ({ children }: IAuthenticationProviderProp
 			} else {
 				setUser({} as IUser);
 			}
+		}).catch(() => {
+			setUser({} as IUser);
 		});
 	}, []);
 

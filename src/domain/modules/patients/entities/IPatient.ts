@@ -3,17 +3,16 @@ export interface IPatient {
 	name: string;
 	dicomPatientId: string | null;
 
-	birthDate: Date | null;
+	birthDate: Date | string | null;
 	sex: 'M' | 'F';
 
 	previousBoneLesions: boolean | null;
 	previousQt: boolean | null;
 	previousRt: boolean | null;
 	previousCancerDiagnosis: boolean | null;
-	previousCancerDiagnosisType?: string;
-	observations: string;
+	description: string;
 
 	ownerId: string;
-	createdAt: Date;
-	updatedAt: Date;
+	createdAt: Date | string;
+	updatedAt: Date | string;
 }

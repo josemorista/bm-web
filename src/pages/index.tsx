@@ -44,7 +44,7 @@ function Home() {
 					<form onSubmit={handleSubmit(onSubmit)}>
 						<Input {...register('email')} type="email" placeholder="Email" />
 						<Input {...register('password')} type="password" placeholder="Password" />
-						<Link href={ROUTES.REGISTER} prefetch>
+						<Link href={ROUTES.REGISTER}>
 							<a>Does not have an account? SignIn</a>
 						</Link>
 						<Button type='submit'>SignIn</Button>

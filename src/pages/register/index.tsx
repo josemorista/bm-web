@@ -57,7 +57,7 @@ function Register() {
 						<Input {...register('lastName')} placeholder="Lastname" type="text" />
 						<Input {...register('relatedInstitution')} placeholder="Institution" type="text" />
 						<Input {...register('job')} placeholder="Job" />
-						<Link href={ROUTES.HOME} prefetch>
+						<Link href={ROUTES.HOME}>
 							<a>Already have an account? SignIn</a>
 						</Link>
 						<Button type='submit'>SignUp</Button>
