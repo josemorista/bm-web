@@ -7,7 +7,7 @@ export const GlobalStyles = createGlobalStyle`
 		background-color: transparent;
 		box-shadow: none;
 		box-sizing: border-box;
-		outline: none;
+		outline: 0;
 	}
 
 	html {
@@ -79,6 +79,11 @@ export const GlobalStyles = createGlobalStyle`
 	button {
 		cursor: pointer;
 		font-weight: 700;
+	}
+
+	ul,
+	li {
+		list-style: none;
 	}
 
 `;

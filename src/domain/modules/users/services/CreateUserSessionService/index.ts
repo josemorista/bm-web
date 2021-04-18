@@ -23,7 +23,7 @@ export class CreateUserSessionService {
 		}
 
 		if (!this.formValidationProvider.isSafePassword(password)) {
-			throw new FormValidationError('Password is not strong enough', 'password');
+			throw new FormValidationError('Invalid password', 'password');
 		}
 
 		const { data: { user, token } } = await this.httpClientProvider.post<{ user: IUser; token: string }>({

@@ -17,7 +17,7 @@ export const Button = styled.button<IButtonProps>`
 		if (variant === 'secondary') {
 			return css`
 				background-color: ${theme.colors.white};
-				color: ${theme.colors.blue600};
+				color: ${theme.colors.blue500};
 			`;
 		}
 		return css`
@@ -25,5 +25,11 @@ export const Button = styled.button<IButtonProps>`
 				color: ${theme.colors.white};
 			`;
 	}};
+
+	transition: filter .5s;
+
+	&:hover {
+		filter: brightness(0.7);
+	}
 
 `;
