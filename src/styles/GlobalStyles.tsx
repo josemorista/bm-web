@@ -32,6 +32,7 @@ export const GlobalStyles = createGlobalStyle`
 	a,
 	input,
 	textarea,
+	select,
 	legend {
 		font-family: Ubuntu, sans-serif;
 		font-size: 1.6rem;

@@ -5,6 +5,10 @@ const Container = styled.main`
 		margin: 2rem auto;
 		max-width: 1800px;
 
+		@media (max-width: 1800px) {
+			margin: 2rem;
+		}
+
 		> h1 {
 			margin-bottom: 3rem;
 
@@ -14,14 +18,30 @@ const Container = styled.main`
 		}
 
 		> section {
-			max-width: 500px;
-			margin-bottom: 3rem;
+			&:first-of-type {
+				max-width: 500px;
+				margin-bottom: 3rem;
+			}
 		}
 
 		ul {
 			border: 1px solid ${({ theme }) => theme.colors.blue500};
 			border-radius: 6px;
 			padding: 2rem;
+			margin-bottom: 3rem;
+		}
+
+		.addPatientButtonContainer {
+			
+			display: flex;
+			justify-content: flex-end;
+
+			> button {
+				svg {
+					width: 2rem;
+					height: 2rem;
+				}
+			}
 		}
 	}
 `;
@@ -96,8 +116,30 @@ const PatientListItem = styled.li`
 	}
 `;
 
+const NewOrEditPatientModal = styled.div`
+	
+	h1 {
+		color: ${({ theme }) => theme.colors.blue500};
+		border-bottom: 1px solid ${({ theme }) => theme.colors.blue500};
+		margin-bottom: 1rem;
+	}
+
+	input,
+	select,
+	textarea,
+	button {
+		margin-top: 1rem;	 
+	}
+
+	.submitButtonContainer {
+		display: flex;
+		justify-content: flex-end;
+	}
+
+`;
 
 export const MyPatientsStyles = {
 	Container,
-	PatientListItem
+	PatientListItem,
+	NewOrEditPatientModal
 };

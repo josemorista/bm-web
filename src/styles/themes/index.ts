@@ -12,5 +12,8 @@ export const theme = {
 		red300: '#d9534f',
 		red400: '#D15959',
 		red500: '#ff0033'
+	},
+	zIndexDepths: {
+		modal: 10
 	}
 };

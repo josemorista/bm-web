@@ -1,12 +1,20 @@
-import { useEffect, useState } from 'react';
+import { forwardRef, useCallback, useImperativeHandle, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { Button } from '../../components/Button';
 import { Input } from '../../components/Input';
-import { Modal } from '../../components/Modal';
+import { IModalHandle, Modal } from '../../components/Modal';
+import { Select } from '../../components/Select';
+import { Textarea } from '../../components/Textarea';
 import { IPatient } from '../../domain/modules/patients/entities/IPatient';
+import { formatDate } from '../../utils/formatDate';
+import { MyPatientsStyles } from './_styles';
 
 interface INewOrEditPatientModalProps {
-	patientId?: string;
-	onCloseAction: () => void | Promise<void>;
+	onCloseAction?: () => void | Promise<void>;
+}
+
+export interface IINewOrEditPatientModalHandler {
+	handleOpenModal(patientId?: string): Promise<void>;
 }
 
 const patients: Array<IPatient> = [
@@ -27,22 +35,78 @@ const patients: Array<IPatient> = [
 	}
 ];
 
-export const NewOrEditPatientModal = ({ patientId, onCloseAction }: INewOrEditPatientModalProps) => {
+export const NewOrEditPatientModal = forwardRef<IINewOrEditPatientModalHandler, INewOrEditPatientModalProps>(({ onCloseAction }, ref) => {
 
-	const { register, handleSubmit, setValue } = useForm();
+	const modalRef = useRef<IModalHandle>(null);
+	const { register, handleSubmit, setValue, reset } = useForm();
 
-	useEffect(() => {
-		const fetchedPatient = patients.find(el => el.id === patientId);
-		if (fetchedPatient) {
-			for (const key of Object.keys(fetchedPatient) as Array<keyof IPatient>) {
-				setValue(key, fetchedPatient[key] || '');
+	const [modalTexts, setModalTexts] = useState({
+		title: 'New patient',
+		submit: 'Create'
+	});
+
+	const onSubmit = useCallback((data) => {
+		console.table(data);
+		(onCloseAction && (onCloseAction()));
+		modalRef.current?.closeModal();
+	}, [onCloseAction]);
+
+	const handleOpenModal: IINewOrEditPatientModalHandler['handleOpenModal'] = useCallback(async (patientId) => {
+		if (patientId) {
+			const fetchedPatient = patients.find(el => el.id === patientId);
+			if (fetchedPatient) {
+				setModalTexts({
+					title: fetchedPatient.name,
+					submit: 'Edit'
+				});
+				for (const key of Object.keys(fetchedPatient) as Array<keyof IPatient>) {
+					if (key === 'birthDate' && fetchedPatient[key]) {
+						setValue(key, formatDate(fetchedPatient[key] || ''));
+					} else {
+						setValue(key, fetchedPatient[key] || '');
+					}
+				}
 			}
+		} else {
+			setModalTexts({
+				title: 'New patient',
+				submit: 'Create'
+			});
+			reset();
 		}
-	}, [patientId, setValue]);
+		modalRef.current?.openModal();
+	}, [setValue, reset]);
 
-	return <Modal open={true}>
-		<form>
-			<Input  {...register('name')} />
-		</form>
+	useImperativeHandle(ref, () => ({
+		handleOpenModal
+	}));
+
+	return <Modal ref={modalRef} onCloseEvent={() => {
+		(onCloseAction && (onCloseAction()));
+		modalRef.current?.closeModal();
+	}}>
+		<MyPatientsStyles.NewOrEditPatientModal>
+			<h1>
+				{modalTexts.title}
+			</h1>
+			<form onSubmit={handleSubmit(onSubmit)}>
+
+				<Input  {...register('name')} placeholder="Patient name" />
+				<Input  {...register('birthDate')} placeholder="Birth date" />
+
+				<Select {...register('sex')} defaultValue="M" placeholder="Sex">
+					<option value="M">Male</option>
+					<option value="F">Female</option>
+				</Select>
+
+				<Textarea {...register('description')} placeholder="Description"></Textarea>
+
+				<section className="submitButtonContainer">
+					<Button type="submit" variant="primary">
+						{modalTexts.submit}
+					</Button>
+				</section>
+			</form>
+		</MyPatientsStyles.NewOrEditPatientModal>
 	</Modal>;
-};
+});

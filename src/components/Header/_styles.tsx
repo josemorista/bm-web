@@ -4,7 +4,7 @@ const Container = styled.header`
 	height: 9rem;
 	display: flex;
 	background: ${({ theme }) => theme.colors.blue500};
-
+	
 	> section {
 		margin: auto 0;
 		margin-left: auto;

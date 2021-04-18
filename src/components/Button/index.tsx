@@ -1,35 +1,15 @@
-import styled, { css } from 'styled-components';
+import { ButtonHTMLAttributes } from 'react';
+import { ButtonStyles } from './_styles';
 
-interface IButtonProps {
+interface IButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 	variant?: 'primary' | 'secondary';
+	children: React.ReactNode;
 }
 
-export const Button = styled.button<IButtonProps>`
-	
-	height: 5rem;
-
-	padding: 0 1.5rem;
-
-	border: 0;
-	border-radius: 6px;
-	
-	${({ theme, variant }) => {
-		if (variant === 'secondary') {
-			return css`
-				background-color: ${theme.colors.white};
-				color: ${theme.colors.blue500};
-			`;
-		}
-		return css`
-				background-color: ${theme.colors.blue500};
-				color: ${theme.colors.white};
-			`;
-	}};
-
-	transition: filter .5s;
-
-	&:hover {
-		filter: brightness(0.7);
-	}
-
-`;
+export const Button = ({ variant = 'primary', children, ...rest }: IButtonProps) => {
+	return <ButtonStyles.Container variant={variant} {...rest}>
+		<div className="content">
+			{children}
+		</div>
+	</ButtonStyles.Container>;
+};
