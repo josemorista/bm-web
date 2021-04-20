@@ -10,7 +10,7 @@ const Container = styled.main`
 		}
 
 		> h1 {
-			margin-bottom: 3rem;
+			margin: 3rem 0	;
 
 			font-size: 4.5rem;
 			font-weight: 400;

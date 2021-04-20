@@ -8,6 +8,9 @@ export const theme = {
 		gray800: '#312E38',
 
 		green300: '#5cb85c',
+		green900: '#60F947',
+
+		yellow600: '#D1BE59',
 
 		red300: '#d9534f',
 		red400: '#D15959',
