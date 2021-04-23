@@ -3,7 +3,7 @@ import { IFormValidationProvider } from '../models/IFormValidationProvider';
 export class RegexFormValidationProvider implements IFormValidationProvider {
 
 	hasLength(data: string, length: number): boolean {
-		return data.length >= length;
+		return new RegExp(`.{${length},}`, 'ig').test(data);
 	}
 
 	isEmail(data: string): boolean {
@@ -11,7 +11,7 @@ export class RegexFormValidationProvider implements IFormValidationProvider {
 	}
 
 	isSafePassword(data: string): boolean {
-		return this.hasLength(data, 3);
+		return this.hasLength(data, 6) && /\d/.test(data) && /[a-z]/ig.test(data) && /[&._-]/.test(data);
 	}
 
 	isValidDate(data: string): boolean {

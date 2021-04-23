@@ -1,15 +1,24 @@
 import Head from 'next/head';
+import { useRef } from 'react';
 import { FiArrowUp } from 'react-icons/fi';
+import { Button } from '../../components/Button';
 import { Header } from '../../components/Header';
 import { Led } from '../../components/Led';
 import { Tab, Tabs } from '../../components/Tabs';
-import { ExamsStyles } from './_styles';
+import { IINewExamModalHandler, NewExamModal } from './_newExamModal';
+import { PatientStyles } from './_[patient]_styles';
 
-export default function Exams() {
-	return <ExamsStyles.Container>
+export default function Patient() {
+
+	const newExamModalRef = useRef<IINewExamModalHandler>(null);
+
+	return <PatientStyles.Container>
 		<Head>
 			<title>Exams | Bone Metastasis</title>
 		</Head>
+		<NewExamModal patientId={'1'} ref={newExamModalRef} onCloseAction={() => {
+			console.log('closed');
+		}} />
 		<Header />
 		<main>
 			<h1>João da Silva</h1>
@@ -21,14 +30,14 @@ export default function Exams() {
 				Lorem Ipsum is simply dummy text of the printing and typesetting industry
 			</p>
 
-			<ExamsStyles.ExamsSection>
+			<PatientStyles.ExamsSection>
 				<Tabs>
 					<Tab isActive={true}>Frontscans</Tab>
 					<Tab isActive={false}>Backscans</Tab>
 				</Tabs>
 
 				<ul className="examsList">
-					<ExamsStyles.ExamListItem status="positive">
+					<PatientStyles.ExamListItem status="positive">
 						<Led status='success' />
 						<div>
 							<p className="examName">Posterior01</p>
@@ -51,8 +60,8 @@ export default function Exams() {
 								</span>
 							</p>
 						</div>
-					</ExamsStyles.ExamListItem>
-					<ExamsStyles.ExamListItem status="negative">
+					</PatientStyles.ExamListItem>
+					<PatientStyles.ExamListItem status="negative">
 						<Led status='error' />
 						<div>
 							<p className="examName">Posterior01</p>
@@ -75,8 +84,8 @@ export default function Exams() {
 								</span>
 							</p>
 						</div>
-					</ExamsStyles.ExamListItem>
-					<ExamsStyles.ExamListItem status="incomplete">
+					</PatientStyles.ExamListItem>
+					<PatientStyles.ExamListItem status="incomplete">
 						<Led status='alert' />
 						<div>
 							<p className="examName">Posterior01</p>
@@ -96,11 +105,14 @@ export default function Exams() {
 								Total affected area: -
 							</p>
 						</div>
-					</ExamsStyles.ExamListItem>
+					</PatientStyles.ExamListItem>
 				</ul>
-
-			</ExamsStyles.ExamsSection>
-
+			</PatientStyles.ExamsSection>
+			<section className="newExamButton">
+				<Button variant="primary" onClick={() => {
+					newExamModalRef.current?.handleOpenModal();
+				}}>New exam</Button>
+			</section>
 		</main>
-	</ExamsStyles.Container>;
+	</PatientStyles.Container>;
 }

@@ -30,6 +30,12 @@ const Container = styled.main`
 			margin-top: 1rem;
 			color: ${({ theme }) => theme.colors.white};
 		}
+
+		.newExamButton {
+			margin-top: 2rem;
+			display: flex;
+			justify-content: flex-end;
+		}
 	}
 
 `;
@@ -104,8 +110,52 @@ const ExamListItem = styled.li<IExamListItemProps>`
 	}
 `;
 
-export const ExamsStyles = {
+
+const NewExamModal = styled.div`
+	
+	h1 {
+		color: ${({ theme }) => theme.colors.blue500};
+		border-bottom: 1px solid ${({ theme }) => theme.colors.blue500};
+		margin-bottom: 1rem;
+	}
+
+	input,
+	select,
+	textarea,
+	button {
+		margin-top: 1rem;	 
+	}
+
+	.submitButtonContainer {
+		display: flex;
+		justify-content: flex-end;
+	}
+
+	.dropzoneContainer {
+		margin-top: 1rem;
+
+		cursor: pointer;
+		
+		width: 100%;
+		height: 200px;
+
+		display: flex;
+		align-items: center;
+		justify-content:center;
+
+		border: 1px dashed ${({ theme }) => theme.colors.blue500};
+
+		p {
+			color: ${({ theme }) => theme.colors.white};
+		}
+
+	}
+
+`;
+
+export const PatientStyles = {
 	Container,
 	ExamsSection,
-	ExamListItem
+	ExamListItem,
+	NewExamModal
 };

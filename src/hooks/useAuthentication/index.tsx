@@ -1,13 +1,13 @@
 import { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { IUser } from '../../domain/modules/users/entities/IUser';
-import { CloseUserSessionServiceFactory } from '../../domain/modules/users/factories/CloseUserSessionServiceFactory';
-import { CreateUserServiceFactory } from '../../domain/modules/users/factories/CreateUserServiceFactory';
-import { CreateUserSessionServiceFactory } from '../../domain/modules/users/factories/CreateUserSessionServiceFactory';
-import { GetUserFromSessionServiceFactory } from '../../domain/modules/users/factories/GetUserFromSessionServiceFactory';
+import { IUserCredentials } from '../../domain/modules/users/entities/IUserCredentials';
+import { UserServicesFactory } from '../../domain/modules/users/factories/UserServicesFactory';
+import { UserSessionsServicesFactory } from '../../domain/modules/users/factories/UserSessionsServicesFactory';
 
 interface IAuthenticationContext {
 	user: IUser;
 	signed: boolean;
+	token: string;
 	signIn(data: Pick<IUser, 'email' | 'password'>): Promise<void>;
 	signUp(data: Pick<IUser, 'email' | 'password' | 'firstName' | 'lastName' | 'job' | 'relatedInstitution'>): Promise<void>;
 	logout(): Promise<void>
@@ -20,32 +20,30 @@ interface IAuthenticationProviderProps {
 }
 
 // services
-const createUserService = CreateUserServiceFactory.create();
-const createUserSessionService = CreateUserSessionServiceFactory.create();
-const getUserFromSessionService = GetUserFromSessionServiceFactory.create();
-const closeUserSessionService = CloseUserSessionServiceFactory.create();
+const createUserService = UserServicesFactory.createCreateUserService();
+const createUserSessionService = UserSessionsServicesFactory.createCreateUserSessionService();
+const getUserSessionService = UserSessionsServicesFactory.createGetUserSessionService();
+const closeUserSessionService = UserSessionsServicesFactory.createCloseUserSessionService();
+const getUserService = UserServicesFactory.createGetUserService();
 
 export const AuthenticationProvider = ({ children }: IAuthenticationProviderProps) => {
 
-	const [user, setUser] = useState<IUser | undefined>(undefined);
-
-	useEffect(() => {
-		getUserFromSessionService.execute().then(resp => {
-			if (resp) {
-				setUser(resp);
-			} else {
-				setUser({} as IUser);
-			}
-		}).catch(() => {
-			setUser({} as IUser);
-		});
-	}, []);
+	const [contextState, setContextState] = useState<{
+		user: IUser,
+		credentials: IUserCredentials
+	} | undefined>(undefined);
 
 	const signIn: IAuthenticationContext['signIn'] = useCallback(async (data) => {
-		await createUserSessionService.execute(data);
-		const fetchedUser = await getUserFromSessionService.execute();
-		if (fetchedUser) {
-			setUser(fetchedUser);
+		const credentials = await createUserSessionService.execute(data);
+		const user = await getUserService.execute({
+			userId: credentials.userId,
+			authorizeToken: credentials.token
+		});
+		if (user) {
+			setContextState({
+				user,
+				credentials
+			});
 		}
 	}, []);
 
@@ -55,19 +53,45 @@ export const AuthenticationProvider = ({ children }: IAuthenticationProviderProp
 
 	const logout: IAuthenticationContext['logout'] = useCallback(async () => {
 		await closeUserSessionService.execute();
-		setUser({} as IUser);
+		setContextState({
+			user: {} as IUser,
+			credentials: {} as IUserCredentials
+		});
 	}, []);
 
-	if (user === undefined) {
+	useEffect(() => {
+		getUserSessionService.execute().then(credentials => {
+			if (credentials) {
+				getUserService.execute({
+					userId: credentials.userId,
+					authorizeToken: credentials.token
+				}).then(user => {
+					if (user) {
+						setContextState({
+							user,
+							credentials
+						});
+					}
+				});
+			} else {
+				logout();
+			}
+		}).catch(() => {
+			logout();
+		});
+	}, [logout]);
+
+	if (contextState === undefined) {
 		return null;
 	}
 
 	return <authenticationContext.Provider value={{
-		user,
+		user: contextState.user,
+		token: contextState.credentials.token,
 		signIn,
 		signUp,
 		logout,
-		signed: !!user.id
+		signed: !!contextState.user.id
 	}}>
 		{children}
 	</authenticationContext.Provider>;

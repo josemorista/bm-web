@@ -9,11 +9,11 @@ import { ROUTES } from '../../consts';
 import { useToastMessage } from '../../hooks/useToastMessage';
 import { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
-import { CreateUserServiceFactory } from '../../domain/modules/users/factories/CreateUserServiceFactory';
 import { useRouter } from 'next/router';
 import { withAuth } from '../../hocs';
+import { UserServicesFactory } from '../../domain/modules/users/factories/UserServicesFactory';
 
-const createUserService = CreateUserServiceFactory.create();
+const createUserService = UserServicesFactory.createCreateUserService();
 
 function Register() {
 
@@ -68,4 +68,4 @@ function Register() {
 	);
 }
 
-export default withAuth(Register, { strictPrivate: false, strictPublic: true });
+export default withAuth(Register, { strictPublic: true, strictPrivate: false });

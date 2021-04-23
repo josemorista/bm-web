@@ -1,39 +1,17 @@
-import axios, { AxiosInstance } from 'axios';
+import axios from 'axios';
 import { httpClientConfig } from '../../../../config/httpClient';
 import { AppError } from '../../../errors/AppError';
 import { IHttpResponseDTO, IDeleteMethodDTO, IGetMethodDTO, IHttpClientProvider, IPatchMethodDTO, IPostMethodDTO, IPutMethodDTO } from '../models/IHttpClientProvider';
 
-let instance: AxiosHttpClientProvider | null = null;
-export class AxiosHttpClientProvider implements IHttpClientProvider {
+const api = axios.create({
+	timeout: httpClientConfig.timeout
+});
 
-	private api: AxiosInstance;
-
-	constructor() {
-		if (!instance) {
-			this.api = axios.create({
-				timeout: httpClientConfig.timeout
-			});
-			instance = this;
-			return instance;
-		} else {
-			return instance;
-		}
-	}
-
-	addDefaultHeader(name: string, value: unknown): void {
-		this.api.defaults.headers[name] = value;
-	}
-
-	removeDefaultHeader(name: string): void {
-		if (this.api.defaults.headers[name]) {
-			delete this.api.defaults.headers[name];
-		}
-	}
-
+class AxiosHttpClientProvider implements IHttpClientProvider {
 
 	async post<Response>({ url, body, params, headers }: IPostMethodDTO): Promise<IHttpResponseDTO<Response>> {
 		try {
-			const { data, status } = await this.api.post(url, body || {}, {
+			const { data, status } = await api.post(url, body || {}, {
 				headers: {
 					...headers
 				},
@@ -50,7 +28,7 @@ export class AxiosHttpClientProvider implements IHttpClientProvider {
 
 	async get<Response>({ url, params, headers }: IGetMethodDTO): Promise<IHttpResponseDTO<Response>> {
 		try {
-			const { data, status } = await this.api.get(url, {
+			const { data, status } = await api.get(url, {
 				params,
 				headers: {
 					...headers
@@ -67,7 +45,7 @@ export class AxiosHttpClientProvider implements IHttpClientProvider {
 
 	async patch<Response>({ url, params, headers, body }: IPatchMethodDTO): Promise<IHttpResponseDTO<Response>> {
 		try {
-			const { data, status } = await this.api.patch(url, body || {}, {
+			const { data, status } = await api.patch(url, body || {}, {
 				headers: {
 					...headers
 				},
@@ -84,7 +62,7 @@ export class AxiosHttpClientProvider implements IHttpClientProvider {
 
 	async put<Response>({ url, params, headers, body }: IPutMethodDTO): Promise<IHttpResponseDTO<Response>> {
 		try {
-			const { data, status } = await this.api.put(url, body || {}, {
+			const { data, status } = await api.put(url, body || {}, {
 				headers: {
 					...headers
 				},
@@ -101,7 +79,7 @@ export class AxiosHttpClientProvider implements IHttpClientProvider {
 
 	async delete<Response>({ url, params, headers }: IDeleteMethodDTO): Promise<IHttpResponseDTO<Response>> {
 		try {
-			const { data, status } = await this.api.delete(url, {
+			const { data, status } = await api.delete(url, {
 				headers: {
 					...headers
 				},
@@ -116,3 +94,5 @@ export class AxiosHttpClientProvider implements IHttpClientProvider {
 		}
 	}
 }
+
+export { AxiosHttpClientProvider };
