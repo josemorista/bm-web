@@ -1,4 +1,4 @@
-import { CookiesCacheProvider } from '../../../../shared/providers/CacheProvider/implementations/CookiesCacheProvider';
+import { LocalStorageCacheProvider } from '../../../../shared/providers/CacheProvider/implementations/LocalStorageCacheProvider';
 import { ICacheProvider } from '../../../../shared/providers/CacheProvider/models/ICacheProvider';
 import { RegexFormValidationProvider } from '../../../../shared/providers/FormValidationProvider/implementations/RegexFormValidationProvider';
 import { AxiosHttpClientProvider } from '../../../../shared/providers/HttpClientProvider/implementations/AxiosHttpClientProvider';
@@ -14,7 +14,7 @@ class UserSessionsServicesFactory {
 
 	static initialize(): void {
 		this.httpClientProvider = new AxiosHttpClientProvider();
-		this.cacheProvider = new CookiesCacheProvider();
+		this.cacheProvider = new LocalStorageCacheProvider();
 	}
 
 	static createGetUserSessionService(): GetUserSessionService {

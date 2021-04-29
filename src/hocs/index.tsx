@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useAuthentication } from '../hooks/useAuthentication';
 import { useRouter } from 'next/router';
 import { ROUTES } from '../consts';

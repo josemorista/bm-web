@@ -6,7 +6,7 @@ import { Header } from '../../components/Header';
 import { Led } from '../../components/Led';
 import { Tab, Tabs } from '../../components/Tabs';
 import { IINewExamModalHandler, NewExamModal } from './_newExamModal';
-import { PatientStyles } from './_[patient]_styles';
+import { PatientStyles } from './_[patientId]_styles';
 
 export default function Patient() {
 
