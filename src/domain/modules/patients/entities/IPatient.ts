@@ -6,10 +6,6 @@ export interface IPatient {
 	birthDate: Date | string | null;
 	sex: 'M' | 'F';
 
-	previousBoneLesions: boolean | null;
-	previousQt: boolean | null;
-	previousRt: boolean | null;
-	previousCancerDiagnosis: boolean | null;
 	description: string;
 
 	ownerId: string;

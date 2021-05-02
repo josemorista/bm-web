@@ -26,10 +26,6 @@ const patients: Array<IPatient> = [
 		sex: 'M',
 		ownerId: '1',
 		dicomPatientId: 'Paciente1',
-		previousBoneLesions: null,
-		previousCancerDiagnosis: null,
-		previousQt: null,
-		previousRt: null,
 		createdAt: '2021-04-02T16:54:35.130Z',
 		updatedAt: '2021-04-02T16:54:35.130Z'
 	}

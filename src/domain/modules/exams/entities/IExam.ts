@@ -1,5 +1,4 @@
 import { IPatient } from '../../patients/entities/IPatient';
-import { IExamDetection } from './IExamDetection';
 
 export interface IExam {
 	id: string;
@@ -7,13 +6,12 @@ export interface IExam {
 	category: 'ant' | 'post' | 'cra';
 
 	patientId: string;
-	pixelArea: number;
-
 	patient?: IPatient;
+
+	pixelArea: number;
 
 	dicomFileLocation: string;
 
-	examDetections?: Array<IExamDetection>;
 	createdAt: Date;
 	updatedAt: Date;
 }
