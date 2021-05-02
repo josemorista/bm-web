@@ -4,17 +4,17 @@ import { IFormValidationProvider } from '../../../../shared/providers/FormValida
 import { IHttpClientProvider } from '../../../../shared/providers/HttpClientProvider/models/IHttpClientProvider';
 import { IPatient } from '../../entities/IPatient';
 
-interface ICreatePatientServiceDTO extends Pick<IPatient, 'name' | 'birthDate' | 'description' | 'sex'> {
+interface IUpdatePatientServiceDTO extends Pick<IPatient, 'name' | 'birthDate' | 'description' | 'sex' | 'id'> {
 	authorizeToken: string;
 }
 
-export class CreatePatientService {
+export class UpdatePatientService {
 
 	constructor(
 		private httpClientProvider: IHttpClientProvider,
 		private formValidationProvider: IFormValidationProvider) { }
 
-	async execute({ authorizeToken, name, birthDate, ...rest }: ICreatePatientServiceDTO): Promise<void> {
+	async execute({ authorizeToken, name, birthDate, id, ...rest }: IUpdatePatientServiceDTO): Promise<void> {
 		if (!this.formValidationProvider.hasLength(name, 1)) {
 			throw new FormValidationError('Field name is required', 'name');
 		}
@@ -29,8 +29,8 @@ export class CreatePatientService {
 		if (formattedDate instanceof Date && Date.now() < formattedDate.getTime()) {
 			throw new FormValidationError('Invalid date', 'birthDate');
 		}
-		await this.httpClientProvider.post({
-			url: API_ROUTES.PATIENTS,
+		await this.httpClientProvider.put({
+			url: `${API_ROUTES.PATIENTS}/${id}`,
 			body: {
 				name,
 				birthDate: formattedDate,

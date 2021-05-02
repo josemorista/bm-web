@@ -7,59 +7,62 @@ import { Select } from '../../components/Select';
 import { Textarea } from '../../components/Textarea';
 import { IPatient } from '../../domain/modules/patients/entities/IPatient';
 import { formatDate } from '../../utils/formatDate';
+import { CreatePatientsServicesFactory } from '../../domain/modules/patients/factories/CreatePatientsServicesFactory';
 import { MyPatientsStyles } from './_styles';
+import { useAuthentication } from '../../hooks/useAuthentication';
 
 interface INewOrEditPatientModalProps {
 	onCloseAction?: () => void | Promise<void>;
 }
 
 export interface IINewOrEditPatientModalHandler {
-	handleOpenModal(patientId?: string): Promise<void>;
+	handleOpenModal(patient?: IPatient): Promise<void>;
 }
 
-const patients: Array<IPatient> = [
-	{
-		id: '1',
-		name: 'João da Silva',
-		birthDate: '2021-04-02T16:54:35.130Z',
-		description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry',
-		sex: 'M',
-		ownerId: '1',
-		dicomPatientId: 'Paciente1',
-		createdAt: '2021-04-02T16:54:35.130Z',
-		updatedAt: '2021-04-02T16:54:35.130Z'
-	}
-];
+
+// Services
+const createPatientService = CreatePatientsServicesFactory.createCreatePatientService();
+const updatePatientService = CreatePatientsServicesFactory.createUpdatePatientService();
 
 export const NewOrEditPatientModal = forwardRef<IINewOrEditPatientModalHandler, INewOrEditPatientModalProps>(({ onCloseAction }, ref) => {
 
 	const modalRef = useRef<IModalHandle>(null);
 	const { register, handleSubmit, setValue, reset } = useForm();
+	const { token } = useAuthentication();
 
 	const [modalTexts, setModalTexts] = useState({
 		title: 'New patient',
 		submit: 'Create'
 	});
 
-	const onSubmit = useCallback((data) => {
-		console.table(data);
+	const onSubmit = useCallback(async (data) => {
+		if (!data.id) {
+			await createPatientService.execute({
+				...data,
+				authorizeToken: token
+			});
+		} else {
+			await updatePatientService.execute({
+				...data,
+				authorizeToken: token
+			});
+		}
 		(onCloseAction && (onCloseAction()));
 		modalRef.current?.closeModal();
-	}, [onCloseAction]);
+	}, [onCloseAction, token]);
 
-	const handleOpenModal: IINewOrEditPatientModalHandler['handleOpenModal'] = useCallback(async (patientId) => {
-		if (patientId) {
-			const fetchedPatient = patients.find(el => el.id === patientId);
-			if (fetchedPatient) {
+	const handleOpenModal: IINewOrEditPatientModalHandler['handleOpenModal'] = useCallback(async (patient?) => {
+		if (patient) {
+			if (patient) {
 				setModalTexts({
-					title: fetchedPatient.name,
+					title: patient.name,
 					submit: 'Edit'
 				});
-				for (const key of Object.keys(fetchedPatient) as Array<keyof IPatient>) {
-					if (key === 'birthDate' && fetchedPatient[key]) {
-						setValue(key, formatDate(fetchedPatient[key] || ''));
+				for (const key of Object.keys(patient) as Array<keyof IPatient>) {
+					if (key === 'birthDate' && patient[key]) {
+						setValue(key, formatDate(patient[key] || ''));
 					} else {
-						setValue(key, fetchedPatient[key] || '');
+						setValue(key, patient[key] || '');
 					}
 				}
 			}
@@ -69,6 +72,7 @@ export const NewOrEditPatientModal = forwardRef<IINewOrEditPatientModalHandler, 
 				submit: 'Create'
 			});
 			reset();
+			setValue('birthDate', formatDate(new Date()));
 		}
 		modalRef.current?.openModal();
 	}, [setValue, reset]);

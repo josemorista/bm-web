@@ -1,21 +1,37 @@
 import Head from 'next/head';
-import { useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { FiTrash, FiEdit2, FiPlus } from 'react-icons/fi';
 import { Button } from '../../components/Button';
 import { Header } from '../../components/Header';
 import { Input } from '../../components/Input';
+import { IPatient } from '../../domain/modules/patients/entities/IPatient';
+import { CreatePatientsServicesFactory } from '../../domain/modules/patients/factories/CreatePatientsServicesFactory';
 import { withAuth } from '../../hocs';
+import { useAuthentication } from '../../hooks/useAuthentication';
 import { IINewOrEditPatientModalHandler, NewOrEditPatientModal } from './_newOrEditPatientModal';
 import { MyPatientsStyles } from './_styles';
 
 // Services
-
+const getPatientsFromUserService = CreatePatientsServicesFactory.createGetPatientsFromUserService();
 
 function MyPatients() {
 
 	const [patientToSearch, setPatientSearch] = useState('');
+	const [patients, setPatients] = useState<Array<IPatient>>([]);
+	const { token } = useAuthentication();
 
 	const newOrEditPatientModalRef = useRef<IINewOrEditPatientModalHandler>(null);
+
+	const getPatients = useCallback(async () => {
+		const resp = await getPatientsFromUserService.execute({
+			authorizeToken: token
+		});
+		setPatients(resp);
+	}, [token]);
+
+	useEffect(() => {
+		getPatients();
+	}, [getPatients]);
 
 	return <MyPatientsStyles.Container>
 		<Head>
@@ -23,7 +39,7 @@ function MyPatients() {
 		</Head>
 
 		<NewOrEditPatientModal ref={newOrEditPatientModalRef} onCloseAction={() => {
-			console.log('Closed');
+			getPatients();
 		}} />
 
 		<Header />
@@ -38,28 +54,28 @@ function MyPatients() {
 				}} />
 			</section>
 			<ul>
-				<MyPatientsStyles.PatientListItem>
+				{patients.map(patient => <MyPatientsStyles.PatientListItem key={patient.id}>
 					<section>
 						<div className="patientInitial">
 							<h1>
-								Jo
+								{patient.name.slice(0, 2)}
 							</h1>
 						</div>
 						<div>
 							<h4>
-								João da Silva
+								{patient.name}
 							</h4>
 							<strong>
-								dicomId: 5004548846461615
+								dicomId: {patient.dicomPatientId || ''}
 							</strong>
 							<p>
-								Lorem Ipsum is simply dummy text of the printing and typesetting industry
+								{patient.description}
 							</p>
 						</div>
 					</section>
 					<section>
 						<button onClick={() => {
-							newOrEditPatientModalRef.current?.handleOpenModal('1');
+							newOrEditPatientModalRef.current?.handleOpenModal(patient);
 						}}>
 							<FiEdit2 />
 						</button>
@@ -67,7 +83,7 @@ function MyPatients() {
 							<FiTrash />
 						</button>
 					</section>
-				</MyPatientsStyles.PatientListItem>
+				</MyPatientsStyles.PatientListItem>)}
 			</ul>
 			<div className="addPatientButtonContainer">
 				<Button onClick={() => {
@@ -81,4 +97,4 @@ function MyPatients() {
 	</MyPatientsStyles.Container>;
 }
 
-export default withAuth(MyPatients, { strictPrivate: false, strictPublic: true });
+export default withAuth(MyPatients, { strictPrivate: true });

@@ -45,7 +45,7 @@ function Home() {
 						<Input {...register('email')} type="email" placeholder="Email" />
 						<Input {...register('password')} type="password" placeholder="Password" />
 						<Link href={ROUTES.REGISTER}>
-							<a>Does not have an account? SignIn</a>
+							<a>Does not have an account? SignUp</a>
 						</Link>
 						<Button type='submit'>SignIn</Button>
 					</form>

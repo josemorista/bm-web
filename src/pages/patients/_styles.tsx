@@ -51,7 +51,7 @@ const PatientListItem = styled.li`
 	justify-content: space-between;
 	align-items: flex-end;
 
-	padding-bottom: 2rem;
+	padding: 2rem 0;
 	
 	border-bottom: 1px solid  ${({ theme }) => theme.colors.gray300};		
 
