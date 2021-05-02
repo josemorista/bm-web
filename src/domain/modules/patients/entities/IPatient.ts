@@ -9,6 +9,7 @@ export interface IPatient {
 	description: string;
 
 	ownerId: string;
+
 	createdAt: Date | string;
 	updatedAt: Date | string;
 }

@@ -5,13 +5,20 @@ export interface IExam {
 	label: string;
 	category: 'ant' | 'post' | 'cra';
 
+	date: Date | string;
+
 	patientId: string;
 	patient?: IPatient;
 
-	pixelArea: number;
+	pixelArea: number | null;
 
 	dicomFileLocation: string;
 
-	createdAt: Date;
-	updatedAt: Date;
+	originalImageLocation: string | null;
+	resultImageLocation: string | null;
+	edgedResultImageLocation: string | null;
+	overlayImageLocation: string | null;
+
+	createdAt: Date | string;
+	updatedAt: Date | string;
 }
