@@ -1,9 +1,11 @@
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { FiTrash, FiEdit2, FiPlus } from 'react-icons/fi';
 import { Button } from '../../components/Button';
 import { Header } from '../../components/Header';
 import { Input } from '../../components/Input';
+import { ROUTES } from '../../consts';
 import { IPatient } from '../../domain/modules/patients/entities/IPatient';
 import { CreatePatientsServicesFactory } from '../../domain/modules/patients/factories/CreatePatientsServicesFactory';
 import { withAuth } from '../../hocs';
@@ -19,6 +21,8 @@ function MyPatients() {
 	const [patientToSearch, setPatientSearch] = useState('');
 	const [patients, setPatients] = useState<Array<IPatient>>([]);
 	const { token } = useAuthentication();
+
+	const router = useRouter();
 
 	const newOrEditPatientModalRef = useRef<IINewOrEditPatientModalHandler>(null);
 
@@ -54,7 +58,9 @@ function MyPatients() {
 				}} />
 			</section>
 			<ul>
-				{patients.map(patient => <MyPatientsStyles.PatientListItem key={patient.id}>
+				{patients.map(patient => <MyPatientsStyles.PatientListItem key={patient.id} onClick={() => {
+					router.push(ROUTES.PATIENT(patient.id));
+				}}>
 					<section>
 						<div className="patientInitial">
 							<h1>
@@ -74,7 +80,8 @@ function MyPatients() {
 						</div>
 					</section>
 					<section>
-						<button onClick={() => {
+						<button onClick={(e) => {
+							e.stopPropagation();
 							newOrEditPatientModalRef.current?.handleOpenModal(patient);
 						}}>
 							<FiEdit2 />

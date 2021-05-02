@@ -1,16 +1,78 @@
 import Head from 'next/head';
-import { useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { FiArrowUp } from 'react-icons/fi';
 import { Button } from '../../components/Button';
 import { Header } from '../../components/Header';
 import { Led } from '../../components/Led';
 import { Tab, Tabs } from '../../components/Tabs';
+import { IPatient } from '../../domain/modules/patients/entities/IPatient';
+import { CreatePatientsServicesFactory } from '../../domain/modules/patients/factories/CreatePatientsServicesFactory';
+import { useAuthentication } from '../../hooks/useAuthentication';
 import { IINewExamModalHandler, NewExamModal } from './_newExamModal';
 import { PatientStyles } from './_[patientId]_styles';
+import { useRouter } from 'next/router';
+import { ROUTES } from '../../consts';
+import { differenceInCalendarYears } from 'date-fns';
+import { CreateExamsServicesFactory } from '../../domain/modules/exams/factories/CreateExamsServicesFactory';
+import { IExam } from '../../domain/modules/exams/entities/IExam';
+import { formatDate } from '../../utils/formatDate';
+
+// services 
+const getPatientByIdService = CreatePatientsServicesFactory.createGetPatientByIdService();
+const getExamsFromPatientService = CreateExamsServicesFactory.createGetExamsFromPatientService();
 
 export default function Patient() {
 
 	const newExamModalRef = useRef<IINewExamModalHandler>(null);
+	const router = useRouter();
+	const { patientId } = router.query;
+
+	const [patient, setPatient] = useState<IPatient | undefined>(undefined);
+	const { token } = useAuthentication();
+
+	const [category, setCategory] = useState<IExam['category']>('ant');
+
+	const [exams, setExams] = useState<Array<IExam>>([]);
+
+	const categoryExams = useMemo(() => {
+		return exams.filter(el => el.category === category).map(el => ({
+			...el,
+			formattedDate: formatDate(el.date),
+			formattedCreatedAt: formatDate(el.createdAt)
+		}));
+	}, [category, exams]);
+
+	const patientAge = useMemo(() => {
+		return patient?.birthDate && typeof patient.birthDate === 'string' ? differenceInCalendarYears(new Date(patient.birthDate), new Date()) : null;
+	}, [patient]);
+
+	useEffect(() => {
+		getPatientByIdService.execute({
+			id: String(patientId),
+			authorizeToken: token
+		}).then(resp => {
+			if (resp) {
+				setPatient(resp);
+			} else {
+				router.replace(ROUTES.MY_PATIENTS);
+			}
+		});
+	}, [token, patientId, router]);
+
+	useEffect(() => {
+		if (patient?.id) {
+			getExamsFromPatientService.execute({
+				patientId: patient.id,
+				authorizeToken: token
+			}).then(resp => {
+				setExams(resp);
+			});
+		}
+	}, [patient?.id, token]);
+
+	if (!patient) {
+		return null;
+	}
 
 	return <PatientStyles.Container>
 		<Head>
@@ -21,46 +83,51 @@ export default function Patient() {
 		}} />
 		<Header />
 		<main>
-			<h1>João da Silva</h1>
-			<h5>dicomId: 5004548846461615</h5>
+			<h1>{patient.name}</h1>
+			<h5>dicomId: {patient.dicomPatientId || ''}</h5>
 			<p>
-				32 years old
+				Age: {patientAge || '-'}
 			</p>
 			<p>
-				Lorem Ipsum is simply dummy text of the printing and typesetting industry
+				{patient.description}
 			</p>
 
 			<PatientStyles.ExamsSection>
 				<Tabs>
-					<Tab isActive={true}>Frontscans</Tab>
-					<Tab isActive={false}>Backscans</Tab>
+					<Tab isActive={category === 'ant'} onClick={() => {
+						setCategory('ant');
+					}}>Frontscans</Tab>
+					<Tab isActive={category === 'post'} onClick={() => {
+						setCategory('post');
+					}}>Backscans</Tab>
 				</Tabs>
 
 				<ul className="examsList">
-					<PatientStyles.ExamListItem status="positive">
+					{categoryExams.map(exam => <PatientStyles.ExamListItem key={exam.id} status="positive">
 						<Led status='success' />
 						<div>
-							<p className="examName">Posterior01</p>
+							<p className="examName">{exam.label}</p>
 							<p className="revisionStatus">
-								Revised exam, report available
+								-
 							</p>
 							<p className="examDates">
-								Realizado em: 20/04/2021
+								Realizado em: {exam.formattedDate}
 								<span>
-									Adicionado em: 20/04/2021
+									Adicionado em: {exam.formattedCreatedAt}
 								</span>
 							</p>
 							<p className="detections">
-								Detections: 16
+								Detections: -
 							</p>
 							<p className="affectedArea">
-								Total affected area: 526mm²
+								Total affected area: - mm²
 								<span>
 									<FiArrowUp size="16px" /> 32% reduction from last exam.
 								</span>
 							</p>
 						</div>
-					</PatientStyles.ExamListItem>
+					</PatientStyles.ExamListItem>)}
+
 					<PatientStyles.ExamListItem status="negative">
 						<Led status='error' />
 						<div>
