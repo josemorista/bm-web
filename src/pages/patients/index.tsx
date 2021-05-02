@@ -8,6 +8,9 @@ import { withAuth } from '../../hocs';
 import { IINewOrEditPatientModalHandler, NewOrEditPatientModal } from './_newOrEditPatientModal';
 import { MyPatientsStyles } from './_styles';
 
+// Services
+
+
 function MyPatients() {
 
 	const [patientToSearch, setPatientSearch] = useState('');
