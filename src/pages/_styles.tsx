@@ -1,6 +1,12 @@
 import styled from 'styled-components';
+import { fadeIn } from '../styles/animations';
 
 const Container = styled.main`
+
+	animation-name: ${fadeIn};
+	animation-fill-mode: backwards;
+	animation-duration: 1s;
+
 	display: grid;
 
 	width: 100%;

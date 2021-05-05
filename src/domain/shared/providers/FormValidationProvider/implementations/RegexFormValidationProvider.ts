@@ -11,7 +11,7 @@ export class RegexFormValidationProvider implements IFormValidationProvider {
 	}
 
 	isSafePassword(data: string): boolean {
-		return this.hasLength(data, 6) && /\d/.test(data) && /[a-z]/ig.test(data) && /[&._-]/.test(data);
+		return this.hasLength(data, 6) && /\d/.test(data) && /[a-z]/ig.test(data);
 	}
 
 	isValidDate(data: string): boolean {
