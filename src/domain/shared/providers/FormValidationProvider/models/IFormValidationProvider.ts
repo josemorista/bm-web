@@ -3,4 +3,5 @@ export interface IFormValidationProvider {
 	hasLength(data: string, length: number): boolean;
 	isSafePassword(data: string): boolean;
 	isValidDate(date: string): boolean;
+	verifyFileType(data: string, extensions: Array<string>): boolean;
 }

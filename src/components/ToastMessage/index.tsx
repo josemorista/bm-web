@@ -1,7 +1,6 @@
 import { ToastMessageStyles } from './_styles';
 import { FiAlertCircle, FiInfo } from 'react-icons/fi';
 import { AiOutlineLike } from 'react-icons/ai';
-import { useEffect, useState } from 'react';
 
 interface IToastMessageProps {
 	variant?: 'error' | 'success' | 'info';

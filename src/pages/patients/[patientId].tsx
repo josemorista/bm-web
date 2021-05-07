@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { FiArrowUp } from 'react-icons/fi';
 import { Button } from '../../components/Button';
 import { Header } from '../../components/Header';
@@ -46,6 +46,16 @@ export default function Patient() {
 		return patient?.birthDate && typeof patient.birthDate === 'string' ? differenceInCalendarYears(new Date(patient.birthDate), new Date()) : null;
 	}, [patient]);
 
+	const getExamsFromPatient = useCallback(async () => {
+		if (patient?.id) {
+			const resp = await getExamsFromPatientService.execute({
+				patientId: patient.id,
+				authorizeToken: token
+			});
+			setExams(resp);
+		}
+	}, [patient?.id, token]);
+
 	useEffect(() => {
 		getPatientByIdService.execute({
 			id: String(patientId),
@@ -60,15 +70,8 @@ export default function Patient() {
 	}, [token, patientId, router]);
 
 	useEffect(() => {
-		if (patient?.id) {
-			getExamsFromPatientService.execute({
-				patientId: patient.id,
-				authorizeToken: token
-			}).then(resp => {
-				setExams(resp);
-			});
-		}
-	}, [patient?.id, token]);
+		getExamsFromPatient();
+	}, [getExamsFromPatient]);
 
 	if (!patient) {
 		return null;
@@ -78,8 +81,8 @@ export default function Patient() {
 		<Head>
 			<title>Exams | Bone Metastasis</title>
 		</Head>
-		<NewExamModal patientId={'1'} ref={newExamModalRef} onCloseAction={() => {
-			console.log('closed');
+		<NewExamModal patientId={patient.id} ref={newExamModalRef} onCloseAction={() => {
+			getExamsFromPatient();
 		}} />
 		<Header />
 		<main>
@@ -100,6 +103,9 @@ export default function Patient() {
 					<Tab isActive={category === 'post'} onClick={() => {
 						setCategory('post');
 					}}>Backscans</Tab>
+					<Tab isActive={category === 'cra'} onClick={() => {
+						setCategory('cra');
+					}}>Cranium</Tab>
 				</Tabs>
 
 				<ul className="examsList">
@@ -128,7 +134,7 @@ export default function Patient() {
 						</div>
 					</PatientStyles.ExamListItem>)}
 
-					<PatientStyles.ExamListItem status="negative">
+					{/*<PatientStyles.ExamListItem status="negative">
 						<Led status='error' />
 						<div>
 							<p className="examName">Posterior01</p>
@@ -172,7 +178,7 @@ export default function Patient() {
 								Total affected area: -
 							</p>
 						</div>
-					</PatientStyles.ExamListItem>
+				</PatientStyles.ExamListItem>*/}
 				</ul>
 			</PatientStyles.ExamsSection>
 			<section className="newExamButton">

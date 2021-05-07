@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import { createContext, useCallback, useContext, useState } from 'react';
 import { ToastMessage } from '../../components/ToastMessage';
 
 interface IToastMessage {
@@ -20,16 +20,11 @@ export const ToastMessageProvider = ({ children }: IToastMessageProviderProps) =
 
 	const [toastMessage, setMessage] = useState<IToastMessage | null>(null);
 
-	useEffect(() => {
-		if (toastMessage) {
-			setTimeout(() => {
-				setMessage(null);
-			}, 5000);
-		}
-	}, [toastMessage]);
-
 	const setToastMessage: IToastMessageContext['setToastMessage'] = useCallback((data) => {
 		setMessage(data);
+		setTimeout(() => {
+			setMessage(null);
+		}, 5000);
 	}, []);
 
 	return <toastMessageContext.Provider value={{ setToastMessage }}>

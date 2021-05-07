@@ -18,4 +18,8 @@ export class RegexFormValidationProvider implements IFormValidationProvider {
 		return (/^([0-2][0-9]|(3)[0-1])(-)(((0)[0-9])|((1)[0-2]))(-)\d{4}$/.test(data));
 	}
 
+	verifyFileType(data: string, extensions: Array<string>): boolean {
+		return (new RegExp(`\\w+.(${extensions.join('|')})`)).test(data);
+	}
+
 }

@@ -24,7 +24,11 @@ export class CreatePatientService {
 			if (!this.formValidationProvider.isValidDate(formattedDate)) {
 				throw new FormValidationError('Invalid date format', 'birthDate');
 			}
-			formattedDate = new Date(formattedDate);
+			const matches = /(\d+)-(\d+)-(\d+)/.exec(formattedDate);
+
+			if (matches) {
+				formattedDate = new Date(Number(matches[3]), (Number(matches[2]) - 1), Number(matches[1]));
+			}
 		}
 		if (formattedDate instanceof Date && Date.now() < formattedDate.getTime()) {
 			throw new FormValidationError('Invalid date', 'birthDate');

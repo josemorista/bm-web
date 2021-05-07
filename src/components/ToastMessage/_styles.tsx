@@ -10,6 +10,8 @@ const Container = styled.div<IContainerProps>`
 	top: 1rem;
 	right: 1rem;
 
+	z-index: 1000;
+
 	display: flex;
 	align-items: center;
 
