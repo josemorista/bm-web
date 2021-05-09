@@ -1,10 +1,57 @@
 import Head from 'next/head';
+import Router, { useRouter } from 'next/router';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Button } from '../../../components/Button';
 import { Checkbox } from '../../../components/Checkbox';
 import { Header } from '../../../components/Header';
+import { ROUTES } from '../../../consts';
+import { IExam } from '../../../domain/modules/exams/entities/IExam';
+import { CreateExamsServicesFactory } from '../../../domain/modules/exams/factories/CreateExamsServicesFactory';
+import { useAuthentication } from '../../../hooks/useAuthentication';
 import { ExamStyles } from './_[examId]_styles';
 
-export default () => {
+const processExamService = CreateExamsServicesFactory.createProcessExamService();
+const getExamByIdService = CreateExamsServicesFactory.createGetExamByIdService();
+
+export default function Exam() {
+
+	const { token } = useAuthentication();
+
+	const router = useRouter();
+	const { examId } = router.query;
+	const debounce = useRef<null | NodeJS.Timeout>(null);
+	const [exam, setExam] = useState<IExam | null | undefined>(null);
+
+	const getExam = useCallback(async () => {
+		const resp = await getExamByIdService.execute({
+			examId: String(examId),
+			authorizeToken: token
+		});
+		if (resp) {
+			setExam(resp);
+		} else {
+			Router.replace(ROUTES.MY_PATIENTS);
+		}
+	}, [token, examId]);
+
+	useEffect(() => {
+		if (exam === undefined) {
+			getExam();
+		}
+	}, [exam, getExam]);
+
+	const handleProcessExam = async (threshold: number): Promise<void> => {
+		try {
+			await processExamService.execute({
+				examId: String(examId),
+				threshold,
+				authorizeToken: token
+			});
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
 	return <ExamStyles.Container>
 		<Head>
 			<title>Exam | Bone Metastasis</title>
@@ -41,7 +88,14 @@ export default () => {
 						<legend>
 							Lower probability allows more detections but with less  precision
 						</legend>
-						<input type="range" />
+						<input onChange={e => {
+							if (debounce.current) {
+								clearTimeout(debounce.current);
+							}
+							debounce.current = setTimeout(() => {
+								handleProcessExam(Number(e.target.value));
+							}, 1000);
+						}} type="range" defaultValue="0.4" min="0" max="1" step="0.1" />
 					</section>
 					<section className="contrast">
 						<h6>Visualization contrast</h6>
@@ -71,4 +125,4 @@ export default () => {
 			</section>
 		</main>
 	</ExamStyles.Container>;
-};
+}
