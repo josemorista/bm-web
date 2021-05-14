@@ -10,8 +10,21 @@ import { CreateExamsServicesFactory } from '../../../domain/modules/exams/factor
 import { useAuthentication } from '../../../hooks/useAuthentication';
 import { ExamStyles } from './_[examId]_styles';
 
+type IVisualizationOptions = 'ore' | 'oro' | 'oeo';
+
 const processExamService = CreateExamsServicesFactory.createProcessExamService();
 const getExamByIdService = CreateExamsServicesFactory.createGetExamByIdService();
+
+const invertPixelData = function (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) {
+	const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+	const data = imageData.data;
+	for (let i = 0; i < data.length; i += 4) {
+		data[i] = 255 - data[i];     // red
+		data[i + 1] = 255 - data[i + 1]; // green
+		data[i + 2] = 255 - data[i + 2]; // blue
+	}
+	ctx.putImageData(imageData, 0, 0);
+};
 
 export default function Exam() {
 
@@ -21,6 +34,13 @@ export default function Exam() {
 	const { examId } = router.query;
 	const debounce = useRef<null | NodeJS.Timeout>(null);
 	const [exam, setExam] = useState<IExam | null | undefined>(null);
+
+	const [visualization, setVisualization] = useState<IVisualizationOptions>('oro');
+	const [pixelDataColorScheme, setPixelDataColorScheme] = useState<'bInW' | 'wInB'>('bInW');
+
+	const canvas1Ref = useRef<HTMLCanvasElement>(null);
+	const canvas2Ref = useRef<HTMLCanvasElement>(null);
+	const canvas3Ref = useRef<HTMLCanvasElement>(null);
 
 	const getExam = useCallback(async () => {
 		const resp = await getExamByIdService.execute({
@@ -34,23 +54,64 @@ export default function Exam() {
 		}
 	}, [token, examId]);
 
+	const togglePixelDataColorScheme = () => {
+		const canvasArray = [canvas1Ref, canvas2Ref, canvas3Ref];
+		canvasArray.forEach((canvasRef, i) => {
+			if (canvasRef.current) {
+				const ctx = canvasRef.current.getContext('2d');
+				if (ctx) {
+					invertPixelData(ctx, canvasRef.current);
+				}
+			}
+		});
+	};
+
+	const refreshImages = useCallback((exam: IExam, visualization: IVisualizationOptions) => {
+		const imgs = [new Image(), new Image(), new Image()];
+		const canvasArray = [canvas1Ref, canvas2Ref, canvas3Ref];
+
+		exam.originalImageUrl && (imgs[0].src = exam.originalImageUrl);
+
+		exam.resultImageUrl && (imgs[1].src = exam.resultImageUrl);
+		exam.edgedResultImageUrl && (imgs[2].src = exam.edgedResultImageUrl);
+
+		if (['oro', 'oeo'].includes(visualization)) {
+			exam.overlayImageUrl && (imgs[2].src = exam.overlayImageUrl);
+		}
+
+		if (visualization === 'oeo') {
+			exam.edgedResultImageUrl && (imgs[1].src = exam.edgedResultImageUrl);
+		}
+
+		canvasArray.forEach((canvasRef, i) => {
+			if (canvasRef.current) {
+				const ctx = canvasRef.current.getContext('2d');
+				ctx?.drawImage(imgs[i], 0, 0);
+			}
+		});
+	}, []);
+
+	const handleProcessExam = async (threshold: number): Promise<void> => {
+		try {
+			if (exam) {
+				await processExamService.execute({
+					examId: String(examId),
+					threshold,
+					authorizeToken: token
+				});
+				refreshImages(exam, visualization);
+			}
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
 	useEffect(() => {
 		if (exam === undefined) {
 			getExam();
 		}
 	}, [exam, getExam]);
 
-	const handleProcessExam = async (threshold: number): Promise<void> => {
-		try {
-			await processExamService.execute({
-				examId: String(examId),
-				threshold,
-				authorizeToken: token
-			});
-		} catch (error) {
-			console.error(error);
-		}
-	};
 
 	return <ExamStyles.Container>
 		<Head>
@@ -72,13 +133,19 @@ export default function Exam() {
 			<section className="segmentationAndClassification">
 				<ul>
 					<li>
-						<img src="/assets/imgs/png/test01.png" alt="" />
+						{exam?.originalImageUrl && <>
+							<canvas width="768" height="1024" ref={canvas1Ref}></canvas></>
+						}
 					</li>
 					<li>
-						<img src="/assets/imgs/png/test02.png" alt="" />
+						{exam?.resultImageUrl && <>
+							<canvas width="768" height="1024" ref={canvas2Ref}></canvas>
+						</>}
 					</li>
 					<li>
-						<img src="/assets/imgs/png/test03.png" alt="" />
+						{exam?.edgedResultImageUrl && <>
+							<canvas width="768" height="1024" ref={canvas3Ref}></canvas>
+						</>}
 					</li>
 				</ul>
 
@@ -86,7 +153,7 @@ export default function Exam() {
 					<section className="threshold">
 						<h6>Classifier probability threshold</h6>
 						<legend>
-							Lower probability allows more detections but with less  precision
+							Lower probability allows more detections but with less precision
 						</legend>
 						<input onChange={e => {
 							if (debounce.current) {
@@ -100,17 +167,36 @@ export default function Exam() {
 					<section className="contrast">
 						<h6>Visualization contrast</h6>
 						<div>
-							<span className="whiteContrast"></span>
-							<span className="blackContrast"></span>
+							<span className="whiteContrast" onClick={() => {
+								if (pixelDataColorScheme === 'bInW') {
+									setPixelDataColorScheme('wInB');
+									togglePixelDataColorScheme();
+								}
+							}}></span>
+							<span className="blackContrast" onClick={() => {
+								if (pixelDataColorScheme === 'wInB') {
+									setPixelDataColorScheme('bInW');
+									togglePixelDataColorScheme();
+								}
+							}}></span>
 						</div>
 					</section>
 					<section>
 						<h6>Visualizations:</h6>
 						<ul>
 							<li>
-								<Checkbox label="Original + segmented + overlay" />
-								<Checkbox label="Original + segmented + overlay" />
-								<Checkbox label="Original + segmented + overlay" />
+								<Checkbox checked={visualization === 'oro'} onClick={() => {
+									setVisualization('oro');
+									exam && (refreshImages(exam, 'oro'));
+								}} label="Original + segmented + overlay" />
+								<Checkbox checked={visualization === 'ore'} onClick={() => {
+									setVisualization('ore');
+									exam && (refreshImages(exam, 'ore'));
+								}} label="Original + segmented + edged" />
+								<Checkbox checked={visualization === 'oeo'} onClick={() => {
+									setVisualization('oeo');
+									exam && (refreshImages(exam, 'oeo'));
+								}} label="Original + edged + overlay" />
 							</li>
 						</ul>
 					</section>

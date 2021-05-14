@@ -7,7 +7,7 @@ export class RegexFormValidationProvider implements IFormValidationProvider {
 	}
 
 	isEmail(data: string): boolean {
-		return (/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/gi.test(data));
+		return (/[\w.]+@[\w+]\..*/gi.test(data));
 	}
 
 	isSafePassword(data: string): boolean {
