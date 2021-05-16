@@ -10,6 +10,7 @@ import { IPatient } from '../../domain/modules/patients/entities/IPatient';
 import { CreatePatientsServicesFactory } from '../../domain/modules/patients/factories/CreatePatientsServicesFactory';
 import { withAuth } from '../../hocs';
 import { useAuthentication } from '../../hooks/useAuthentication';
+import { DeletePatientModal, IDeletePatientModalHandle } from './_deletePatientModal';
 import { IINewOrEditPatientModalHandler, NewOrEditPatientModal } from './_newOrEditPatientModal';
 import { MyPatientsStyles } from './_styles';
 
@@ -29,6 +30,7 @@ function MyPatients() {
 	const debouncePatientSearch = useRef<NodeJS.Timeout>(null);
 
 	const newOrEditPatientModalRef = useRef<IINewOrEditPatientModalHandler>(null);
+	const deletePatientModalRef = useRef<IDeletePatientModalHandle>(null);
 
 	const getPatients = useCallback(async () => {
 		const resp = await getPatientsFromUserService.execute({
@@ -49,6 +51,10 @@ function MyPatients() {
 		<NewOrEditPatientModal ref={newOrEditPatientModalRef} onCloseAction={() => {
 			getPatients();
 		}} />
+
+		<DeletePatientModal ref={deletePatientModalRef} onCloseAction={() => {
+			getPatients();
+		}}></DeletePatientModal>
 
 		<Header />
 
@@ -96,7 +102,10 @@ function MyPatients() {
 							<FiEdit2 />
 						</button>
 						<button>
-							<FiTrash />
+							<FiTrash onClick={(e) => {
+								e.stopPropagation();
+								deletePatientModalRef.current?.openDeletePatientModal(patient);
+							}} />
 						</button>
 					</section>
 				</MyPatientsStyles.PatientListItem>)}

@@ -140,8 +140,34 @@ const NewOrEditPatientModal = styled.div`
 
 `;
 
+const DeletePatientModal = styled.div`
+
+	h1 {
+		color: ${({ theme }) => theme.colors.blue500};
+		border-bottom: 1px solid ${({ theme }) => theme.colors.blue500};
+		margin-bottom: 1rem;
+	}
+
+	h3 {
+		margin: 2rem 0;
+		color: ${({ theme }) => theme.colors.white};
+	}
+
+	.buttonsContainer {
+		display:flex;
+		justify-content: flex-end;
+
+		> * {
+			margin-left: 1rem;
+		}
+	}
+
+	
+`;
+
 export const MyPatientsStyles = {
 	Container,
 	PatientListItem,
-	NewOrEditPatientModal
+	NewOrEditPatientModal,
+	DeletePatientModal
 };

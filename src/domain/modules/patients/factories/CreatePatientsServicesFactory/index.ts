@@ -5,6 +5,7 @@ import { AxiosHttpClientProvider } from '../../../../shared/providers/HttpClient
 import { IHttpClientProvider } from '../../../../shared/providers/HttpClientProvider/models/IHttpClientProvider';
 import { UpdatePatientService } from '../../services/UpdatePatientService';
 import { GetPatientByIdService } from '../../services/GetPatientByIdService';
+import { DeletePatientService } from '../../services/DeletePatientService';
 
 class CreatePatientsServicesFactory {
 
@@ -28,6 +29,10 @@ class CreatePatientsServicesFactory {
 
 	static createGetPatientByIdService(): GetPatientByIdService {
 		return (new GetPatientByIdService(this.httpClientProvider));
+	}
+
+	static createDeletePatientService(): DeletePatientService {
+		return (new DeletePatientService(this.httpClientProvider, (new RegexFormValidationProvider())));
 	}
 
 }
