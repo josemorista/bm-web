@@ -7,7 +7,7 @@ export class RegexFormValidationProvider implements IFormValidationProvider {
 	}
 
 	isEmail(data: string): boolean {
-		return (/[\w.]+@[\w+]\..*/gi.test(data));
+		return (/[\w.]+@[\w]+\..*/gi.test(data));
 	}
 
 	isSafePassword(data: string): boolean {
@@ -15,7 +15,7 @@ export class RegexFormValidationProvider implements IFormValidationProvider {
 	}
 
 	isValidDate(data: string): boolean {
-		return (/^([0-2][0-9]|(3)[0-1])(-)(((0)[0-9])|((1)[0-2]))(-)\d{4}$/.test(data));
+		return (/(?<month>[0-1]{1}[0-9]{1})-(?<day>[0-3]{1}[1-9]{1})-(?<year>\d{4})$/.test(data));
 	}
 
 	verifyFileType(data: string, extensions: Array<string>): boolean {

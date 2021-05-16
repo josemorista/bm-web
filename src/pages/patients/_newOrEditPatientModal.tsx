@@ -10,6 +10,7 @@ import { formatDate } from '../../utils/formatDate';
 import { CreatePatientsServicesFactory } from '../../domain/modules/patients/factories/CreatePatientsServicesFactory';
 import { MyPatientsStyles } from './_styles';
 import { useAuthentication } from '../../hooks/useAuthentication';
+import { useToastMessage } from '../../hooks/useToastMessage';
 
 interface INewOrEditPatientModalProps {
 	onCloseAction?: () => void | Promise<void>;
@@ -29,6 +30,7 @@ export const NewOrEditPatientModal = forwardRef<IINewOrEditPatientModalHandler, 
 	const modalRef = useRef<IModalHandle>(null);
 	const { register, handleSubmit, setValue, reset } = useForm();
 	const { token } = useAuthentication();
+	const { setToastMessage } = useToastMessage();
 
 	const [modalTexts, setModalTexts] = useState({
 		title: 'New patient',
@@ -36,20 +38,28 @@ export const NewOrEditPatientModal = forwardRef<IINewOrEditPatientModalHandler, 
 	});
 
 	const onSubmit = useCallback(async (data) => {
-		if (!data.id) {
-			await createPatientService.execute({
-				...data,
-				authorizeToken: token
-			});
-		} else {
-			await updatePatientService.execute({
-				...data,
-				authorizeToken: token
+		try {
+
+			if (!data.id) {
+				await createPatientService.execute({
+					...data,
+					authorizeToken: token
+				});
+			} else {
+				await updatePatientService.execute({
+					...data,
+					authorizeToken: token
+				});
+			}
+			(onCloseAction && (onCloseAction()));
+			modalRef.current?.closeModal();
+		} catch (error) {
+			setToastMessage({
+				type: 'error',
+				message: error.message
 			});
 		}
-		(onCloseAction && (onCloseAction()));
-		modalRef.current?.closeModal();
-	}, [onCloseAction, token]);
+	}, [onCloseAction, token, setToastMessage]);
 
 	const handleOpenModal: IINewOrEditPatientModalHandler['handleOpenModal'] = useCallback(async (patient?) => {
 		if (patient) {

@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { FiTrash, FiEdit2, FiPlus } from 'react-icons/fi';
 import { Button } from '../../components/Button';
 import { Header } from '../../components/Header';
@@ -17,12 +17,16 @@ import { MyPatientsStyles } from './_styles';
 const getPatientsFromUserService = CreatePatientsServicesFactory.createGetPatientsFromUserService();
 
 function MyPatients() {
-
-	const [patientToSearch, setPatientSearch] = useState('');
 	const [patients, setPatients] = useState<Array<IPatient>>([]);
+	const [searchFilter, setSearchFilter] = useState('');
 	const { token } = useAuthentication();
-
 	const router = useRouter();
+
+	const searchedPatients = useMemo(() => {
+		return patients.filter(el => el.name.toLocaleLowerCase().includes(searchFilter.toLocaleLowerCase()));
+	}, [patients, searchFilter]);
+
+	const debouncePatientSearch = useRef<NodeJS.Timeout>(null);
 
 	const newOrEditPatientModalRef = useRef<IINewOrEditPatientModalHandler>(null);
 
@@ -53,12 +57,17 @@ function MyPatients() {
 				My patients
 			</h1>
 			<section>
-				<Input type="text" placeholder="Search patient by name..." value={patientToSearch} onChange={e => {
-					setPatientSearch(e.target.value);
+				<Input type="text" placeholder="Search patient by name..." onChange={e => {
+					if (debouncePatientSearch.current) {
+						clearTimeout(debouncePatientSearch.current);
+					}
+					setTimeout(() => {
+						setSearchFilter(e.target.value);
+					}, 1000);
 				}} />
 			</section>
 			<ul>
-				{patients.map(patient => <MyPatientsStyles.PatientListItem key={patient.id} onClick={() => {
+				{searchedPatients.map(patient => <MyPatientsStyles.PatientListItem key={patient.id} onClick={() => {
 					router.push(ROUTES.PATIENT(patient.id));
 				}}>
 					<section>

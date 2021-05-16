@@ -20,19 +20,22 @@ export class CreatePatientService {
 		}
 		let formattedDate = birthDate;
 		if (typeof formattedDate == 'string') {
-			formattedDate = formattedDate.replaceAll('/', '-');
+			formattedDate = formattedDate.replace(/\//g, '-');
 			if (!this.formValidationProvider.isValidDate(formattedDate)) {
 				throw new FormValidationError('Invalid date format', 'birthDate');
 			}
-			const matches = /(\d+)-(\d+)-(\d+)/.exec(formattedDate);
+			const matches = /(?<month>\d+)-(?<day>\d+)-(?<year>\d+)/.exec(formattedDate);
 
 			if (matches) {
-				formattedDate = new Date(Number(matches[3]), (Number(matches[2]) - 1), Number(matches[1]));
+				const { groups } = matches;
+				groups && (formattedDate = new Date(Number(groups.year), (Number(groups.month) - 1), Number(groups.day)));
 			}
 		}
+
 		if (formattedDate instanceof Date && Date.now() < formattedDate.getTime()) {
 			throw new FormValidationError('Invalid date', 'birthDate');
 		}
+
 		await this.httpClientProvider.post({
 			url: API_ROUTES.PATIENTS,
 			body: {
