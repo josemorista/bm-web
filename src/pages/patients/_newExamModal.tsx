@@ -37,7 +37,7 @@ export const NewExamModal = forwardRef<IINewExamModalHandler, INewExamModalProps
 
 	const onSubmit = useCallback(async (data) => {
 		try {
-
+			console.log(data);
 			if (dcmFile) {
 				await createExamService.execute({
 					...data,
@@ -80,8 +80,8 @@ export const NewExamModal = forwardRef<IINewExamModalHandler, INewExamModalProps
 			<form onSubmit={handleSubmit(onSubmit)}>
 				<Input  {...register('label')} placeholder="Exam label" />
 				<Select {...register('category')} placeholder="Category">
-					<option value="ant">Backscan</option>
-					<option value="post">Frontscan</option>
+					<option value="post">Backscan</option>
+					<option value="ant">Frontscan</option>
 					<option value="cra">Cranium</option>
 				</Select>
 				<Input  {...register('date')} type='text' placeholder="Exam date" />

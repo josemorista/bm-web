@@ -53,6 +53,7 @@ const ExamsSection = styled.section`
 
 const ExamListItem = styled.li<IExamListItemProps>`
 	display: flex;
+	cursor: pointer;
 
 	max-height: 600px;
 	overflow: auto;

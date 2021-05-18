@@ -14,13 +14,16 @@ export class GetUserService {
 	) { }
 
 	async execute({ userId, authorizeToken }: IGetUserServiceDTO): Promise<IUser | null> {
-		const { data: user } = await this.httpClientProvider.get<IUser | undefined>({
-			url: `${API_ROUTES.USERS}/${userId}`,
-			headers: {
-				Authorization: `Bearer ${authorizeToken}`
-			}
-		});
-
-		return user || null;
+		try {
+			const { data: user } = await this.httpClientProvider.get<IUser | undefined>({
+				url: `${API_ROUTES.USERS}/${userId}`,
+				headers: {
+					Authorization: `Bearer ${authorizeToken}`
+				}
+			});
+			return user || null;
+		} catch (error) {
+			return null;
+		}
 	}
 }

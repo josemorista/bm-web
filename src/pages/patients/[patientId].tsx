@@ -16,12 +16,18 @@ import { differenceInCalendarYears } from 'date-fns';
 import { CreateExamsServicesFactory } from '../../domain/modules/exams/factories/CreateExamsServicesFactory';
 import { IExam } from '../../domain/modules/exams/entities/IExam';
 import { formatDate } from '../../utils/formatDate';
+import { withAuth } from '../../hocs';
 
 // services 
 const getPatientByIdService = CreatePatientsServicesFactory.createGetPatientByIdService();
 const getExamsFromPatientService = CreateExamsServicesFactory.createGetExamsFromPatientService();
 
-export default function Patient() {
+const getExamLedStatus = (exam: IExam) => {
+	if (!exam.overlayImageUrl) return 'alert';
+	return 'success';
+};
+
+function Patient() {
 
 	const newExamModalRef = useRef<IINewExamModalHandler>(null);
 	const router = useRouter();
@@ -57,16 +63,18 @@ export default function Patient() {
 	}, [patient?.id, token]);
 
 	useEffect(() => {
-		getPatientByIdService.execute({
-			id: String(patientId),
-			authorizeToken: token
-		}).then(resp => {
-			if (resp) {
-				setPatient(resp);
-			} else {
-				router.replace(ROUTES.MY_PATIENTS);
-			}
-		});
+		if (patientId) {
+			getPatientByIdService.execute({
+				id: String(patientId),
+				authorizeToken: token
+			}).then(resp => {
+				if (resp) {
+					setPatient(resp);
+				} else {
+					router.replace(ROUTES.MY_PATIENTS);
+				}
+			});
+		}
 	}, [token, patientId, router]);
 
 	useEffect(() => {
@@ -109,8 +117,10 @@ export default function Patient() {
 				</Tabs>
 
 				<ul className="examsList">
-					{categoryExams.map(exam => <PatientStyles.ExamListItem key={exam.id} status="positive">
-						<Led status='success' />
+					{categoryExams.map(exam => <PatientStyles.ExamListItem key={exam.id} status="positive" onClick={() => {
+						router.push(ROUTES.EXAMS(exam.id));
+					}}>
+						<Led status={getExamLedStatus(exam)} />
 						<div>
 							<p className="examName">{exam.label}</p>
 							<p className="revisionStatus">
@@ -128,57 +138,11 @@ export default function Patient() {
 							<p className="affectedArea">
 								Total affected area: - mm²
 								<span>
-									<FiArrowUp size="16px" /> 32% reduction from last exam.
+									{/*<FiArrowUp size="16px"  32% reduction from last exam. />*/}
 								</span>
 							</p>
 						</div>
 					</PatientStyles.ExamListItem>)}
-
-					{/*<PatientStyles.ExamListItem status="negative">
-						<Led status='error' />
-						<div>
-							<p className="examName">Posterior01</p>
-							<p className="revisionStatus">
-								Revised exam, report available
-							</p>
-							<p className="examDates">
-								Realizado em: 20/04/2021
-								<span>
-									Adicionado em: 20/04/2021
-								</span>
-							</p>
-							<p className="detections">
-								Detections: 16
-							</p>
-							<p className="affectedArea">
-								Total affected area: 526mm²
-								<span>
-									<FiArrowUp size="16px" /> 32% reduction from last exam.
-								</span>
-							</p>
-						</div>
-					</PatientStyles.ExamListItem>
-					<PatientStyles.ExamListItem status="incomplete">
-						<Led status='alert' />
-						<div>
-							<p className="examName">Posterior01</p>
-							<p className="revisionStatus">
-								Incomplete exam information
-							</p>
-							<p className="examDates">
-								Realizado em: 20/04/2021
-								<span>
-									Adicionado em: 20/04/2021
-								</span>
-							</p>
-							<p className="detections">
-								Detections: -
-							</p>
-							<p className="affectedArea">
-								Total affected area: -
-							</p>
-						</div>
-				</PatientStyles.ExamListItem>*/}
 				</ul>
 			</PatientStyles.ExamsSection>
 			<section className="newExamButton">
@@ -189,3 +153,5 @@ export default function Patient() {
 		</main>
 	</PatientStyles.Container>;
 }
+
+export default withAuth(Patient, { strictPrivate: true });

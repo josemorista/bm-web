@@ -7,6 +7,7 @@ import { Header } from '../../../components/Header';
 import { ROUTES } from '../../../consts';
 import { IExam } from '../../../domain/modules/exams/entities/IExam';
 import { CreateExamsServicesFactory } from '../../../domain/modules/exams/factories/CreateExamsServicesFactory';
+import { withAuth } from '../../../hocs';
 import { useAuthentication } from '../../../hooks/useAuthentication';
 import { ExamStyles } from './_[examId]_styles';
 
@@ -26,14 +27,14 @@ const invertPixelData = function (ctx: CanvasRenderingContext2D, canvas: HTMLCan
 	ctx.putImageData(imageData, 0, 0);
 };
 
-export default function Exam() {
+function Exam() {
 
 	const { token } = useAuthentication();
 
 	const router = useRouter();
 	const { examId } = router.query;
 	const debounce = useRef<null | NodeJS.Timeout>(null);
-	const [exam, setExam] = useState<IExam | null | undefined>(null);
+	const [exam, setExam] = useState<IExam | null | undefined>(undefined);
 
 	const [visualization, setVisualization] = useState<IVisualizationOptions>('oro');
 	const [pixelDataColorScheme, setPixelDataColorScheme] = useState<'bInW' | 'wInB'>('bInW');
@@ -42,21 +43,9 @@ export default function Exam() {
 	const canvas2Ref = useRef<HTMLCanvasElement>(null);
 	const canvas3Ref = useRef<HTMLCanvasElement>(null);
 
-	const getExam = useCallback(async () => {
-		const resp = await getExamByIdService.execute({
-			examId: String(examId),
-			authorizeToken: token
-		});
-		if (resp) {
-			setExam(resp);
-		} else {
-			Router.replace(ROUTES.MY_PATIENTS);
-		}
-	}, [token, examId]);
-
 	const togglePixelDataColorScheme = () => {
 		const canvasArray = [canvas1Ref, canvas2Ref, canvas3Ref];
-		canvasArray.forEach((canvasRef, i) => {
+		canvasArray.forEach((canvasRef) => {
 			if (canvasRef.current) {
 				const ctx = canvasRef.current.getContext('2d');
 				if (ctx) {
@@ -91,11 +80,11 @@ export default function Exam() {
 		});
 	}, []);
 
-	const handleProcessExam = async (threshold: number): Promise<void> => {
+	const handleProcessExam = useCallback(async (exam: IExam, threshold: number): Promise<void> => {
 		try {
 			if (exam) {
 				await processExamService.execute({
-					examId: String(examId),
+					examId: String(exam.id),
 					threshold,
 					authorizeToken: token
 				});
@@ -104,7 +93,24 @@ export default function Exam() {
 		} catch (error) {
 			console.error(error);
 		}
-	};
+	}, [refreshImages, token, visualization]);
+
+	const getExam = useCallback(async () => {
+		if (examId) {
+			const resp = await getExamByIdService.execute({
+				examId: String(examId),
+				authorizeToken: token
+			});
+			if (resp) {
+				setExam(resp);
+				if (!resp.originalImageUrl) {
+					handleProcessExam(resp, 0.4);
+				}
+			} else {
+				Router.replace(ROUTES.MY_PATIENTS);
+			}
+		}
+	}, [token, examId, handleProcessExam]);
 
 	useEffect(() => {
 		if (exam === undefined) {
@@ -160,7 +166,7 @@ export default function Exam() {
 								clearTimeout(debounce.current);
 							}
 							debounce.current = setTimeout(() => {
-								handleProcessExam(Number(e.target.value));
+								exam && handleProcessExam(exam, Number(e.target.value));
 							}, 1000);
 						}} type="range" defaultValue="0.4" min="0" max="1" step="0.1" />
 					</section>
@@ -185,15 +191,15 @@ export default function Exam() {
 						<h6>Visualizations:</h6>
 						<ul>
 							<li>
-								<Checkbox checked={visualization === 'oro'} onClick={() => {
+								<Checkbox checked={visualization === 'oro'} onChange={() => {
 									setVisualization('oro');
 									exam && (refreshImages(exam, 'oro'));
 								}} label="Original + segmented + overlay" />
-								<Checkbox checked={visualization === 'ore'} onClick={() => {
+								<Checkbox checked={visualization === 'ore'} onChange={() => {
 									setVisualization('ore');
 									exam && (refreshImages(exam, 'ore'));
 								}} label="Original + segmented + edged" />
-								<Checkbox checked={visualization === 'oeo'} onClick={() => {
+								<Checkbox checked={visualization === 'oeo'} onChange={() => {
 									setVisualization('oeo');
 									exam && (refreshImages(exam, 'oeo'));
 								}} label="Original + edged + overlay" />
@@ -212,3 +218,5 @@ export default function Exam() {
 		</main>
 	</ExamStyles.Container>;
 }
+
+export default withAuth(Exam, { strictPrivate: true });
