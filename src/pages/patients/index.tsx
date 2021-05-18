@@ -1,12 +1,12 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { FiTrash, FiEdit2, FiPlus } from 'react-icons/fi';
+import { useQuery } from 'react-query';
 import { Button } from '../../components/Button';
 import { Header } from '../../components/Header';
 import { Input } from '../../components/Input';
 import { ROUTES } from '../../consts';
-import { IPatient } from '../../domain/modules/patients/entities/IPatient';
 import { CreatePatientsServicesFactory } from '../../domain/modules/patients/factories/CreatePatientsServicesFactory';
 import { withAuth } from '../../hocs';
 import { useAuthentication } from '../../hooks/useAuthentication';
@@ -18,13 +18,21 @@ import { MyPatientsStyles } from './_styles';
 const getPatientsFromUserService = CreatePatientsServicesFactory.createGetPatientsFromUserService();
 
 function MyPatients() {
-	const [patients, setPatients] = useState<Array<IPatient>>([]);
 	const [searchFilter, setSearchFilter] = useState('');
 	const { token } = useAuthentication();
+
+	const { data: patients, refetch: refetchPatients } = useQuery('MyPatients-patients', async () => {
+		return (await getPatientsFromUserService.execute({
+			authorizeToken: token
+		}));
+	}, {
+		refetchOnMount: false
+	});
+
 	const router = useRouter();
 
 	const searchedPatients = useMemo(() => {
-		return patients.filter(el => el.name.toLocaleLowerCase().includes(searchFilter.toLocaleLowerCase()));
+		return patients?.filter(el => el.name.toLocaleLowerCase().includes(searchFilter.toLocaleLowerCase())) || [];
 	}, [patients, searchFilter]);
 
 	const debouncePatientSearch = useRef<NodeJS.Timeout>(null);
@@ -32,16 +40,6 @@ function MyPatients() {
 	const newOrEditPatientModalRef = useRef<IINewOrEditPatientModalHandler>(null);
 	const deletePatientModalRef = useRef<IDeletePatientModalHandle>(null);
 
-	const getPatients = useCallback(async () => {
-		const resp = await getPatientsFromUserService.execute({
-			authorizeToken: token
-		});
-		setPatients(resp);
-	}, [token]);
-
-	useEffect(() => {
-		getPatients();
-	}, [getPatients]);
 
 	return <MyPatientsStyles.Container>
 		<Head>
@@ -49,11 +47,11 @@ function MyPatients() {
 		</Head>
 
 		<NewOrEditPatientModal ref={newOrEditPatientModalRef} onCloseAction={() => {
-			getPatients();
+			refetchPatients();
 		}} />
 
 		<DeletePatientModal ref={deletePatientModalRef} onCloseAction={() => {
-			getPatients();
+			refetchPatients();
 		}}></DeletePatientModal>
 
 		<Header />
