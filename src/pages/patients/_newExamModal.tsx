@@ -9,6 +9,7 @@ import { useDropzone } from 'react-dropzone';
 import { CreateExamsServicesFactory } from '../../domain/modules/exams/factories/CreateExamsServicesFactory';
 import { AppError } from '../../domain/shared/errors/AppError';
 import { useToastMessage } from '../../hooks/useToastMessage';
+import { useAuthentication } from '../../hooks/useAuthentication';
 
 interface INewExamModalProps {
 	patientId: string;
@@ -25,6 +26,7 @@ const createExamService = CreateExamsServicesFactory.createCreateExamService();
 export const NewExamModal = forwardRef<IINewExamModalHandler, INewExamModalProps>(({ onCloseAction, patientId }, ref) => {
 
 	const modalRef = useRef<IModalHandle>(null);
+	const { token } = useAuthentication();
 	const { register, handleSubmit, reset } = useForm();
 	const { setToastMessage } = useToastMessage();
 	const [dcmFile, setDcmFile] = useState<File | null>(null);
@@ -37,10 +39,10 @@ export const NewExamModal = forwardRef<IINewExamModalHandler, INewExamModalProps
 
 	const onSubmit = useCallback(async (data) => {
 		try {
-			console.log(data);
 			if (dcmFile) {
 				await createExamService.execute({
 					...data,
+					authorizeToken: token,
 					patientId: patientId,
 					dcm: dcmFile
 				});
