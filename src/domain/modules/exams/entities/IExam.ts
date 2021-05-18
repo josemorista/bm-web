@@ -13,6 +13,7 @@ export interface IExam {
 	pixelArea: number | null;
 
 	dicomFileLocation: string;
+	originalImageLocation: string | null;
 
 	originalImageUrl?: string | null;
 	resultImageUrl?: string | null;

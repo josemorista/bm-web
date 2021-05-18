@@ -36,7 +36,7 @@ function Exam() {
 	const debounce = useRef<null | NodeJS.Timeout>(null);
 	const [exam, setExam] = useState<IExam | null | undefined>(undefined);
 
-	const [visualization, setVisualization] = useState<IVisualizationOptions>('oro');
+	const [visualization, setVisualization] = useState<IVisualizationOptions>('ore');
 	const [pixelDataColorScheme, setPixelDataColorScheme] = useState<'bInW' | 'wInB'>('bInW');
 
 	const canvas1Ref = useRef<HTMLCanvasElement>(null);
@@ -55,8 +55,14 @@ function Exam() {
 		});
 	};
 
-	const refreshImages = useCallback((exam: IExam, visualization: IVisualizationOptions) => {
+	const refreshImages = useCallback((exam: IExam, visualization?: IVisualizationOptions) => {
+
 		const imgs = [new Image(), new Image(), new Image()];
+
+		imgs.forEach(img => {
+			img.setAttribute('crossOrigin', '');
+		});
+
 		const canvasArray = [canvas1Ref, canvas2Ref, canvas3Ref];
 
 		exam.originalImageUrl && (imgs[0].src = exam.originalImageUrl);
@@ -64,7 +70,7 @@ function Exam() {
 		exam.resultImageUrl && (imgs[1].src = exam.resultImageUrl);
 		exam.edgedResultImageUrl && (imgs[2].src = exam.edgedResultImageUrl);
 
-		if (['oro', 'oeo'].includes(visualization)) {
+		if (['oro', 'oeo'].includes(visualization || 'ore')) {
 			exam.overlayImageUrl && (imgs[2].src = exam.overlayImageUrl);
 		}
 
@@ -75,9 +81,16 @@ function Exam() {
 		canvasArray.forEach((canvasRef, i) => {
 			if (canvasRef.current) {
 				const ctx = canvasRef.current.getContext('2d');
-				ctx?.drawImage(imgs[i], 0, 0);
+				ctx?.clearRect(0, 0, 256, 1024);
+				imgs[i].onload = function () {
+					ctx?.drawImage(imgs[i], 0, 0);
+				};
+
 			}
 		});
+
+		console.log('painted');
+
 	}, []);
 
 	const handleProcessExam = useCallback(async (exam: IExam, threshold: number): Promise<void> => {
@@ -102,15 +115,17 @@ function Exam() {
 				authorizeToken: token
 			});
 			if (resp) {
-				setExam(resp);
 				if (!resp.originalImageUrl) {
-					handleProcessExam(resp, 0.4);
+					await handleProcessExam(resp, 0.4);
+				} else {
+					refreshImages(resp);
 				}
+				setExam(resp);
 			} else {
 				Router.replace(ROUTES.MY_PATIENTS);
 			}
 		}
-	}, [token, examId, handleProcessExam]);
+	}, [token, examId, handleProcessExam, refreshImages]);
 
 	useEffect(() => {
 		if (exam === undefined) {
@@ -129,7 +144,9 @@ function Exam() {
 				<h1>
 					Exam: Posterior01
 				</h1>
-				<Button variant="secondary">
+				<Button variant="secondary" onClick={() => {
+					Router.back();
+				}}>
 					Back
 				</Button>
 			</header>
@@ -139,19 +156,13 @@ function Exam() {
 			<section className="segmentationAndClassification">
 				<ul>
 					<li>
-						{exam?.originalImageUrl && <>
-							<canvas width="768" height="1024" ref={canvas1Ref}></canvas></>
-						}
+						<canvas width="256px" height="1024px" ref={canvas1Ref}></canvas>
 					</li>
 					<li>
-						{exam?.resultImageUrl && <>
-							<canvas width="768" height="1024" ref={canvas2Ref}></canvas>
-						</>}
+						<canvas width="256px" height="1024px" ref={canvas2Ref}></canvas>
 					</li>
 					<li>
-						{exam?.edgedResultImageUrl && <>
-							<canvas width="768" height="1024" ref={canvas3Ref}></canvas>
-						</>}
+						<canvas width="256px" height="1024px" ref={canvas3Ref}></canvas>
 					</li>
 				</ul>
 
@@ -173,13 +184,13 @@ function Exam() {
 					<section className="contrast">
 						<h6>Visualization contrast</h6>
 						<div>
-							<span className="whiteContrast" onClick={() => {
+							<span className={`whiteContrast ${pixelDataColorScheme === 'wInB' ? 'selected' : ''}`} onClick={() => {
 								if (pixelDataColorScheme === 'bInW') {
 									setPixelDataColorScheme('wInB');
 									togglePixelDataColorScheme();
 								}
 							}}></span>
-							<span className="blackContrast" onClick={() => {
+							<span className={`blackContrast ${pixelDataColorScheme === 'bInW' ? 'selected' : ''}`} onClick={() => {
 								if (pixelDataColorScheme === 'wInB') {
 									setPixelDataColorScheme('bInW');
 									togglePixelDataColorScheme();
@@ -216,7 +227,7 @@ function Exam() {
 				<p>Total affected area: - mm²</p>
 			</section>
 		</main>
-	</ExamStyles.Container>;
+	</ExamStyles.Container >;
 }
 
 export default withAuth(Exam, { strictPrivate: true });

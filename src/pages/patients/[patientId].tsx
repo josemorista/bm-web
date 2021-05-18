@@ -23,7 +23,7 @@ const getPatientByIdService = CreatePatientsServicesFactory.createGetPatientById
 const getExamsFromPatientService = CreateExamsServicesFactory.createGetExamsFromPatientService();
 
 const getExamLedStatus = (exam: IExam) => {
-	if (!exam.overlayImageUrl) return 'alert';
+	if (!exam.originalImageLocation) return 'alert';
 	return 'success';
 };
 

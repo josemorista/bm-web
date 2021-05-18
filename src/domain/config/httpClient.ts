@@ -1,3 +1,3 @@
 export const httpClientConfig = {
-	timeout: 3000
+	timeout: 30000
 };

@@ -90,13 +90,21 @@ const Container = styled.div`
 
 						span {
 
+							margin-right: 0.5rem;
+
+							border: 3px solid transparent;
+
+							&.selected {
+								border: 3px solid ${({ theme }) => theme.colors.blue500};
+							}
+
 							display: block;
 							cursor: pointer;
 
 							width: 3rem;
 							height: 3rem;
 
-							border-radius: 6px;
+							border-radius: 50%;
 
 							background: white;
 
