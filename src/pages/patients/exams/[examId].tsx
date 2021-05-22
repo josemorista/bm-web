@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import Router, { useRouter } from 'next/router';
 import { useCallback, useRef, useState } from 'react';
+import { AiOutlineLoading } from 'react-icons/ai';
 import { useQuery } from 'react-query';
 import { Button } from '../../../components/Button';
 import { Checkbox } from '../../../components/Checkbox';
@@ -35,6 +36,9 @@ function Exam() {
 
 	const router = useRouter();
 	const { examId } = router.query;
+
+	const [loading, setLoading] = useState<boolean | undefined>(true);
+
 	const debounce = useRef<null | NodeJS.Timeout>(null);
 
 	const [segmentedExam, setSegmentedExam] = useState<ISegmentedExam | undefined>(undefined);
@@ -57,12 +61,14 @@ function Exam() {
 				} catch (error) {
 					console.error(error);
 				}
+			} else {
+				setLoading(false);
 			}
 			refreshImages(data, visualization);
 		}
 	});
 
-	const [visualization, setVisualization] = useState<IVisualizationOptions>('ore');
+	const [visualization, setVisualization] = useState<IVisualizationOptions>('oro');
 	const [pixelDataColorScheme, setPixelDataColorScheme] = useState<'bInW' | 'wInB'>('bInW');
 
 	const canvas1Ref = useRef<HTMLCanvasElement>(null);
@@ -96,7 +102,7 @@ function Exam() {
 		exam.resultImageUrl && (imgs[1].src = exam.resultImageUrl);
 		exam.edgedResultImageUrl && (imgs[2].src = exam.edgedResultImageUrl);
 
-		if (['oro', 'oeo'].includes(visualization || 'ore')) {
+		if (['oro', 'oeo'].includes(visualization || 'ose')) {
 			exam.overlayImageUrl && (imgs[2].src = exam.overlayImageUrl);
 		}
 
@@ -118,6 +124,7 @@ function Exam() {
 	}, []);
 
 	const handleProcessExam = useCallback(async (exam: IExam, threshold: number): Promise<void> => {
+		setLoading(true);
 		try {
 			if (exam) {
 				const response = await processExamService.execute({
@@ -135,6 +142,7 @@ function Exam() {
 		} catch (error) {
 			console.error(error);
 		}
+		setLoading(false);
 	}, [refreshImages, token, visualization, refetchExam]);
 
 
@@ -170,20 +178,27 @@ function Exam() {
 					</li>
 				</ul>
 
-				<section className="segmentationOptions">
+				{!loading ? <section className="segmentationOptions">
 					<section className="threshold">
 						<h6>Classifier probability threshold</h6>
 						<legend>
 							Lower probability allows more detections but with less precision
 						</legend>
-						<input onChange={e => {
-							if (debounce.current) {
-								clearTimeout(debounce.current);
-							}
-							debounce.current = setTimeout(() => {
-								exam && handleProcessExam(exam, Number(e.target.value));
-							}, 1000);
-						}} type="range" defaultValue="0.4" min="0" max="1" step="0.1" />
+						<div className="inputRangeContainer">
+							<span>0</span>
+							<input onChange={e => {
+								if (debounce.current) {
+									clearTimeout(debounce.current);
+								}
+								debounce.current = setTimeout(() => {
+									exam && handleProcessExam(exam, Number(e.target.value));
+								}, 1000);
+							}} type="range" defaultValue="0.4" list="threshold-tickmarks" min="0" max="1" step="0.1" />
+							<datalist id="threshold-tickmarks">
+								{[...new Array(11)].map((el, i) => <option key={i * 0.1} value={i * 0.1} label={`${i * 0.1}`} />)}
+							</datalist>
+							<span>1</span>
+						</div>
 					</section>
 					<section className="contrast">
 						<h6>Visualization contrast</h6>
@@ -221,7 +236,7 @@ function Exam() {
 							</li>
 						</ul>
 					</section>
-				</section>
+				</section> : <div className="loading"><img src="/assets/imgs/gif/loading.gif" alt="loading" />Loading...</div>}
 			</section>
 			<h2>
 				Report

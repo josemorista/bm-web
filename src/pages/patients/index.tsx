@@ -25,8 +25,6 @@ function MyPatients() {
 		return (await getPatientsFromUserService.execute({
 			authorizeToken: token
 		}));
-	}, {
-		refetchOnMount: false
 	});
 
 	const router = useRouter();

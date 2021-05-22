@@ -68,6 +68,22 @@ const Container = styled.div`
 			}
 		}
 
+		.loading {
+			display: flex;
+			align-items: center;
+
+			margin: 2rem 0;
+			height: 40px;
+
+			color: ${({ theme }) => theme.colors.white};
+
+			img {
+				margin-right: 1rem;
+				width: 40px;
+				height: 40px;
+			}
+		}
+
 		.segmentationOptions {
 			h6, p,legend {
 				color: ${({ theme }) => theme.colors.white};
@@ -83,9 +99,20 @@ const Container = styled.div`
 				}
 
 				&.threshold {
-					input {
+					.inputRangeContainer {
 						margin-top: 1rem;
-						width: 100%;
+
+						display: flex;
+						align-items: center;
+
+						span {
+							color: ${({ theme }) => theme.colors.white};
+						}
+
+						input {
+							margin: 0 1rem;
+							width: 100%;
+						}
 					}
 				}
 
