@@ -48,7 +48,7 @@ function Patient() {
 	}, [category, exams]);
 
 	const patientAge = useMemo(() => {
-		return patient?.birthDate && typeof patient.birthDate === 'string' ? differenceInCalendarYears(new Date(patient.birthDate), new Date()) : null;
+		return patient?.birthDate && typeof patient.birthDate === 'string' ? differenceInCalendarYears(new Date(), new Date(patient.birthDate)) : null;
 	}, [patient?.birthDate]);
 
 	const getExamsFromPatient = useCallback(async () => {
