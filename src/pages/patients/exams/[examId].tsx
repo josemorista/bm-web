@@ -226,9 +226,8 @@ function Exam() {
 			<h2>
 				Report
 			</h2>
-			<section className="report">
-				<p>Detections count: -</p>
-				<p>Total affected area: {segmentedExam?.affectedArea ?? '-'} mm²</p>
+			<section className={`report ${(segmentedExam?.affectedArea ?? 0) > 0 ? 'negative' : ''}`}>
+				<p>Total affected area: <b>{segmentedExam?.affectedArea ?? '-'}</b> mm²</p>
 			</section>
 		</main>
 	</ExamStyles.Container >;

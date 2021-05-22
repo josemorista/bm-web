@@ -37,6 +37,12 @@ const Container = styled.div`
 			border-radius: 6px;
 
 			&.report {
+				&.negative {
+					b {
+						color: ${({ theme }) => theme.colors.red300};
+					}
+				}
+				
 				> p {
 					color: ${({ theme }) => theme.colors.white};
 				}
