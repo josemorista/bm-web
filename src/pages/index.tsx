@@ -42,8 +42,8 @@ function Home() {
 						<img src="/assets/imgs/png/huapLogo.png" alt="HUAP" />
 					</header>
 					<form onSubmit={handleSubmit(onSubmit)}>
-						<Input {...register('email')} type="email" placeholder="Email" />
-						<Input {...register('password')} type="password" placeholder="Password" />
+						<Input {...register('email')} autoComplete="off" type="email" placeholder="Email" />
+						<Input {...register('password')} autoComplete="off" type="password" placeholder="Password" />
 						<Link href={ROUTES.REGISTER}>
 							<a>Does not have an account? SignUp</a>
 						</Link>

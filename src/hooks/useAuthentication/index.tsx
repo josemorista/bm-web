@@ -71,6 +71,8 @@ export const AuthenticationProvider = ({ children }: IAuthenticationProviderProp
 							user,
 							credentials
 						});
+					} else {
+						logout();
 					}
 				});
 			} else {
