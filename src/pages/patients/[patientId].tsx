@@ -1,6 +1,5 @@
 import Head from 'next/head';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { FiArrowUp } from 'react-icons/fi';
 import { Button } from '../../components/Button';
 import { Header } from '../../components/Header';
 import { Led } from '../../components/Led';
@@ -50,7 +49,7 @@ function Patient() {
 
 	const patientAge = useMemo(() => {
 		return patient?.birthDate && typeof patient.birthDate === 'string' ? differenceInCalendarYears(new Date(patient.birthDate), new Date()) : null;
-	}, [patient]);
+	}, [patient?.birthDate]);
 
 	const getExamsFromPatient = useCallback(async () => {
 		if (patient?.id) {
@@ -97,7 +96,7 @@ function Patient() {
 			<h1>{patient.name}</h1>
 			<h5>dicomId: {patient.dicomPatientId || ''}</h5>
 			<p>
-				Age: {patientAge || '-'}
+				Age: {patientAge ?? '-'} years old
 			</p>
 			<p>
 				{patient.description}
@@ -124,7 +123,7 @@ function Patient() {
 						<div>
 							<p className="examName">{exam.label}</p>
 							<p className="revisionStatus">
-								-
+
 							</p>
 							<p className="examDates">
 								Realizado em: {exam.formattedDate}
@@ -133,7 +132,7 @@ function Patient() {
 								</span>
 							</p>
 							<p className="detections">
-								Detections: -
+								{/*Detections: -*/}
 							</p>
 							<p className="affectedArea">
 								Total affected area: - mm²

@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import Router, { useRouter } from 'next/router';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useQuery } from 'react-query';
 import { Button } from '../../../components/Button';
 import { Checkbox } from '../../../components/Checkbox';
 import { Header } from '../../../components/Header';
@@ -34,7 +35,28 @@ function Exam() {
 	const router = useRouter();
 	const { examId } = router.query;
 	const debounce = useRef<null | NodeJS.Timeout>(null);
-	const [exam, setExam] = useState<IExam | null | undefined>(undefined);
+	const { data: exam, refetch: refetchExam } = useQuery<IExam | null>(`exam-:${examId}`, async () => {
+		const exam = await getExamByIdService.execute({
+			authorizeToken: token,
+			examId: String(examId)
+		});
+		return exam;
+	}, {
+		onSuccess: async (data) => {
+			if (!data) {
+				Router.replace(ROUTES.MY_PATIENTS);
+				return;
+			}
+			if (data && !data?.originalImageUrl) {
+				try {
+					await handleProcessExam(data, 0.4);
+				} catch (error) {
+					console.error(error);
+				}
+			}
+			refreshImages(data, visualization);
+		}
+	});
 
 	const [visualization, setVisualization] = useState<IVisualizationOptions>('ore');
 	const [pixelDataColorScheme, setPixelDataColorScheme] = useState<'bInW' | 'wInB'>('bInW');
@@ -89,8 +111,6 @@ function Exam() {
 			}
 		});
 
-		console.log('painted');
-
 	}, []);
 
 	const handleProcessExam = useCallback(async (exam: IExam, threshold: number): Promise<void> => {
@@ -101,37 +121,16 @@ function Exam() {
 					threshold,
 					authorizeToken: token
 				});
-				refreshImages(exam, visualization);
+				if (!exam.originalImageUrl) {
+					await refetchExam();
+				} else {
+					refreshImages(exam, visualization);
+				}
 			}
 		} catch (error) {
 			console.error(error);
 		}
-	}, [refreshImages, token, visualization]);
-
-	const getExam = useCallback(async () => {
-		if (examId) {
-			const resp = await getExamByIdService.execute({
-				examId: String(examId),
-				authorizeToken: token
-			});
-			if (resp) {
-				if (!resp.originalImageUrl) {
-					await handleProcessExam(resp, 0.4);
-				} else {
-					refreshImages(resp);
-				}
-				setExam(resp);
-			} else {
-				Router.replace(ROUTES.MY_PATIENTS);
-			}
-		}
-	}, [token, examId, handleProcessExam, refreshImages]);
-
-	useEffect(() => {
-		if (exam === undefined) {
-			getExam();
-		}
-	}, [exam, getExam]);
+	}, [refreshImages, token, visualization, refetchExam]);
 
 
 	return <ExamStyles.Container>
