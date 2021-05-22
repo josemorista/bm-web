@@ -1,7 +1,6 @@
 import Head from 'next/head';
 import Router, { useRouter } from 'next/router';
 import { useCallback, useRef, useState } from 'react';
-import { AiOutlineLoading } from 'react-icons/ai';
 import { useQuery } from 'react-query';
 import { Button } from '../../../components/Button';
 import { Checkbox } from '../../../components/Checkbox';
@@ -117,10 +116,8 @@ function Exam() {
 				imgs[i].onload = function () {
 					ctx?.drawImage(imgs[i], 0, 0);
 				};
-
 			}
 		});
-
 	}, []);
 
 	const handleProcessExam = useCallback(async (exam: IExam, threshold: number): Promise<void> => {
@@ -145,6 +142,11 @@ function Exam() {
 		setLoading(false);
 	}, [refreshImages, token, visualization, refetchExam]);
 
+	const handleChangeVisualization = (op: IVisualizationOptions) => {
+		setVisualization(op);
+		setPixelDataColorScheme('bInW');
+		exam && (refreshImages(exam, op));
+	};
 
 	return <ExamStyles.Container>
 		<Head>
@@ -222,16 +224,13 @@ function Exam() {
 						<ul>
 							<li>
 								<Checkbox checked={visualization === 'oro'} onChange={() => {
-									setVisualization('oro');
-									exam && (refreshImages(exam, 'oro'));
+									handleChangeVisualization('oro');
 								}} label="Original + segmented + overlay" />
 								<Checkbox checked={visualization === 'ore'} onChange={() => {
-									setVisualization('ore');
-									exam && (refreshImages(exam, 'ore'));
+									handleChangeVisualization('ore');
 								}} label="Original + segmented + edged" />
 								<Checkbox checked={visualization === 'oeo'} onChange={() => {
-									setVisualization('oeo');
-									exam && (refreshImages(exam, 'oeo'));
+									handleChangeVisualization('oeo');
 								}} label="Original + edged + overlay" />
 							</li>
 						</ul>
