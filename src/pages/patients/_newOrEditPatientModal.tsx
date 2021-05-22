@@ -104,7 +104,7 @@ export const NewOrEditPatientModal = forwardRef<IINewOrEditPatientModalHandler, 
 				<Input  {...register('name')} placeholder="Patient name" />
 				<Input  {...register('birthDate')} type='text' placeholder="Birth date" />
 
-				<Select {...register('sex')} defaultValue="M" placeholder="Sex">
+				<Select {...register('gender')} defaultValue="M" placeholder="gender">
 					<option value="M">Male</option>
 					<option value="F">Female</option>
 				</Select>

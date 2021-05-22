@@ -1,5 +1,6 @@
 import { API_ROUTES } from '../../../../consts';
 import { IHttpClientProvider } from '../../../../shared/providers/HttpClientProvider/models/IHttpClientProvider';
+import { ISegmentedExam } from '../../entities/ISegmentedExam';
 
 interface IProcessExamServiceDTO {
 	examId: string;
@@ -13,8 +14,8 @@ export class ProcessExamService {
 		private httpClientProvider: IHttpClientProvider
 	) { }
 
-	async execute({ examId, threshold, authorizeToken }: IProcessExamServiceDTO): Promise<void> {
-		await this.httpClientProvider.post({
+	async execute({ examId, threshold, authorizeToken }: IProcessExamServiceDTO): Promise<ISegmentedExam> {
+		const { data } = await this.httpClientProvider.post<ISegmentedExam>({
 			url: `${API_ROUTES.EXAMS}/${examId}/segmentation`,
 			body: {
 				algorithm: 'randomForest',
@@ -26,5 +27,6 @@ export class ProcessExamService {
 				Authorization: `Bearer ${authorizeToken}`
 			}
 		});
+		return data;
 	}
 }

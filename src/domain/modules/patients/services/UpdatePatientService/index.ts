@@ -4,7 +4,7 @@ import { IFormValidationProvider } from '../../../../shared/providers/FormValida
 import { IHttpClientProvider } from '../../../../shared/providers/HttpClientProvider/models/IHttpClientProvider';
 import { IPatient } from '../../entities/IPatient';
 
-interface IUpdatePatientServiceDTO extends Pick<IPatient, 'name' | 'birthDate' | 'description' | 'sex' | 'id'> {
+interface IUpdatePatientServiceDTO extends Pick<IPatient, 'name' | 'birthDate' | 'description' | 'gender' | 'id'> {
 	authorizeToken: string;
 }
 

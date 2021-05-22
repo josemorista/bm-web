@@ -60,7 +60,7 @@ export const NewExamModal = forwardRef<IINewExamModalHandler, INewExamModalProps
 				});
 			}
 		}
-	}, [onCloseAction, dcmFile, setToastMessage, patientId]);
+	}, [onCloseAction, dcmFile, setToastMessage, patientId, token]);
 
 	const handleOpenModal: IINewExamModalHandler['handleOpenModal'] = useCallback(async () => {
 		reset();

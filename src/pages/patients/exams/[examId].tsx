@@ -1,12 +1,13 @@
 import Head from 'next/head';
 import Router, { useRouter } from 'next/router';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { useQuery } from 'react-query';
 import { Button } from '../../../components/Button';
 import { Checkbox } from '../../../components/Checkbox';
 import { Header } from '../../../components/Header';
 import { ROUTES } from '../../../consts';
 import { IExam } from '../../../domain/modules/exams/entities/IExam';
+import { ISegmentedExam } from '../../../domain/modules/exams/entities/ISegmentedExam';
 import { CreateExamsServicesFactory } from '../../../domain/modules/exams/factories/CreateExamsServicesFactory';
 import { withAuth } from '../../../hocs';
 import { useAuthentication } from '../../../hooks/useAuthentication';
@@ -35,6 +36,9 @@ function Exam() {
 	const router = useRouter();
 	const { examId } = router.query;
 	const debounce = useRef<null | NodeJS.Timeout>(null);
+
+	const [segmentedExam, setSegmentedExam] = useState<ISegmentedExam | undefined>(undefined);
+
 	const { data: exam, refetch: refetchExam } = useQuery<IExam | null>(`exam-:${examId}`, async () => {
 		const exam = await getExamByIdService.execute({
 			authorizeToken: token,
@@ -116,11 +120,12 @@ function Exam() {
 	const handleProcessExam = useCallback(async (exam: IExam, threshold: number): Promise<void> => {
 		try {
 			if (exam) {
-				await processExamService.execute({
+				const response = await processExamService.execute({
 					examId: String(exam.id),
 					threshold,
 					authorizeToken: token
 				});
+				setSegmentedExam(response);
 				if (!exam.originalImageUrl) {
 					await refetchExam();
 				} else {
@@ -223,7 +228,7 @@ function Exam() {
 			</h2>
 			<section className="report">
 				<p>Detections count: -</p>
-				<p>Total affected area: - mm²</p>
+				<p>Total affected area: {segmentedExam?.affectedArea ?? '-'} mm²</p>
 			</section>
 		</main>
 	</ExamStyles.Container >;
