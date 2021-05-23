@@ -18,7 +18,7 @@ pipeline {
 					echo NEXT_PUBLIC_API_URL=$API_URL &> .env
 					npm run build
 					tar cfz $artifact node_modules public .env package.json .babelrc .next
-					scp $artifact $sshUser@$host:/tmp/$artifact
+					scp $artifact $sshuser@$host:/tmp/$artifact
 					rm -rf ./*
 				'''
 			}
@@ -26,7 +26,7 @@ pipeline {
 		stage('Deploy') {
 			steps {
 				sh '''
-					ssh -o StrictHostKeyChecking=no -T $sshUser@$host << EOF
+					ssh -o StrictHostKeyChecking=no -T $sshuser@$host << EOF
 					cd /tmp
 					mkdir -p $directory
 					rm -rf $directory/*
