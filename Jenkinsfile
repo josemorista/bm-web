@@ -15,9 +15,9 @@ pipeline {
 			steps {
 				sh '''
 					npm install
-					npm run build
 					echo NEXT_PUBLIC_API_URL=$API_URL &> .env
-					tar cfz $artifact node_modules public .env.local package.json .babelrc .next
+					npm run build
+					tar cfz $artifact node_modules public .env package.json .babelrc .next
 					scp $artifact $sshUser@$host:/tmp/$artifact
 					rm -rf ./*
 				'''
