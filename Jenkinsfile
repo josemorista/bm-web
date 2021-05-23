@@ -8,7 +8,7 @@ pipeline {
 		API_URL = 'https://api.bm-diag.org'
 	}
 
-	tools {nodejs: 'nodejs'}
+	tools {nodejs "nodejs"}
 
 	stages {
 		stage('Build') {
