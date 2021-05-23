@@ -13,20 +13,19 @@ pipeline {
 	stages {
 		stage('Build') {
 			steps {
-				sh """
+				sh '''
 					npm install
 					npm run build
-					echo '...' &> .env.local
-					echo NEXT_PUBLIC_API_URL=$API_URL &> .env.local
+					echo NEXT_PUBLIC_API_URL=$API_URL &> .env
 					tar cfz $artifact node_modules public .env.local package.json .babelrc .next
 					scp $artifact $sshUser@$host:/tmp/$artifact
 					rm -rf ./*
-				"""
+				'''
 			}
 		}
 		stage('Deploy') {
 			steps {
-				sh """
+				sh '''
 					ssh -o StrictHostKeyChecking=no -T $sshUser@$host << EOF
 					cd /tmp
 					mkdir -p $directory
@@ -36,7 +35,7 @@ pipeline {
 					cd $directory
 					pm2 delete process.json
 					pm2 start process.json
-EOF"""
+EOF'''
 			}
 		}
 	}

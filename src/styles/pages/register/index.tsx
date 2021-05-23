@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { fadeIn } from '../../styles/animations';
+import { fadeIn } from '../../animations';
 
 const Container = styled.main`
 	display: grid;

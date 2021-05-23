@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { loadFromRight } from '../../styles/animations';
+import { loadFromRight } from '../../../styles/animations';
 
 interface IContainerProps {
 	variant: 'error' | 'success' | 'info';

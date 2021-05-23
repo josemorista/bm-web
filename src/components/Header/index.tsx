@@ -1,5 +1,5 @@
 import { useAuthentication } from '../../hooks/useAuthentication';
-import { Button } from '../Button';
+import { Button } from '../templates/Button';
 import { HeaderStyles } from './_styles';
 import { useRouter } from 'next/router';
 import { ROUTES } from '../../consts';

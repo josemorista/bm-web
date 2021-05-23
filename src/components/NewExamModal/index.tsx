@@ -1,10 +1,10 @@
 import { forwardRef, useCallback, useImperativeHandle, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Button } from '../../components/Button';
-import { Input } from '../../components/Input';
-import { IModalHandle, Modal } from '../../components/Modal';
-import { Select } from '../../components/Select';
-import { PatientStyles } from './_[patientId]_styles';
+import { Button } from '../templates/Button';
+import { Input } from '../templates/Input';
+import { IModalHandle, Modal } from '../templates/Modal';
+import { Select } from '../templates/Select';
+import { PatientStyles } from '../../styles/pages/patients/patientId';
 import { useDropzone } from 'react-dropzone';
 import { CreateExamsServicesFactory } from '../../domain/modules/exams/factories/CreateExamsServicesFactory';
 import { AppError } from '../../domain/shared/errors/AppError';

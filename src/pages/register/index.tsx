@@ -1,10 +1,10 @@
 import Head from 'next/head';
 import Link from 'next/link';
 
-import { RegisterStyles } from './_styles';
+import { RegisterStyles } from '../../styles/pages/register';
 
-import { Input } from '../../components/Input';
-import { Button } from '../../components/Button';
+import { Input } from '../../components/templates/Input';
+import { Button } from '../../components/templates/Button';
 import { ROUTES } from '../../consts';
 import { useToastMessage } from '../../hooks/useToastMessage';
 import { useCallback } from 'react';

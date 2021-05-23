@@ -3,16 +3,16 @@ import { useRouter } from 'next/router';
 import { useMemo, useRef, useState } from 'react';
 import { FiTrash, FiEdit2, FiPlus } from 'react-icons/fi';
 import { useQuery } from 'react-query';
-import { Button } from '../../components/Button';
+import { Button } from '../../components/templates/Button';
 import { Header } from '../../components/Header';
-import { Input } from '../../components/Input';
+import { Input } from '../../components/templates/Input';
 import { ROUTES } from '../../consts';
 import { CreatePatientsServicesFactory } from '../../domain/modules/patients/factories/CreatePatientsServicesFactory';
 import { withAuth } from '../../hocs';
 import { useAuthentication } from '../../hooks/useAuthentication';
-import { DeletePatientModal, IDeletePatientModalHandle } from './_deletePatientModal';
-import { IINewOrEditPatientModalHandler, NewOrEditPatientModal } from './_newOrEditPatientModal';
-import { MyPatientsStyles } from './_styles';
+import { DeletePatientModal, IDeletePatientModalHandle } from '../../components/DeletePatientModal';
+import { IINewOrEditPatientModalHandler, NewOrEditPatientModal } from '../../components/NewOrEditPatientModal';
+import { MyPatientsStyles } from '../../styles/pages/patients';
 
 // Services
 const getPatientsFromUserService = CreatePatientsServicesFactory.createGetPatientsFromUserService();

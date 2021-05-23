@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { loadFromBottom } from '../../styles/animations';
+import { loadFromBottom } from '../../../styles/animations';
 
 const Container = styled.div`
 	position: fixed;

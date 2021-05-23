@@ -1,11 +1,11 @@
 import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
-import { Button } from '../../components/Button';
-import { IModalHandle, Modal } from '../../components/Modal';
+import { Button } from '../templates/Button';
+import { IModalHandle, Modal } from '../templates/Modal';
 import { IPatient } from '../../domain/modules/patients/entities/IPatient';
 import { CreatePatientsServicesFactory } from '../../domain/modules/patients/factories/CreatePatientsServicesFactory';
 import { AppError } from '../../domain/shared/errors/AppError';
 import { useAuthentication } from '../../hooks/useAuthentication';
-import { MyPatientsStyles } from './_styles';
+import { MyPatientsStyles } from '../../styles/pages/patients';
 
 interface IDeletePatientModalProps {
 	onCloseAction?: () => void | Promise<void>;

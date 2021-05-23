@@ -1,14 +1,14 @@
 import { forwardRef, useCallback, useImperativeHandle, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Button } from '../../components/Button';
-import { Input } from '../../components/Input';
-import { IModalHandle, Modal } from '../../components/Modal';
-import { Select } from '../../components/Select';
-import { Textarea } from '../../components/Textarea';
+import { Button } from '../templates/Button';
+import { Input } from '../templates/Input';
+import { IModalHandle, Modal } from '../templates/Modal';
+import { Select } from '../templates/Select';
+import { Textarea } from '../templates/Textarea';
 import { IPatient } from '../../domain/modules/patients/entities/IPatient';
 import { formatDate } from '../../utils/formatDate';
 import { CreatePatientsServicesFactory } from '../../domain/modules/patients/factories/CreatePatientsServicesFactory';
-import { MyPatientsStyles } from './_styles';
+import { MyPatientsStyles } from '../../styles/pages/patients';
 import { useAuthentication } from '../../hooks/useAuthentication';
 import { useToastMessage } from '../../hooks/useToastMessage';
 

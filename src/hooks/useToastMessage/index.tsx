@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useState } from 'react';
-import { ToastMessage } from '../../components/ToastMessage';
+import { ToastMessage } from '../../components/templates/ToastMessage';
 
 interface IToastMessage {
 	message: string;

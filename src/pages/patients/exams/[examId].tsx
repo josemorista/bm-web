@@ -2,8 +2,8 @@ import Head from 'next/head';
 import Router, { useRouter } from 'next/router';
 import { useCallback, useRef, useState } from 'react';
 import { useQuery } from 'react-query';
-import { Button } from '../../../components/Button';
-import { Checkbox } from '../../../components/Checkbox';
+import { Button } from '../../../components/templates/Button';
+import { Checkbox } from '../../../components/templates/Checkbox';
 import { Header } from '../../../components/Header';
 import { ROUTES } from '../../../consts';
 import { IExam } from '../../../domain/modules/exams/entities/IExam';
@@ -11,7 +11,7 @@ import { ISegmentedExam } from '../../../domain/modules/exams/entities/ISegmente
 import { CreateExamsServicesFactory } from '../../../domain/modules/exams/factories/CreateExamsServicesFactory';
 import { withAuth } from '../../../hocs';
 import { useAuthentication } from '../../../hooks/useAuthentication';
-import { ExamStyles } from './_[examId]_styles';
+import { ExamStyles } from '../../../styles/pages/patients/exams/examId';
 
 type IVisualizationOptions = 'ore' | 'oro' | 'oeo';
 
