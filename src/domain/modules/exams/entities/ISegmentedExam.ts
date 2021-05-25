@@ -3,6 +3,7 @@ export interface ISegmentedExam {
 	algorithm: 'randomForest' | 'SVM';
 	threshold: number;
 	affectedArea: number;
+	classifiedArea: number;
 	createdAt: Date | string;
 	updatedAt: Date | string;
 }

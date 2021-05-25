@@ -48,6 +48,7 @@ const Container = styled.div`
 				}
 			}
 
+
 			&.segmentationAndClassification {
 
 				display: flex;
@@ -149,6 +150,15 @@ const Container = styled.div`
 				}
 			}
 		}
+	}
+
+	.exportReportContainer {
+				
+		margin: 1rem 0;
+
+		display: flex;
+		justify-content: flex-end;
+
 	}
 
 

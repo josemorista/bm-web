@@ -36,6 +36,7 @@ function Exam() {
 	const router = useRouter();
 	const { examId } = router.query;
 
+	const reportRef = useRef<HTMLDivElement>(null);
 	const [loading, setLoading] = useState<boolean | undefined>(true);
 
 	const debounce = useRef<null | NodeJS.Timeout>(null);
@@ -148,6 +149,20 @@ function Exam() {
 		exam && (refreshImages(exam, op));
 	};
 
+	const downloadInnerHtml = (filename: string, mimeType?: string) => {
+		const elHtml = reportRef.current?.innerHTML.replace(/(<\/p>)|(<br\/>)/g, '\n').replace(/<\/?(.+?)>/g, '');
+		if (elHtml) {
+			const link = document.createElement('a');
+			mimeType = mimeType || 'text/plain';
+
+			link.setAttribute('download', filename);
+			link.setAttribute('href', 'data:' + mimeType + ';charset=utf-8,' + encodeURIComponent(elHtml));
+			link.click();
+		}
+	};
+
+	const affectedAreaRatio = ((segmentedExam?.affectedArea || 0) / (segmentedExam?.classifiedArea || 1));
+
 	return <ExamStyles.Container>
 		<Head>
 			<title>Exam | Bone Metastasis</title>
@@ -240,9 +255,17 @@ function Exam() {
 			<h2>
 				Report
 			</h2>
-			<section className={`report ${(segmentedExam?.affectedArea ?? 0) > 0 ? 'negative' : ''}`}>
+			<section className={`report ${(segmentedExam?.affectedArea ?? 0) > 0 ? 'negative' : ''}`} ref={reportRef}>
 				<p>Total affected area: <b>{segmentedExam?.affectedArea ?? '-'}</b> mm²</p>
+				<p>Total classified area: {segmentedExam?.classifiedArea ?? '-'} mm²</p>
+				<p>Affected area ratio: <b>{affectedAreaRatio}</b></p>
+				<p hidden>Result image: ${exam?.resultImageUrl}</p>
+				<p hidden>Edge image: ${exam?.edgedResultImageUrl}</p>
+				<p hidden>Overlay image: ${exam?.overlayImageUrl}</p>
 			</section>
+			<div className="exportReportContainer">
+				<Button variant='primary' onClick={() => downloadInnerHtml(exam?.id || 'report.txt')}>Export as txt</Button>
+			</div>
 		</main>
 	</ExamStyles.Container >;
 }
