@@ -62,6 +62,9 @@ function Exam() {
 					console.error(error);
 				}
 			} else {
+				if (data.segmentedExam) {
+					setSegmentedExam(data.segmentedExam);
+				}
 				setLoading(false);
 			}
 			refreshImages(data, visualization);
