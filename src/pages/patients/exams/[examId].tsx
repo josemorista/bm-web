@@ -259,9 +259,9 @@ function Exam() {
 				<p>Total affected area: <b>{segmentedExam?.affectedArea ?? '-'}</b> mm²</p>
 				<p>Total classified area: {segmentedExam?.classifiedArea ?? '-'} mm²</p>
 				<p>Affected area ratio: <b>{affectedAreaRatio}</b></p>
-				<p hidden>Result image: ${exam?.resultImageUrl}</p>
-				<p hidden>Edge image: ${exam?.edgedResultImageUrl}</p>
-				<p hidden>Overlay image: ${exam?.overlayImageUrl}</p>
+				<p hidden>Result image: {exam?.resultImageUrl}</p>
+				<p hidden>Edge image: {exam?.edgedResultImageUrl}</p>
+				<p hidden>Overlay image: {exam?.overlayImageUrl}</p>
 			</section>
 			<div className="exportReportContainer">
 				<Button variant='primary' onClick={() => downloadInnerHtml(exam?.id || 'report.txt')}>Export as txt</Button>
