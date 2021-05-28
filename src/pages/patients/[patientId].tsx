@@ -134,12 +134,12 @@ function Patient() {
 							<p className="detections">
 								{/*Detections: -*/}
 							</p>
-							<p className="affectedArea">
+							{/*<p className="affectedArea">
 								Total affected area: - mm²
 								<span>
-									{/*<FiArrowUp size="16px"  32% reduction from last exam. />*/}
+									<FiArrowUp size="16px"  32% reduction from last exam. />
 								</span>
-							</p>
+				</p>*/}
 						</div>
 					</PatientStyles.ExamListItem>)}
 				</ul>
