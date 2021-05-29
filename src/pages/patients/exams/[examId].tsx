@@ -71,7 +71,7 @@ function Exam() {
 		}
 	});
 
-	const [visualization, setVisualization] = useState<IVisualizationOptions>('oro');
+	const [visualization, setVisualization] = useState<IVisualizationOptions>('oeo');
 	const [pixelDataColorScheme, setPixelDataColorScheme] = useState<'bInW' | 'wInB'>('bInW');
 
 	const canvas1Ref = useRef<HTMLCanvasElement>(null);
@@ -94,23 +94,25 @@ function Exam() {
 
 		const imgs = [new Image(), new Image(), new Image()];
 
+		const ts = Date.now();
+
 		imgs.forEach(img => {
 			img.setAttribute('crossOrigin', '');
 		});
 
 		const canvasArray = [canvas1Ref, canvas2Ref, canvas3Ref];
 
-		exam.originalImageUrl && (imgs[0].src = exam.originalImageUrl);
+		exam.originalImageUrl && (imgs[0].src = `${exam.originalImageUrl}?ts=${ts}`);
 
-		exam.resultImageUrl && (imgs[1].src = exam.resultImageUrl);
-		exam.edgedResultImageUrl && (imgs[2].src = exam.edgedResultImageUrl);
+		exam.resultImageUrl && (imgs[1].src = `${exam.resultImageUrl}?ts=${ts}`);
+		exam.edgedResultImageUrl && (imgs[2].src = `${exam.edgedResultImageUrl}?ts=${ts}`);
 
 		if (['oro', 'oeo'].includes(visualization || 'ose')) {
-			exam.overlayImageUrl && (imgs[2].src = exam.overlayImageUrl);
+			exam.overlayImageUrl && (imgs[2].src = `${exam.overlayImageUrl}?ts=${ts}`);
 		}
 
 		if (visualization === 'oeo') {
-			exam.edgedResultImageUrl && (imgs[1].src = exam.edgedResultImageUrl);
+			exam.edgedResultImageUrl && (imgs[1].src = `${exam.edgedResultImageUrl}?ts=${ts}`);
 		}
 
 		canvasArray.forEach((canvasRef, i) => {
