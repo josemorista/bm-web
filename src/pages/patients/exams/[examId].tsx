@@ -213,7 +213,7 @@ function Exam() {
 								debounce.current = setTimeout(() => {
 									exam && handleProcessExam(exam, Number(e.target.value));
 								}, 1000);
-							}} type="range" defaultValue="0.4" list="threshold-tickmarks" min="0" max="1" step="0.1" />
+							}} type="range" defaultValue={segmentedExam?.threshold || 0.4} list="threshold-tickmarks" min="0" max="1" step="0.1" />
 							<datalist id="threshold-tickmarks">
 								{[...new Array(11)].map((el, i) => <option key={i * 0.1} value={i * 0.1} label={`${i * 0.1}`} />)}
 							</datalist>
