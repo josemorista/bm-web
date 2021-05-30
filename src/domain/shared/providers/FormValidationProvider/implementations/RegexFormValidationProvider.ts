@@ -15,7 +15,7 @@ export class RegexFormValidationProvider implements IFormValidationProvider {
 	}
 
 	isValidDate(data: string): boolean {
-		return (/(?<month>[0-1]{1}[0-9]{1})-(?<day>[0-3]{1}[1-9]{1})-(?<year>\d{4})$/.test(data));
+		return (/(?<month>[0-1]?[0-9]{1})-(?<day>[0-3]?[0-9]{1})-(?<year>\d{4})$/.test(data));
 	}
 
 	verifyFileType(data: string, extensions: Array<string>): boolean {
