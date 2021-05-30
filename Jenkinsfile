@@ -14,11 +14,11 @@ pipeline {
 		stage('Build') {
 			steps {
 				sh('npm install')
-				sh('echo "..." >> ./.env')
-				sh('rm .env')
-				sh('echo "NEXT_PUBLIC_API_URL=$API_URL" >> ./.env')
+				sh('echo "..." >> ./.env.local')
+				sh('rm .env.local')
+				sh('echo "NEXT_PUBLIC_API_URL=$API_URL" >> ./.env.local')
 				sh('npm run build')
-				sh('tar cfz $artifact node_modules public .env package.json .babelrc .next process.json')
+				sh('tar cfz $artifact node_modules public .env.local package.json .babelrc .next process.json')
 				sh('scp $artifact $sshuser@$host:/tmp/$artifact')
 				sh('rm -rf ./*')
 			}
