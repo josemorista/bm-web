@@ -19,7 +19,7 @@ export class ProcessExamService {
 			url: `${API_ROUTES.EXAMS}/${examId}/segmentation`,
 			body: {
 				algorithm: 'randomForest',
-				randomForestParams: {
+				params: {
 					threshold
 				}
 			},
