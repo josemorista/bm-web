@@ -178,7 +178,7 @@ function Exam() {
 				<h1>
 					Exam: Posterior01
 				</h1>
-				<Button variant="secondary" onClick={() => {
+				<Button ariaLabel="Go back button" variant="secondary" onClick={() => {
 					Router.back();
 				}}>
 					Back
@@ -269,7 +269,7 @@ function Exam() {
 				<p hidden>Overlay image: {exam?.overlayImageUrl}</p>
 			</section>
 			<div className="exportReportContainer">
-				<Button variant='primary' onClick={() => downloadInnerHtml(exam?.id || 'report.txt')}>Export as txt</Button>
+				<Button ariaLabel="Download report as text file" variant='primary' onClick={() => downloadInnerHtml(exam?.id || 'report.txt')}>Export as txt</Button>
 			</div>
 		</main>
 	</ExamStyles.Container >;

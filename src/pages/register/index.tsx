@@ -60,7 +60,7 @@ function Register() {
 						<Link href={ROUTES.HOME}>
 							<a>Already have an account? SignIn</a>
 						</Link>
-						<Button type='submit'>SignUp</Button>
+						<Button ariaLabel="Submit sign up form" type='submit'>SignUp</Button>
 					</form>
 				</section>
 			</RegisterStyles.Container>

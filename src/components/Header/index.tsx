@@ -11,10 +11,10 @@ export const Header = () => {
 
 	return <HeaderStyles.Container>
 		<section>
-			<Button onClick={() => {
+			<Button ariaLabel="Go to homepage" onClick={() => {
 				router.push(ROUTES.MY_PATIENTS);
 			}} variant='secondary'>Home</Button>
-			<Button onClick={() => {
+			<Button ariaLabel="Logout" onClick={() => {
 				logout();
 			}} variant='secondary'>Logout</Button>
 		</section>

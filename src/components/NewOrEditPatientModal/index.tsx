@@ -112,7 +112,7 @@ export const NewOrEditPatientModal = forwardRef<IINewOrEditPatientModalHandler, 
 				<Textarea {...register('description')} placeholder="Description"></Textarea>
 
 				<section className="submitButtonContainer">
-					<Button type="submit" variant="primary">
+					<Button ariaLabel="Submit or edit new patient" type="submit" variant="primary">
 						{modalTexts.submit}
 					</Button>
 				</section>

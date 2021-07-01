@@ -145,7 +145,7 @@ function Patient() {
 				</ul>
 			</PatientStyles.ExamsSection>
 			<section className="newExamButton">
-				<Button variant="primary" onClick={() => {
+				<Button ariaLabel="Open create new exam" variant="primary" onClick={() => {
 					newExamModalRef.current?.handleOpenModal();
 				}}>New exam</Button>
 			</section>

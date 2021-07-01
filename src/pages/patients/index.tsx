@@ -91,13 +91,13 @@ function MyPatients() {
 						</div>
 					</section>
 					<section>
-						<button onClick={(e) => {
+						<button aria-label="Open edit patient" onClick={(e) => {
 							e.stopPropagation();
 							newOrEditPatientModalRef.current?.handleOpenModal(patient);
 						}}>
 							<FiEdit2 />
 						</button>
-						<button>
+						<button aria-label="Open delete patient">
 							<FiTrash onClick={(e) => {
 								e.stopPropagation();
 								deletePatientModalRef.current?.openDeletePatientModal(patient);
@@ -107,7 +107,7 @@ function MyPatients() {
 				</MyPatientsStyles.PatientListItem>)}
 			</ul>
 			<div className="addPatientButtonContainer">
-				<Button onClick={() => {
+				<Button ariaLabel="Open create new patient" onClick={() => {
 					newOrEditPatientModalRef.current?.handleOpenModal();
 				}}>
 					<FiPlus />

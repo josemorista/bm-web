@@ -92,7 +92,7 @@ export const NewExamModal = forwardRef<IINewExamModalHandler, INewExamModalProps
 					{!dcmFile ? <p>Drop the file here ...</p> : <p>{dcmFile.name}</p>}
 				</div>
 				<section className="submitButtonContainer">
-					<Button type="submit" variant="primary">
+					<Button ariaLabel="Submit new exam" type="submit" variant="primary">
 						New
 					</Button>
 				</section>

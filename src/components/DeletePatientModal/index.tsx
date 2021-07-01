@@ -62,10 +62,10 @@ export const DeletePatientModal = forwardRef<IDeletePatientModalHandle, IDeleteP
 				Are you sure you want to delete {patient?.name || ''}?
 			</h3>
 			<section className='buttonsContainer'>
-				<Button onClick={() => {
+				<Button ariaLabel="Cancel delete patient" onClick={() => {
 					modalRef.current?.closeModal();
 				}}>No</Button>
-				<Button onClick={() => {
+				<Button ariaLabel="Confirm delete patient" onClick={() => {
 					handleDeletePatient();
 				}}>Yes</Button>
 			</section>
