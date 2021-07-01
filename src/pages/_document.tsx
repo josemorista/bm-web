@@ -34,9 +34,8 @@ export default class MyDocument extends Document<any> {
 
 	render() {
 		return (
-			<Html>
+			<Html lang="en">
 				<Head>
-					<meta lang='en' />
 					<link rel="preconnect" href="https://fonts.gstatic.com" />
 					<link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap" rel="stylesheet" />
 					{this.props.styleTags /*rendering the actually stylesheet*/}
