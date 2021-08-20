@@ -1,17 +1,17 @@
-import Head from 'next/head';
-import Link from 'next/link';
+import Head from "next/head";
+import Link from "next/link";
 
-import { RegisterStyles } from '../../styles/pages/register';
+import { RegisterStyles } from "../../styles/pages/register";
 
-import { Input } from '../../components/templates/Input';
-import { Button } from '../../components/templates/Button';
-import { ROUTES } from '../../consts';
-import { useToastMessage } from '../../hooks/useToastMessage';
-import { useCallback } from 'react';
-import { useForm } from 'react-hook-form';
-import { useRouter } from 'next/router';
-import { withAuth } from '../../hocs';
-import { UserServicesFactory } from '../../domain/modules/users/factories/UserServicesFactory';
+import { Input } from "../../components/templates/Input";
+import { Button } from "../../components/templates/Button";
+import { ROUTES } from "../../consts";
+import { useToastMessage } from "../../hooks/useToastMessage";
+import { useCallback } from "react";
+import { useForm } from "react-hook-form";
+import { useRouter } from "next/router";
+import { withAuth } from "../../hocs";
+import { UserServicesFactory } from "../../domain/modules/users/factories/UserServicesFactory";
 
 const createUserService = UserServicesFactory.createCreateUserService();
 
@@ -25,14 +25,14 @@ function Register() {
 		try {
 			await createUserService.execute(data);
 			setToastMessage({
-				message: 'User created',
-				type: 'success'
+				message: "User created",
+				type: "success"
 			});
 			router.push(ROUTES.HOME);
 		} catch (error) {
 			setToastMessage({
 				message: error.message,
-				type: 'error'
+				type: "error"
 			});
 		}
 	}, [setToastMessage, router]);
@@ -51,12 +51,12 @@ function Register() {
 						<img src="/assets/imgs/png/huapLogo.png" alt="HUAP" />
 					</header>
 					<form onSubmit={handleSubmit(onSubmit)}>
-						<Input {...register('email')} placeholder="Email" type="email" />
-						<Input {...register('password')} placeholder="Password" type="password" />
-						<Input {...register('firstName')} placeholder="Firstname" type="text" />
-						<Input {...register('lastName')} placeholder="Lastname" type="text" />
-						<Input {...register('relatedInstitution')} placeholder="Institution" type="text" />
-						<Input {...register('job')} placeholder="Job" />
+						<Input {...register("email")} placeholder="Email" type="email" />
+						<Input {...register("password")} placeholder="Password" type="password" />
+						<Input {...register("firstName")} placeholder="Firstname" type="text" />
+						<Input {...register("lastName")} placeholder="Lastname" type="text" />
+						<Input {...register("relatedInstitution")} placeholder="Institution" type="text" />
+						<Input {...register("job")} placeholder="Job" />
 						<Link href={ROUTES.HOME}>
 							<a>Already have an account? SignIn</a>
 						</Link>

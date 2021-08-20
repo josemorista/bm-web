@@ -1,7 +1,7 @@
-import axios from 'axios';
-import { httpClientConfig } from '../../../../config/httpClient';
-import { AppError } from '../../../errors/AppError';
-import { IHttpResponseDTO, IDeleteMethodDTO, IGetMethodDTO, IHttpClientProvider, IPatchMethodDTO, IPostMethodDTO, IPutMethodDTO } from '../models/IHttpClientProvider';
+import axios from "axios";
+import { httpClientConfig } from "../../../../config/httpClient";
+import { AppError } from "../../../errors/AppError";
+import { IHttpResponseDTO, IDeleteMethodDTO, IGetMethodDTO, IHttpClientProvider, IPatchMethodDTO, IPostMethodDTO, IPutMethodDTO } from "../models/IHttpClientProvider";
 
 const api = axios.create({
 	timeout: httpClientConfig.timeout

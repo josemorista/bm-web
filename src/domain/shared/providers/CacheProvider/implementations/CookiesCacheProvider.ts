@@ -1,6 +1,6 @@
-import { ICacheProvider } from '../models/ICacheProvider';
-import Cookie from 'js-cookie';
-import { CACHE_CONFIG } from '../../../../config/cache';
+import { ICacheProvider } from "../models/ICacheProvider";
+import Cookie from "js-cookie";
+import { CACHE_CONFIG } from "../../../../config/cache";
 
 export class CookiesCacheProvider implements ICacheProvider {
 

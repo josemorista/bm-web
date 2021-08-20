@@ -1,8 +1,8 @@
-import { API_ROUTES, CACHE_KEYS } from '../../../../consts';
-import { ICacheProvider } from '../../../../shared/providers/CacheProvider/models/ICacheProvider';
+import { API_ROUTES, CACHE_KEYS } from "../../../../consts";
+import { ICacheProvider } from "../../../../shared/providers/CacheProvider/models/ICacheProvider";
 
-import { IHttpClientProvider } from '../../../../shared/providers/HttpClientProvider/models/IHttpClientProvider';
-import { IUserCredentials } from '../../entities/IUserCredentials';
+import { IHttpClientProvider } from "../../../../shared/providers/HttpClientProvider/models/IHttpClientProvider";
+import { IUserCredentials } from "../../entities/IUserCredentials";
 
 export class GetUserSessionService {
 	constructor(

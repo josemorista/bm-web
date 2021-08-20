@@ -1,27 +1,27 @@
-import Head from 'next/head';
-import { useRouter } from 'next/router';
-import { useMemo, useRef, useState } from 'react';
-import { FiTrash, FiEdit2, FiPlus } from 'react-icons/fi';
-import { useQuery } from 'react-query';
-import { Button } from '../../components/templates/Button';
-import { Header } from '../../components/Header';
-import { Input } from '../../components/templates/Input';
-import { ROUTES } from '../../consts';
-import { CreatePatientsServicesFactory } from '../../domain/modules/patients/factories/CreatePatientsServicesFactory';
-import { withAuth } from '../../hocs';
-import { useAuthentication } from '../../hooks/useAuthentication';
-import { DeletePatientModal, IDeletePatientModalHandle } from '../../components/DeletePatientModal';
-import { IINewOrEditPatientModalHandler, NewOrEditPatientModal } from '../../components/NewOrEditPatientModal';
-import { MyPatientsStyles } from '../../styles/pages/patients';
+import Head from "next/head";
+import { useRouter } from "next/router";
+import { useMemo, useRef, useState } from "react";
+import { FiTrash, FiEdit2, FiPlus } from "react-icons/fi";
+import { useQuery } from "react-query";
+import { Button } from "../../components/templates/Button";
+import { Header } from "../../components/Header";
+import { Input } from "../../components/templates/Input";
+import { ROUTES } from "../../consts";
+import { CreatePatientsServicesFactory } from "../../domain/modules/patients/factories/CreatePatientsServicesFactory";
+import { withAuth } from "../../hocs";
+import { useAuthentication } from "../../hooks/useAuthentication";
+import { DeletePatientModal, IDeletePatientModalHandle } from "../../components/DeletePatientModal";
+import { IINewOrEditPatientModalHandler, NewOrEditPatientModal } from "../../components/NewOrEditPatientModal";
+import { MyPatientsStyles } from "../../styles/pages/patients";
 
 // Services
 const getPatientsFromUserService = CreatePatientsServicesFactory.createGetPatientsFromUserService();
 
 function MyPatients() {
-	const [searchFilter, setSearchFilter] = useState('');
+	const [searchFilter, setSearchFilter] = useState("");
 	const { token } = useAuthentication();
 
-	const { data: patients, refetch: refetchPatients } = useQuery('MyPatients-patients', async () => {
+	const { data: patients, refetch: refetchPatients } = useQuery("MyPatients-patients", async () => {
 		return (await getPatientsFromUserService.execute({
 			authorizeToken: token
 		}));
@@ -83,7 +83,7 @@ function MyPatients() {
 								{patient.name}
 							</h4>
 							<strong>
-								dicomId: {patient.dicomPatientId || ''}
+								dicomId: {patient.dicomPatientId || ""}
 							</strong>
 							<p>
 								{patient.description}

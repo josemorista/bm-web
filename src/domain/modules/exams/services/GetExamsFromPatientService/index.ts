@@ -1,6 +1,6 @@
-import { API_ROUTES } from '../../../../consts';
-import { IHttpClientProvider } from '../../../../shared/providers/HttpClientProvider/models/IHttpClientProvider';
-import { IExam } from '../../entities/IExam';
+import { API_ROUTES } from "../../../../consts";
+import { IHttpClientProvider } from "../../../../shared/providers/HttpClientProvider/models/IHttpClientProvider";
+import { IExam } from "../../entities/IExam";
 
 interface IGetExamsFromPatientServiceDTO {
 	patientId: string;

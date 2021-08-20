@@ -1,15 +1,15 @@
-import { forwardRef, useCallback, useImperativeHandle, useRef, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { Button } from '../templates/Button';
-import { Input } from '../templates/Input';
-import { IModalHandle, Modal } from '../templates/Modal';
-import { Select } from '../templates/Select';
-import { PatientStyles } from '../../styles/pages/patients/patientId';
-import { useDropzone } from 'react-dropzone';
-import { CreateExamsServicesFactory } from '../../domain/modules/exams/factories/CreateExamsServicesFactory';
-import { AppError } from '../../domain/shared/errors/AppError';
-import { useToastMessage } from '../../hooks/useToastMessage';
-import { useAuthentication } from '../../hooks/useAuthentication';
+import { forwardRef, useCallback, useImperativeHandle, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
+import { Button } from "../templates/Button";
+import { Input } from "../templates/Input";
+import { IModalHandle, Modal } from "../templates/Modal";
+import { Select } from "../templates/Select";
+import { PatientStyles } from "../../styles/pages/patients/patientId";
+import { useDropzone } from "react-dropzone";
+import { CreateExamsServicesFactory } from "../../domain/modules/exams/factories/CreateExamsServicesFactory";
+import { AppError } from "../../domain/shared/errors/AppError";
+import { useToastMessage } from "../../hooks/useToastMessage";
+import { useAuthentication } from "../../hooks/useAuthentication";
 
 interface INewExamModalProps {
 	patientId: string;
@@ -47,7 +47,7 @@ export const NewExamModal = forwardRef<IINewExamModalHandler, INewExamModalProps
 					dcm: dcmFile
 				});
 			} else {
-				throw new AppError('Missing dcm file', 400);
+				throw new AppError("Missing dcm file", 400);
 			}
 
 			(onCloseAction && (onCloseAction()));
@@ -56,13 +56,13 @@ export const NewExamModal = forwardRef<IINewExamModalHandler, INewExamModalProps
 			if (error.message) {
 				setToastMessage({
 					message: error.message,
-					type: 'error'
+					type: "error"
 				});
 			}
 		}
 	}, [onCloseAction, dcmFile, setToastMessage, patientId, token]);
 
-	const handleOpenModal: IINewExamModalHandler['handleOpenModal'] = useCallback(async () => {
+	const handleOpenModal: IINewExamModalHandler["handleOpenModal"] = useCallback(async () => {
 		reset();
 		modalRef.current?.openModal();
 	}, [reset]);
@@ -80,13 +80,13 @@ export const NewExamModal = forwardRef<IINewExamModalHandler, INewExamModalProps
 				New Exam
 			</h1>
 			<form onSubmit={handleSubmit(onSubmit)}>
-				<Input  {...register('label')} placeholder="Exam label" />
-				<Select {...register('category')} placeholder="Category">
+				<Input  {...register("label")} placeholder="Exam label" />
+				<Select {...register("category")} placeholder="Category">
 					<option value="post">Backscan</option>
 					<option value="ant">Frontscan</option>
 					<option value="cra">Cranium</option>
 				</Select>
-				<Input  {...register('date')} type='text' placeholder="Exam date" />
+				<Input  {...register("date")} type='text' placeholder="Exam date" />
 				<div {...getRootProps()} className="dropzoneContainer">
 					<input {...getInputProps()} />
 					{!dcmFile ? <p>Drop the file here ...</p> : <p>{dcmFile.name}</p>}

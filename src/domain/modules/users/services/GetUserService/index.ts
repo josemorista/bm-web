@@ -1,7 +1,7 @@
-import { API_ROUTES } from '../../../../consts';
+import { API_ROUTES } from "../../../../consts";
 
-import { IHttpClientProvider } from '../../../../shared/providers/HttpClientProvider/models/IHttpClientProvider';
-import { IUser } from '../../entities/IUser';
+import { IHttpClientProvider } from "../../../../shared/providers/HttpClientProvider/models/IHttpClientProvider";
+import { IUser } from "../../entities/IUser";
 
 interface IGetUserServiceDTO {
 	userId: string;

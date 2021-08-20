@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 interface ICheckboxContainerProps {
 	checked: boolean;
@@ -23,7 +23,7 @@ const Container = styled.div<ICheckboxContainerProps>`
 		border-radius: 6px;
 
 		svg {
-			display: ${({ checked }) => checked ? 'block' : 'none'};
+			display: ${({ checked }) => checked ? "block" : "none"};
 			position: absolute;
 			left: 50%;
 			right: 50%;

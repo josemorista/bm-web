@@ -1,10 +1,10 @@
-import { RegexFormValidationProvider } from '../../../../shared/providers/FormValidationProvider/implementations/RegexFormValidationProvider';
-import { AxiosHttpClientProvider } from '../../../../shared/providers/HttpClientProvider/implementations/AxiosHttpClientProvider';
-import { IHttpClientProvider } from '../../../../shared/providers/HttpClientProvider/models/IHttpClientProvider';
-import { CreateExamService } from '../../services/CreateExamService';
-import { GetExamByIdService } from '../../services/GetExamByIdService';
-import { GetExamsFromPatientService } from '../../services/GetExamsFromPatientService';
-import { ProcessExamService } from '../../services/ProcessExamService';
+import { RegexFormValidationProvider } from "../../../../shared/providers/FormValidationProvider/implementations/RegexFormValidationProvider";
+import { AxiosHttpClientProvider } from "../../../../shared/providers/HttpClientProvider/implementations/AxiosHttpClientProvider";
+import { IHttpClientProvider } from "../../../../shared/providers/HttpClientProvider/models/IHttpClientProvider";
+import { CreateExamService } from "../../services/CreateExamService";
+import { GetExamByIdService } from "../../services/GetExamByIdService";
+import { GetExamsFromPatientService } from "../../services/GetExamsFromPatientService";
+import { ProcessExamService } from "../../services/ProcessExamService";
 
 class CreateExamsServicesFactory {
 	private static httpClientProvider: IHttpClientProvider;

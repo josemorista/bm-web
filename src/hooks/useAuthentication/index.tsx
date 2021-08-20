@@ -1,15 +1,15 @@
-import { createContext, useCallback, useContext, useEffect, useState } from 'react';
-import { IUser } from '../../domain/modules/users/entities/IUser';
-import { IUserCredentials } from '../../domain/modules/users/entities/IUserCredentials';
-import { UserServicesFactory } from '../../domain/modules/users/factories/UserServicesFactory';
-import { UserSessionsServicesFactory } from '../../domain/modules/users/factories/UserSessionsServicesFactory';
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
+import { IUser } from "../../domain/modules/users/entities/IUser";
+import { IUserCredentials } from "../../domain/modules/users/entities/IUserCredentials";
+import { UserServicesFactory } from "../../domain/modules/users/factories/UserServicesFactory";
+import { UserSessionsServicesFactory } from "../../domain/modules/users/factories/UserSessionsServicesFactory";
 
 interface IAuthenticationContext {
 	user: IUser;
 	signed: boolean;
 	token: string;
-	signIn(data: Pick<IUser, 'email' | 'password'>): Promise<void>;
-	signUp(data: Pick<IUser, 'email' | 'password' | 'firstName' | 'lastName' | 'job' | 'relatedInstitution'>): Promise<void>;
+	signIn(data: Pick<IUser, "email" | "password">): Promise<void>;
+	signUp(data: Pick<IUser, "email" | "password" | "firstName" | "lastName" | "job" | "relatedInstitution">): Promise<void>;
 	logout(): Promise<void>
 }
 
@@ -33,7 +33,7 @@ export const AuthenticationProvider = ({ children }: IAuthenticationProviderProp
 		credentials: IUserCredentials
 	} | undefined>(undefined);
 
-	const signIn: IAuthenticationContext['signIn'] = useCallback(async (data) => {
+	const signIn: IAuthenticationContext["signIn"] = useCallback(async (data) => {
 		const credentials = await createUserSessionService.execute(data);
 		const user = await getUserService.execute({
 			userId: credentials.userId,
@@ -47,11 +47,11 @@ export const AuthenticationProvider = ({ children }: IAuthenticationProviderProp
 		}
 	}, []);
 
-	const signUp: IAuthenticationContext['signUp'] = useCallback((data) => {
+	const signUp: IAuthenticationContext["signUp"] = useCallback((data) => {
 		return createUserService.execute(data);
 	}, []);
 
-	const logout: IAuthenticationContext['logout'] = useCallback(async () => {
+	const logout: IAuthenticationContext["logout"] = useCallback(async () => {
 		await closeUserSessionService.execute();
 		setContextState({
 			user: {} as IUser,

@@ -8,5 +8,5 @@ export const API_ROUTES = {
 };
 
 export const CACHE_KEYS = {
-	USER_TOKEN: 'token'
+	USER_TOKEN: "token"
 };

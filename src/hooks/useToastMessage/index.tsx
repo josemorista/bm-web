@@ -1,9 +1,9 @@
-import { createContext, useCallback, useContext, useState } from 'react';
-import { ToastMessage } from '../../components/templates/ToastMessage';
+import { createContext, useCallback, useContext, useState } from "react";
+import { ToastMessage } from "../../components/templates/ToastMessage";
 
 interface IToastMessage {
 	message: string;
-	type: 'error' | 'info' | 'success'
+	type: "error" | "info" | "success"
 }
 
 interface IToastMessageContext {
@@ -20,7 +20,7 @@ export const ToastMessageProvider = ({ children }: IToastMessageProviderProps) =
 
 	const [toastMessage, setMessage] = useState<IToastMessage | null>(null);
 
-	const setToastMessage: IToastMessageContext['setToastMessage'] = useCallback((data) => {
+	const setToastMessage: IToastMessageContext["setToastMessage"] = useCallback((data) => {
 		setMessage(data);
 		setTimeout(() => {
 			setMessage(null);

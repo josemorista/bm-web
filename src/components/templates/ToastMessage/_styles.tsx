@@ -1,8 +1,8 @@
-import styled, { css } from 'styled-components';
-import { loadFromRight } from '../../../styles/animations';
+import styled, { css } from "styled-components";
+import { loadFromRight } from "../../../styles/animations";
 
 interface IContainerProps {
-	variant: 'error' | 'success' | 'info';
+	variant: "error" | "success" | "info";
 }
 
 const Container = styled.div<IContainerProps>`
@@ -26,12 +26,12 @@ const Container = styled.div<IContainerProps>`
 	color: ${({ theme }) => theme.colors.white};
 	
 	${({ theme, variant }) => {
-		if (variant === 'success') {
+		if (variant === "success") {
 			return css`
 				background-color: ${theme.colors.green300};
 			`;
 		}
-		if (variant === 'error') {
+		if (variant === "error") {
 			return css`
 				background-color: ${theme.colors.red300};
 			`;

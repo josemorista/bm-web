@@ -1,10 +1,10 @@
-import { ThemeProvider } from 'styled-components';
+import { ThemeProvider } from "styled-components";
 
-import { theme } from '../styles/themes';
-import { GlobalStyles } from '../styles/GlobalStyles';
-import { ToastMessageProvider } from '../hooks/useToastMessage';
-import { AuthenticationProvider } from '../hooks/useAuthentication';
-import { QueryClientProvider, QueryClient } from 'react-query';
+import { theme } from "../styles/themes";
+import { GlobalStyles } from "../styles/GlobalStyles";
+import { ToastMessageProvider } from "../hooks/useToastMessage";
+import { AuthenticationProvider } from "../hooks/useAuthentication";
+import { QueryClientProvider, QueryClient } from "react-query";
 
 const queryClient = new QueryClient({
 	defaultOptions: {

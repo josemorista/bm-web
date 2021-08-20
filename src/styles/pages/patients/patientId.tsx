@@ -1,7 +1,7 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 interface IExamListItemProps {
-	status: 'incomplete' | 'positive' | 'negative';
+	status: "incomplete" | "positive" | "negative";
 }
 
 const Container = styled.main`
@@ -79,10 +79,10 @@ const ExamListItem = styled.li<IExamListItemProps>`
 
 				&.revisionStatus {
 					color: ${({ theme, status }) => {
-		if (status === 'positive') {
+		if (status === "positive") {
 			return theme.colors.green900;
 		}
-		if (status === 'negative') {
+		if (status === "negative") {
 			return theme.colors.red400;
 		}
 		return theme.colors.yellow600;
@@ -96,10 +96,10 @@ const ExamListItem = styled.li<IExamListItemProps>`
 				&.affectedArea {
 					span {
 						color: ${({ theme, status }) => {
-		if (status === 'positive') {
+		if (status === "positive") {
 			return theme.colors.green900;
 		}
-		if (status === 'negative') {
+		if (status === "negative") {
 			return theme.colors.red400;
 		}
 		return theme.colors.yellow600;

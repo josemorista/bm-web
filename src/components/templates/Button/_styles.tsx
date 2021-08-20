@@ -1,7 +1,7 @@
-import styled, { css } from 'styled-components';
+import styled, { css } from "styled-components";
 
 interface IButtonProps {
-	variant: 'primary' | 'secondary';
+	variant: "primary" | "secondary";
 }
 
 export const Container = styled.button<IButtonProps>`
@@ -13,7 +13,7 @@ export const Container = styled.button<IButtonProps>`
 	border-radius: 6px;
 	
 	${({ theme, variant }) => {
-		if (variant === 'secondary') {
+		if (variant === "secondary") {
 			return css`
 				background-color: ${theme.colors.white};
 				color: ${theme.colors.blue500};

@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef, useImperativeHandle, forwardRef, useCallback } from 'react';
-import { ModalStyles } from './styles';
+import React, { useState, useEffect, useRef, useImperativeHandle, forwardRef, useCallback } from "react";
+import { ModalStyles } from "./styles";
 
 export interface IModalHandle {
 	openModal: () => void;

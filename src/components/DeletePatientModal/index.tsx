@@ -1,11 +1,11 @@
-import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
-import { Button } from '../templates/Button';
-import { IModalHandle, Modal } from '../templates/Modal';
-import { IPatient } from '../../domain/modules/patients/entities/IPatient';
-import { CreatePatientsServicesFactory } from '../../domain/modules/patients/factories/CreatePatientsServicesFactory';
-import { AppError } from '../../domain/shared/errors/AppError';
-import { useAuthentication } from '../../hooks/useAuthentication';
-import { MyPatientsStyles } from '../../styles/pages/patients';
+import { forwardRef, useImperativeHandle, useRef, useState } from "react";
+import { Button } from "../templates/Button";
+import { IModalHandle, Modal } from "../templates/Modal";
+import { IPatient } from "../../domain/modules/patients/entities/IPatient";
+import { CreatePatientsServicesFactory } from "../../domain/modules/patients/factories/CreatePatientsServicesFactory";
+import { AppError } from "../../domain/shared/errors/AppError";
+import { useAuthentication } from "../../hooks/useAuthentication";
+import { MyPatientsStyles } from "../../styles/pages/patients";
 
 interface IDeletePatientModalProps {
 	onCloseAction?: () => void | Promise<void>;
@@ -37,7 +37,7 @@ export const DeletePatientModal = forwardRef<IDeletePatientModalHandle, IDeleteP
 	const handleDeletePatient = async () => {
 		try {
 			if (!patient) {
-				throw new AppError('No patient to delete');
+				throw new AppError("No patient to delete");
 			}
 			await deletePatientService.execute({
 				patientId: patient.id,
@@ -59,7 +59,7 @@ export const DeletePatientModal = forwardRef<IDeletePatientModalHandle, IDeleteP
 				Delete patient
 			</h1>
 			<h3	>
-				Are you sure you want to delete {patient?.name || ''}?
+				Are you sure you want to delete {patient?.name || ""}?
 			</h3>
 			<section className='buttonsContainer'>
 				<Button ariaLabel="Cancel delete patient" onClick={() => {

@@ -1,9 +1,9 @@
-import { IHttpRequest } from './IHttpRequest';
+import { IHttpRequest } from "./IHttpRequest";
 
 export type IPostMethodDTO = IHttpRequest;
-export type IGetMethodDTO = Omit<IHttpRequest, 'body'>;
+export type IGetMethodDTO = Omit<IHttpRequest, "body">;
 export type IPutMethodDTO = IHttpRequest;
-export type IDeleteMethodDTO = Omit<IHttpRequest, 'body'>;
+export type IDeleteMethodDTO = Omit<IHttpRequest, "body">;
 export type IPatchMethodDTO = IHttpRequest;
 
 export interface IHttpResponseDTO<Response> {

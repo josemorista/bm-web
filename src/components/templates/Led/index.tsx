@@ -1,7 +1,7 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 interface ILedProps {
-	status: 'success' | 'error' | 'alert';
+	status: "success" | "error" | "alert";
 }
 
 export const Led = styled.div<ILedProps>`
@@ -11,10 +11,10 @@ export const Led = styled.div<ILedProps>`
 	border-radius: 50%;
 
 	background-color: ${({ theme, status }) => {
-		if (status === 'success') {
+		if (status === "success") {
 			return theme.colors.green900;
 		}
-		if (status === 'alert') {
+		if (status === "alert") {
 			return theme.colors.yellow600;
 		}
 		return theme.colors.red400;

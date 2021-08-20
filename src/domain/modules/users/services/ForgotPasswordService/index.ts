@@ -2,30 +2,25 @@ import { API_ROUTES } from "../../../../consts";
 import { FormValidationError } from "../../../../shared/errors/FormValidationError";
 import { IFormValidationProvider } from "../../../../shared/providers/FormValidationProvider/models/IFormValidationProvider";
 import { IHttpClientProvider } from "../../../../shared/providers/HttpClientProvider/models/IHttpClientProvider";
+import { IUser } from "../../entities/IUser";
 
-interface IDeletePatientServiceDTO {
-	patientId: string;
-	authorizeToken: string;
-}
+type IForgotPasswordServiceDTO = Pick<IUser, "email">;
 
-export class DeletePatientService {
+export class ForgotPasswordService {
 	constructor(
 		private httpClientProvider: IHttpClientProvider,
 		private formValidationProvider: IFormValidationProvider
 	) { }
 
-	async execute({ patientId, authorizeToken }: IDeletePatientServiceDTO): Promise<void> {
-
-		if (!this.formValidationProvider.hasLength(patientId, 36)) {
-			throw new FormValidationError("Invalid patient id", "patientId");
+	async execute({ email }: IForgotPasswordServiceDTO): Promise<void> {
+		if (!this.formValidationProvider.isEmail(email)) {
+			throw new FormValidationError("Invalid email", "email");
 		}
-
-		await this.httpClientProvider.delete({
-			url: `${API_ROUTES.PATIENTS}/${patientId}`,
-			headers: {
-				Authorization: `Bearer ${authorizeToken}`
+		await this.httpClientProvider.post({
+			url: `${API_ROUTES.USERS}/forgot-my-password`,
+			body: {
+				email
 			}
 		});
-
 	}
 }

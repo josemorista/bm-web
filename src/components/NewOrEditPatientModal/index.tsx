@@ -1,16 +1,16 @@
-import { forwardRef, useCallback, useImperativeHandle, useRef, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { Button } from '../templates/Button';
-import { Input } from '../templates/Input';
-import { IModalHandle, Modal } from '../templates/Modal';
-import { Select } from '../templates/Select';
-import { Textarea } from '../templates/Textarea';
-import { IPatient } from '../../domain/modules/patients/entities/IPatient';
-import { formatDate } from '../../utils/formatDate';
-import { CreatePatientsServicesFactory } from '../../domain/modules/patients/factories/CreatePatientsServicesFactory';
-import { MyPatientsStyles } from '../../styles/pages/patients';
-import { useAuthentication } from '../../hooks/useAuthentication';
-import { useToastMessage } from '../../hooks/useToastMessage';
+import { forwardRef, useCallback, useImperativeHandle, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
+import { Button } from "../templates/Button";
+import { Input } from "../templates/Input";
+import { IModalHandle, Modal } from "../templates/Modal";
+import { Select } from "../templates/Select";
+import { Textarea } from "../templates/Textarea";
+import { IPatient } from "../../domain/modules/patients/entities/IPatient";
+import { formatDate } from "../../utils/formatDate";
+import { CreatePatientsServicesFactory } from "../../domain/modules/patients/factories/CreatePatientsServicesFactory";
+import { MyPatientsStyles } from "../../styles/pages/patients";
+import { useAuthentication } from "../../hooks/useAuthentication";
+import { useToastMessage } from "../../hooks/useToastMessage";
 
 interface INewOrEditPatientModalProps {
 	onCloseAction?: () => void | Promise<void>;
@@ -33,8 +33,8 @@ export const NewOrEditPatientModal = forwardRef<IINewOrEditPatientModalHandler, 
 	const { setToastMessage } = useToastMessage();
 
 	const [modalTexts, setModalTexts] = useState({
-		title: 'New patient',
-		submit: 'Create'
+		title: "New patient",
+		submit: "Create"
 	});
 
 	const onSubmit = useCallback(async (data) => {
@@ -55,34 +55,34 @@ export const NewOrEditPatientModal = forwardRef<IINewOrEditPatientModalHandler, 
 			modalRef.current?.closeModal();
 		} catch (error) {
 			setToastMessage({
-				type: 'error',
+				type: "error",
 				message: error.message
 			});
 		}
 	}, [onCloseAction, token, setToastMessage]);
 
-	const handleOpenModal: IINewOrEditPatientModalHandler['handleOpenModal'] = useCallback(async (patient?) => {
+	const handleOpenModal: IINewOrEditPatientModalHandler["handleOpenModal"] = useCallback(async (patient?) => {
 		if (patient) {
 			if (patient) {
 				setModalTexts({
 					title: patient.name,
-					submit: 'Edit'
+					submit: "Edit"
 				});
 				for (const key of Object.keys(patient) as Array<keyof IPatient>) {
-					if (key === 'birthDate' && patient[key]) {
-						setValue(key, formatDate(patient[key] || ''));
+					if (key === "birthDate" && patient[key]) {
+						setValue(key, formatDate(patient[key] || ""));
 					} else {
-						setValue(key, patient[key] || '');
+						setValue(key, patient[key] || "");
 					}
 				}
 			}
 		} else {
 			setModalTexts({
-				title: 'New patient',
-				submit: 'Create'
+				title: "New patient",
+				submit: "Create"
 			});
 			reset();
-			setValue('birthDate', formatDate(new Date()));
+			setValue("birthDate", formatDate(new Date()));
 		}
 		modalRef.current?.openModal();
 	}, [setValue, reset]);
@@ -101,15 +101,15 @@ export const NewOrEditPatientModal = forwardRef<IINewOrEditPatientModalHandler, 
 			</h1>
 			<form onSubmit={handleSubmit(onSubmit)}>
 
-				<Input  {...register('name')} placeholder="Patient name" />
-				<Input  {...register('birthDate')} type='text' placeholder="Birth date" />
+				<Input  {...register("name")} placeholder="Patient name" />
+				<Input  {...register("birthDate")} type='text' placeholder="Birth date" />
 
-				<Select {...register('gender')} defaultValue="M" placeholder="gender">
+				<Select {...register("gender")} defaultValue="M" placeholder="gender">
 					<option value="M">Male</option>
 					<option value="F">Female</option>
 				</Select>
 
-				<Textarea {...register('description')} placeholder="Description"></Textarea>
+				<Textarea {...register("description")} placeholder="Description"></Textarea>
 
 				<section className="submitButtonContainer">
 					<Button ariaLabel="Submit or edit new patient" type="submit" variant="primary">

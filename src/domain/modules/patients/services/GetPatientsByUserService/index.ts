@@ -1,6 +1,6 @@
-import { API_ROUTES } from '../../../../consts';
-import { IHttpClientProvider } from '../../../../shared/providers/HttpClientProvider/models/IHttpClientProvider';
-import { IPatient } from '../../entities/IPatient';
+import { API_ROUTES } from "../../../../consts";
+import { IHttpClientProvider } from "../../../../shared/providers/HttpClientProvider/models/IHttpClientProvider";
+import { IPatient } from "../../entities/IPatient";
 
 interface IGetPatientsByUserServiceDTO {
 	authorizeToken: string;

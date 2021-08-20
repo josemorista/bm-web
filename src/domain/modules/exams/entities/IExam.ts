@@ -1,10 +1,10 @@
-import { IPatient } from '../../patients/entities/IPatient';
-import { ISegmentedExam } from './ISegmentedExam';
+import { IPatient } from "../../patients/entities/IPatient";
+import { ISegmentedExam } from "./ISegmentedExam";
 
 export interface IExam {
 	id: string;
 	label: string;
-	category: 'ant' | 'post' | 'cra';
+	category: "ant" | "post" | "cra";
 
 	date: Date | string;
 

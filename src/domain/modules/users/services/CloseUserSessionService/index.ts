@@ -1,5 +1,5 @@
-import { CACHE_KEYS } from '../../../../consts';
-import { ICacheProvider } from '../../../../shared/providers/CacheProvider/models/ICacheProvider';
+import { CACHE_KEYS } from "../../../../consts";
+import { ICacheProvider } from "../../../../shared/providers/CacheProvider/models/ICacheProvider";
 
 export class CloseUserSessionService {
 	constructor(

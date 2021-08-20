@@ -1,19 +1,19 @@
-import Head from 'next/head';
-import Router, { useRouter } from 'next/router';
-import { useCallback, useRef, useState } from 'react';
-import { useQuery } from 'react-query';
-import { Button } from '../../../components/templates/Button';
-import { Checkbox } from '../../../components/templates/Checkbox';
-import { Header } from '../../../components/Header';
-import { ROUTES } from '../../../consts';
-import { IExam } from '../../../domain/modules/exams/entities/IExam';
-import { ISegmentedExam } from '../../../domain/modules/exams/entities/ISegmentedExam';
-import { CreateExamsServicesFactory } from '../../../domain/modules/exams/factories/CreateExamsServicesFactory';
-import { withAuth } from '../../../hocs';
-import { useAuthentication } from '../../../hooks/useAuthentication';
-import { ExamStyles } from '../../../styles/pages/patients/exams/examId';
+import Head from "next/head";
+import Router, { useRouter } from "next/router";
+import { useCallback, useRef, useState } from "react";
+import { useQuery } from "react-query";
+import { Button } from "../../../components/templates/Button";
+import { Checkbox } from "../../../components/templates/Checkbox";
+import { Header } from "../../../components/Header";
+import { ROUTES } from "../../../consts";
+import { IExam } from "../../../domain/modules/exams/entities/IExam";
+import { ISegmentedExam } from "../../../domain/modules/exams/entities/ISegmentedExam";
+import { CreateExamsServicesFactory } from "../../../domain/modules/exams/factories/CreateExamsServicesFactory";
+import { withAuth } from "../../../hocs";
+import { useAuthentication } from "../../../hooks/useAuthentication";
+import { ExamStyles } from "../../../styles/pages/patients/exams/examId";
 
-type IVisualizationOptions = 'ore' | 'oro' | 'oeo';
+type IVisualizationOptions = "ore" | "oro" | "oeo";
 
 const processExamService = CreateExamsServicesFactory.createProcessExamService();
 const getExamByIdService = CreateExamsServicesFactory.createGetExamByIdService();
@@ -71,8 +71,8 @@ function Exam() {
 		}
 	});
 
-	const [visualization, setVisualization] = useState<IVisualizationOptions>('oeo');
-	const [pixelDataColorScheme, setPixelDataColorScheme] = useState<'bInW' | 'wInB'>('bInW');
+	const [visualization, setVisualization] = useState<IVisualizationOptions>("oeo");
+	const [pixelDataColorScheme, setPixelDataColorScheme] = useState<"bInW" | "wInB">("bInW");
 
 	const canvas1Ref = useRef<HTMLCanvasElement>(null);
 	const canvas2Ref = useRef<HTMLCanvasElement>(null);
@@ -82,7 +82,7 @@ function Exam() {
 		const canvasArray = [canvas1Ref, canvas2Ref, canvas3Ref];
 		canvasArray.forEach((canvasRef) => {
 			if (canvasRef.current) {
-				const ctx = canvasRef.current.getContext('2d');
+				const ctx = canvasRef.current.getContext("2d");
 				if (ctx) {
 					invertPixelData(ctx, canvasRef.current);
 				}
@@ -97,7 +97,7 @@ function Exam() {
 		const ts = Date.now();
 
 		imgs.forEach(img => {
-			img.setAttribute('crossOrigin', '');
+			img.setAttribute("crossOrigin", "");
 		});
 
 		const canvasArray = [canvas1Ref, canvas2Ref, canvas3Ref];
@@ -107,17 +107,17 @@ function Exam() {
 		exam.resultImageUrl && (imgs[1].src = `${exam.resultImageUrl}?ts=${ts}`);
 		exam.edgedResultImageUrl && (imgs[2].src = `${exam.edgedResultImageUrl}?ts=${ts}`);
 
-		if (['oro', 'oeo'].includes(visualization || 'ose')) {
+		if (["oro", "oeo"].includes(visualization || "ose")) {
 			exam.overlayImageUrl && (imgs[2].src = `${exam.overlayImageUrl}?ts=${ts}`);
 		}
 
-		if (visualization === 'oeo') {
+		if (visualization === "oeo") {
 			exam.edgedResultImageUrl && (imgs[1].src = `${exam.edgedResultImageUrl}?ts=${ts}`);
 		}
 
 		canvasArray.forEach((canvasRef, i) => {
 			if (canvasRef.current) {
-				const ctx = canvasRef.current.getContext('2d');
+				const ctx = canvasRef.current.getContext("2d");
 				ctx?.clearRect(0, 0, 256, 1024);
 				imgs[i].onload = function () {
 					ctx?.drawImage(imgs[i], 0, 0);
@@ -150,18 +150,18 @@ function Exam() {
 
 	const handleChangeVisualization = (op: IVisualizationOptions) => {
 		setVisualization(op);
-		setPixelDataColorScheme('bInW');
+		setPixelDataColorScheme("bInW");
 		exam && (refreshImages(exam, op));
 	};
 
 	const downloadInnerHtml = (filename: string, mimeType?: string) => {
-		const elHtml = reportRef.current?.innerHTML.replace(/(<\/p>)|(<br\/>)/g, '\n').replace(/<\/?(.+?)>/g, '');
+		const elHtml = reportRef.current?.innerHTML.replace(/(<\/p>)|(<br\/>)/g, "\n").replace(/<\/?(.+?)>/g, "");
 		if (elHtml) {
-			const link = document.createElement('a');
-			mimeType = mimeType || 'text/plain';
+			const link = document.createElement("a");
+			mimeType = mimeType || "text/plain";
 
-			link.setAttribute('download', filename);
-			link.setAttribute('href', 'data:' + mimeType + ';charset=utf-8,' + encodeURIComponent(elHtml));
+			link.setAttribute("download", filename);
+			link.setAttribute("href", "data:" + mimeType + ";charset=utf-8," + encodeURIComponent(elHtml));
 			link.click();
 		}
 	};
@@ -225,15 +225,15 @@ function Exam() {
 					<section className="contrast">
 						<h6>Visualization contrast</h6>
 						<div>
-							<span className={`whiteContrast ${pixelDataColorScheme === 'wInB' ? 'selected' : ''}`} onClick={() => {
-								if (pixelDataColorScheme === 'bInW') {
-									setPixelDataColorScheme('wInB');
+							<span className={`whiteContrast ${pixelDataColorScheme === "wInB" ? "selected" : ""}`} onClick={() => {
+								if (pixelDataColorScheme === "bInW") {
+									setPixelDataColorScheme("wInB");
 									togglePixelDataColorScheme();
 								}
 							}}></span>
-							<span className={`blackContrast ${pixelDataColorScheme === 'bInW' ? 'selected' : ''}`} onClick={() => {
-								if (pixelDataColorScheme === 'wInB') {
-									setPixelDataColorScheme('bInW');
+							<span className={`blackContrast ${pixelDataColorScheme === "bInW" ? "selected" : ""}`} onClick={() => {
+								if (pixelDataColorScheme === "wInB") {
+									setPixelDataColorScheme("bInW");
 									togglePixelDataColorScheme();
 								}
 							}}></span>
@@ -243,14 +243,14 @@ function Exam() {
 						<h6>Visualizations:</h6>
 						<ul>
 							<li>
-								<Checkbox checked={visualization === 'oro'} onChange={() => {
-									handleChangeVisualization('oro');
+								<Checkbox checked={visualization === "oro"} onChange={() => {
+									handleChangeVisualization("oro");
 								}} label="Original + segmented + overlay" />
-								<Checkbox checked={visualization === 'ore'} onChange={() => {
-									handleChangeVisualization('ore');
+								<Checkbox checked={visualization === "ore"} onChange={() => {
+									handleChangeVisualization("ore");
 								}} label="Original + segmented + edged" />
-								<Checkbox checked={visualization === 'oeo'} onChange={() => {
-									handleChangeVisualization('oeo');
+								<Checkbox checked={visualization === "oeo"} onChange={() => {
+									handleChangeVisualization("oeo");
 								}} label="Original + edged + overlay" />
 							</li>
 						</ul>
@@ -260,16 +260,16 @@ function Exam() {
 			<h2>
 				Report
 			</h2>
-			<section className={`report ${(segmentedExam?.affectedArea ?? 0) > 0 ? 'negative' : ''}`} ref={reportRef}>
-				<p>Total affected area: <b>{segmentedExam?.affectedArea ?? '-'}</b> mm²</p>
-				<p>Total classified area: {segmentedExam?.classifiedArea ?? '-'} mm²</p>
+			<section className={`report ${(segmentedExam?.affectedArea ?? 0) > 0 ? "negative" : ""}`} ref={reportRef}>
+				<p>Total affected area: <b>{segmentedExam?.affectedArea ?? "-"}</b> mm²</p>
+				<p>Total classified area: {segmentedExam?.classifiedArea ?? "-"} mm²</p>
 				<p>Affected area ratio: <b>{affectedAreaRatio}</b></p>
 				<p hidden>Result image: {exam?.resultImageUrl}</p>
 				<p hidden>Edge image: {exam?.edgedResultImageUrl}</p>
 				<p hidden>Overlay image: {exam?.overlayImageUrl}</p>
 			</section>
 			<div className="exportReportContainer">
-				<Button ariaLabel="Download report as text file" variant='primary' onClick={() => downloadInnerHtml(exam?.id || 'report.txt')}>Export as txt</Button>
+				<Button ariaLabel="Download report as text file" variant='primary' onClick={() => downloadInnerHtml(exam?.id || "report.txt")}>Export as txt</Button>
 			</div>
 		</main>
 	</ExamStyles.Container >;

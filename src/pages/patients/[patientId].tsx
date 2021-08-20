@@ -1,29 +1,29 @@
-import Head from 'next/head';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Button } from '../../components/templates/Button';
-import { Header } from '../../components/Header';
-import { Led } from '../../components/templates/Led';
-import { Tab, Tabs } from '../../components/templates/Tabs';
-import { IPatient } from '../../domain/modules/patients/entities/IPatient';
-import { CreatePatientsServicesFactory } from '../../domain/modules/patients/factories/CreatePatientsServicesFactory';
-import { useAuthentication } from '../../hooks/useAuthentication';
-import { IINewExamModalHandler, NewExamModal } from '../../components/NewExamModal';
-import { PatientStyles } from '../../styles/pages/patients/patientId';
-import { useRouter } from 'next/router';
-import { ROUTES } from '../../consts';
-import { differenceInCalendarYears } from 'date-fns';
-import { CreateExamsServicesFactory } from '../../domain/modules/exams/factories/CreateExamsServicesFactory';
-import { IExam } from '../../domain/modules/exams/entities/IExam';
-import { formatDate } from '../../utils/formatDate';
-import { withAuth } from '../../hocs';
+import Head from "next/head";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Button } from "../../components/templates/Button";
+import { Header } from "../../components/Header";
+import { Led } from "../../components/templates/Led";
+import { Tab, Tabs } from "../../components/templates/Tabs";
+import { IPatient } from "../../domain/modules/patients/entities/IPatient";
+import { CreatePatientsServicesFactory } from "../../domain/modules/patients/factories/CreatePatientsServicesFactory";
+import { useAuthentication } from "../../hooks/useAuthentication";
+import { IINewExamModalHandler, NewExamModal } from "../../components/NewExamModal";
+import { PatientStyles } from "../../styles/pages/patients/patientId";
+import { useRouter } from "next/router";
+import { ROUTES } from "../../consts";
+import { differenceInCalendarYears } from "date-fns";
+import { CreateExamsServicesFactory } from "../../domain/modules/exams/factories/CreateExamsServicesFactory";
+import { IExam } from "../../domain/modules/exams/entities/IExam";
+import { formatDate } from "../../utils/formatDate";
+import { withAuth } from "../../hocs";
 
 // services 
 const getPatientByIdService = CreatePatientsServicesFactory.createGetPatientByIdService();
 const getExamsFromPatientService = CreateExamsServicesFactory.createGetExamsFromPatientService();
 
 const getExamLedStatus = (exam: IExam) => {
-	if (!exam.originalImageLocation) return 'alert';
-	return 'success';
+	if (!exam.originalImageLocation) return "alert";
+	return "success";
 };
 
 function Patient() {
@@ -35,7 +35,7 @@ function Patient() {
 	const [patient, setPatient] = useState<IPatient | undefined>(undefined);
 	const { token } = useAuthentication();
 
-	const [category, setCategory] = useState<IExam['category']>('ant');
+	const [category, setCategory] = useState<IExam["category"]>("ant");
 
 	const [exams, setExams] = useState<Array<IExam>>([]);
 
@@ -48,7 +48,7 @@ function Patient() {
 	}, [category, exams]);
 
 	const patientAge = useMemo(() => {
-		return patient?.birthDate && typeof patient.birthDate === 'string' ? differenceInCalendarYears(new Date(), new Date(patient.birthDate)) : null;
+		return patient?.birthDate && typeof patient.birthDate === "string" ? differenceInCalendarYears(new Date(), new Date(patient.birthDate)) : null;
 	}, [patient?.birthDate]);
 
 	const getExamsFromPatient = useCallback(async () => {
@@ -94,9 +94,9 @@ function Patient() {
 		<Header />
 		<main>
 			<h1>{patient.name}</h1>
-			<h5>dicomId: {patient.dicomPatientId || ''}</h5>
+			<h5>dicomId: {patient.dicomPatientId || ""}</h5>
 			<p>
-				Age: {patientAge ?? '-'} years old
+				Age: {patientAge ?? "-"} years old
 			</p>
 			<p>
 				{patient.description}
@@ -104,14 +104,14 @@ function Patient() {
 
 			<PatientStyles.ExamsSection>
 				<Tabs>
-					<Tab isActive={category === 'ant'} onClick={() => {
-						setCategory('ant');
+					<Tab isActive={category === "ant"} onClick={() => {
+						setCategory("ant");
 					}}>Frontscans</Tab>
-					<Tab isActive={category === 'post'} onClick={() => {
-						setCategory('post');
+					<Tab isActive={category === "post"} onClick={() => {
+						setCategory("post");
 					}}>Backscans</Tab>
-					<Tab isActive={category === 'cra'} onClick={() => {
-						setCategory('cra');
+					<Tab isActive={category === "cra"} onClick={() => {
+						setCategory("cra");
 					}}>Cranium</Tab>
 				</Tabs>
 

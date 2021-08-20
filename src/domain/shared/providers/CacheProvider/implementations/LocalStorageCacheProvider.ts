@@ -1,5 +1,5 @@
-import { CACHE_CONFIG } from '../../../../config/cache';
-import { ICacheProvider } from '../models/ICacheProvider';
+import { CACHE_CONFIG } from "../../../../config/cache";
+import { ICacheProvider } from "../models/ICacheProvider";
 
 export class LocalStorageCacheProvider implements ICacheProvider {
 	private prefix: string;

@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { fadeIn } from '../animations';
+import styled from "styled-components";
+import { fadeIn } from "../animations";
 
 const Container = styled.main`
 
@@ -56,7 +56,9 @@ const Container = styled.main`
 				display: block;
 				color: ${({ theme }) => theme.colors.white};
 				text-align: center;
-				text-decoration: underline;	
+				&:first-of-type {
+					text-decoration: underline;	
+				}
 			}
 		}
 	}

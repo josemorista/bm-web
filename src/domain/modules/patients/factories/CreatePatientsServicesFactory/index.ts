@@ -1,11 +1,11 @@
-import { CreatePatientService } from '../../services/CreatePatientService';
-import { GetPatientsByUserService } from '../../services/GetPatientsByUserService';
-import { RegexFormValidationProvider } from '../../../../shared/providers/FormValidationProvider/implementations/RegexFormValidationProvider';
-import { AxiosHttpClientProvider } from '../../../../shared/providers/HttpClientProvider/implementations/AxiosHttpClientProvider';
-import { IHttpClientProvider } from '../../../../shared/providers/HttpClientProvider/models/IHttpClientProvider';
-import { UpdatePatientService } from '../../services/UpdatePatientService';
-import { GetPatientByIdService } from '../../services/GetPatientByIdService';
-import { DeletePatientService } from '../../services/DeletePatientService';
+import { CreatePatientService } from "../../services/CreatePatientService";
+import { GetPatientsByUserService } from "../../services/GetPatientsByUserService";
+import { RegexFormValidationProvider } from "../../../../shared/providers/FormValidationProvider/implementations/RegexFormValidationProvider";
+import { AxiosHttpClientProvider } from "../../../../shared/providers/HttpClientProvider/implementations/AxiosHttpClientProvider";
+import { IHttpClientProvider } from "../../../../shared/providers/HttpClientProvider/models/IHttpClientProvider";
+import { UpdatePatientService } from "../../services/UpdatePatientService";
+import { GetPatientByIdService } from "../../services/GetPatientByIdService";
+import { DeletePatientService } from "../../services/DeletePatientService";
 
 class CreatePatientsServicesFactory {
 

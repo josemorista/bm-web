@@ -1,9 +1,9 @@
-import { IFormValidationProvider } from '../models/IFormValidationProvider';
+import { IFormValidationProvider } from "../models/IFormValidationProvider";
 
 export class RegexFormValidationProvider implements IFormValidationProvider {
 
 	hasLength(data: string, length: number): boolean {
-		return new RegExp(`.{${length},}`, 'ig').test(data);
+		return new RegExp(`.{${length},}`, "ig").test(data);
 	}
 
 	isEmail(data: string): boolean {
@@ -19,7 +19,7 @@ export class RegexFormValidationProvider implements IFormValidationProvider {
 	}
 
 	verifyFileType(data: string, extensions: Array<string>): boolean {
-		return (new RegExp(`\\w+.(${extensions.join('|')})`)).test(data);
+		return (new RegExp(`\\w+.(${extensions.join("|")})`)).test(data);
 	}
 
 }
