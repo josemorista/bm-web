@@ -8,7 +8,7 @@ import { ROUTES } from "../../consts";
 import { UserServicesFactory } from "../../domain/modules/users/factories/UserServicesFactory";
 import { withAuth } from "../../hocs";
 import { useToastMessage } from "../../hooks/useToastMessage";
-import { ForgotPatientStyles } from "../../styles/pages/forgotPassword";
+import { ForgotPatientStyles } from "../../styles/pages/forgot-password";
 
 const forgotPasswordService = UserServicesFactory.createForgotPasswordService();
 

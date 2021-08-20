@@ -47,6 +47,7 @@ const Container = styled.main`
 			}
 
 			> h1 {
+				font-size: 3.4rem;
 				margin-bottom: 5rem;
 			}
 
