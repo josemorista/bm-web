@@ -56,9 +56,7 @@ const Container = styled.main`
 				display: block;
 				color: ${({ theme }) => theme.colors.white};
 				text-align: center;
-				&:first-of-type {
-					text-decoration: underline;	
-				}
+				text-decoration: underline;	
 			}
 		}
 	}
