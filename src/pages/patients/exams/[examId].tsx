@@ -155,7 +155,7 @@ function Exam() {
 	};
 
 	const downloadInnerHtml = (filename: string, mimeType?: string) => {
-		const elHtml = reportRef.current?.innerHTML.replace(/(<\/p>)|(<br\/>)/g, "\n").replace(/<\/?(.+?)>/g, "");
+		const elHtml = reportRef.current?.innerHTML.replace(/(<\/p>)|(<br\/>)|(<\/h[12]>)/g, "\n").replace(/<\/?(.+?)>/g, "");
 		if (elHtml) {
 			const link = document.createElement("a");
 			mimeType = mimeType || "text/plain";
@@ -261,12 +261,17 @@ function Exam() {
 				Report
 			</h2>
 			<section className={`report ${(segmentedExam?.affectedArea ?? 0) > 0 ? "negative" : ""}`} ref={reportRef}>
-				<p>Total affected area: <b>{segmentedExam?.affectedArea ?? "-"}</b> mm²</p>
-				<p>Total classified area: {segmentedExam?.classifiedArea ?? "-"} mm²</p>
-				<p>Affected area ratio: <b>{affectedAreaRatio}</b></p>
+				<h1>{exam?.patient?.name} - {exam?.patient?.dicomPatientId}</h1>
+				<h2 hidden>RESULTS:</h2>
+				<p hidden>Whole-body images in the anterior and posterior projections obtained 3 hours after intravenous administration of the radiotracer
+					show focal areas of increased radiotracer fixation:</p>
 				<p hidden>Result image: {exam?.resultImageUrl}</p>
 				<p hidden>Edge image: {exam?.edgedResultImageUrl}</p>
 				<p hidden>Overlay image: {exam?.overlayImageUrl}</p>
+				<h2>SUMMARY:</h2>
+				<p>Affected area ratio: <b>{affectedAreaRatio}</b></p>
+				<p>Total affected area: <b>{segmentedExam?.affectedArea ?? "-"}</b> mm²</p>
+				<p>Total classified area: {segmentedExam?.classifiedArea ?? "-"} mm²</p>
 			</section>
 			<div className="exportReportContainer">
 				<Button ariaLabel="Download report as text file" variant='primary' onClick={() => downloadInnerHtml(exam?.id || "report.txt")}>Export as txt</Button>

@@ -42,6 +42,11 @@ const Container = styled.div`
 						color: ${({ theme }) => theme.colors.red300};
 					}
 				}
+
+				> h1,h2 {
+					color: ${({ theme }) => theme.colors.blue500};
+					margin: 1rem 0;
+				}
 				
 				> p {
 					color: ${({ theme }) => theme.colors.white};
@@ -155,7 +160,6 @@ const Container = styled.div`
 	.exportReportContainer {
 				
 		margin: 1rem 0;
-
 		display: flex;
 		justify-content: flex-end;
 
