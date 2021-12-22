@@ -263,7 +263,7 @@ function Exam() {
 			<section className={`report ${(segmentedExam?.affectedArea ?? 0) > 0 ? "negative" : ""}`} ref={reportRef}>
 				<h1>{exam?.patient?.name} - {exam?.patient?.dicomPatientId}</h1>
 				<h2 hidden>RESULTS:</h2>
-				<p hidden>Whole-body images in the anterior and posterior projections obtained 3 hours after intravenous administration of the radiotracer
+				<p hidden>Whole-body images in the anterior and posterior projections obtained after intravenous administration of the radiotracer
 					show focal areas of increased radiotracer fixation:</p>
 				<p hidden>Result image: {exam?.resultImageUrl}</p>
 				<p hidden>Edge image: {exam?.edgedResultImageUrl}</p>

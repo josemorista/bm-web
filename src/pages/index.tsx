@@ -47,9 +47,9 @@ function Home() {
 						<Link href={ROUTES.REGISTER}>
 							<a>Does not have an account? SignUp</a>
 						</Link>
-						<Link href={ROUTES.FORGOT_PASSWORD}>
+						{/*<Link href={ROUTES.FORGOT_PASSWORD}>
 							<a>Forgot your password?</a>
-						</Link>
+	</Link>*/}
 						<Button ariaLabel="Login" type='submit'>SignIn</Button>
 					</form>
 				</section>
