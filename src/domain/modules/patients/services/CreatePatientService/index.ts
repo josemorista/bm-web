@@ -19,17 +19,8 @@ export class CreatePatientService {
 			throw new FormValidationError("Field name is required", "name");
 		}
 		let formattedDate = birthDate;
-		if (typeof formattedDate == "string") {
-			formattedDate = formattedDate.replace(/\//g, "-");
-			if (!this.formValidationProvider.isValidDate(formattedDate)) {
-				throw new FormValidationError("Invalid date format", "birthDate");
-			}
-			const matches = /(?<month>\d+)-(?<day>\d+)-(?<year>\d+)/.exec(formattedDate);
-
-			if (matches) {
-				const { groups } = matches;
-				groups && (formattedDate = new Date(Number(groups.year), (Number(groups.month) - 1), Number(groups.day)));
-			}
+		if (formattedDate && typeof formattedDate === "string") {
+			formattedDate = new Date(birthDate || "");
 		}
 
 		if (formattedDate instanceof Date && Date.now() < formattedDate.getTime()) {

@@ -86,15 +86,15 @@ export const NewExamModal = forwardRef<IINewExamModalHandler, INewExamModalProps
 					<option value="ant">Frontscan</option>
 					<option value="cra">Cranium</option>
 				</Select>
-				<Input  {...register("date")} type='text' placeholder="Exam date" />
+				<Input  {...register("date")} type='date' placeholder="Exam date" />
 				<div {...getRootProps()} className="dropzoneContainer">
 					<input {...getInputProps()} />
 					{!dcmFile ? <p>Drop the file here ...</p> : <p>{dcmFile.name}</p>}
 				</div>
 				<section className="submitButtonContainer">
-					<Button ariaLabel="Submit new exam" type="submit" variant="primary">
-						New
-					</Button>
+					{!!dcmFile && <Button ariaLabel="Submit new exam" type="submit" variant="primary">
+						Add exam
+					</Button>}
 				</section>
 			</form>
 		</PatientStyles.NewExamModal>
