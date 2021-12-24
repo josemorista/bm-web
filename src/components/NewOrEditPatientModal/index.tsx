@@ -39,7 +39,6 @@ export const NewOrEditPatientModal = forwardRef<IINewOrEditPatientModalHandler, 
 
 	const onSubmit = useCallback(async (data) => {
 		try {
-
 			if (!data.id) {
 				await createPatientService.execute({
 					...data,
@@ -102,7 +101,7 @@ export const NewOrEditPatientModal = forwardRef<IINewOrEditPatientModalHandler, 
 			<form onSubmit={handleSubmit(onSubmit)}>
 
 				<Input  {...register("name")} placeholder="Patient name" />
-				<Input  {...register("birthDate")} type='text' placeholder="Birth date" />
+				<Input  {...register("birthDate")} type='date' placeholder="Birth date" />
 
 				<Select {...register("gender")} defaultValue="M" placeholder="gender">
 					<option value="M">Male</option>

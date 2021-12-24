@@ -39,15 +39,7 @@ export class CreateExamService {
 		let formattedDate = date;
 
 		if (typeof formattedDate == "string") {
-			formattedDate = formattedDate.replace(/\//g, "-");
-			if (!this.formValidationProvider.isValidDate(formattedDate)) {
-				throw new FormValidationError("Invalid date format", "date");
-			}
-			const matches = /(\d+)-(\d+)-(\d+)/.exec(formattedDate);
-
-			if (matches) {
-				formattedDate = new Date(Number(matches[3]), (Number(matches[2]) - 1), Number(matches[1]));
-			}
+			formattedDate = new Date(date);
 		}
 
 		if (formattedDate instanceof Date && Date.now() < formattedDate.getTime()) {
