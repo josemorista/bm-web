@@ -8,6 +8,8 @@ export interface IExam {
 
 	date: Date | string;
 
+	radioTracerApplicationHours: number;
+
 	patientId: string;
 	patient?: IPatient;
 

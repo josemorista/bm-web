@@ -100,15 +100,15 @@ export const NewOrEditPatientModal = forwardRef<IINewOrEditPatientModalHandler, 
 			</h1>
 			<form onSubmit={handleSubmit(onSubmit)}>
 
-				<Input  {...register("name")} placeholder="Patient name" />
-				<Input  {...register("birthDate")} type='date' placeholder="Birth date" />
+				<Input  {...register("name")} placeholder="Patient name (Ex: Jhon Doe)" />
+				<Input  {...register("birthDate")} type='date' placeholder="Birth date (Ex: 12-16-2021)" />
 
 				<Select {...register("gender")} defaultValue="M" placeholder="gender">
 					<option value="M">Male</option>
 					<option value="F">Female</option>
 				</Select>
 
-				<Textarea {...register("description")} placeholder="Description"></Textarea>
+				<Textarea {...register("description")} placeholder="Description (Free informative text)"></Textarea>
 
 				<section className="submitButtonContainer">
 					<Button ariaLabel="Submit or edit new patient" type="submit" variant="primary">
