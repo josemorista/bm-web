@@ -80,12 +80,13 @@ export const NewExamModal = forwardRef<IINewExamModalHandler, INewExamModalProps
 				New Exam
 			</h1>
 			<form onSubmit={handleSubmit(onSubmit)}>
-				<Input  {...register("label")} placeholder="Exam label" />
+				<Input  {...register("label")} placeholder="Exam label (Unifier identification for search purposes)" />
 				<Select {...register("category")} placeholder="Category">
-					<option value="post">Backscan</option>
 					<option value="ant">Frontscan</option>
+					<option value="post">Backscan</option>
 					<option value="cra">Cranium</option>
 				</Select>
+				<Input {...register("radioTracerApplicationHours")} type="number" placeholder="Radio tracer application hours" />
 				<Input  {...register("date")} type='date' placeholder="Exam date" />
 				<div {...getRootProps()} className="dropzoneContainer">
 					<input {...getInputProps()} />

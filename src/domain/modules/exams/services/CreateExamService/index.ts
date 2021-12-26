@@ -11,6 +11,7 @@ interface ICreateExamServiceDTO {
 	dcm: File;
 	label: string;
 	date: string | Date;
+	radioTracerApplicationHours: number;
 	authorizeToken: string;
 }
 
@@ -21,7 +22,7 @@ export class CreateExamService {
 		private formValidationProvider: IFormValidationProvider
 	) { }
 
-	async execute({ patientId, category, dcm, label, date, authorizeToken }: ICreateExamServiceDTO): Promise<IExam> {
+	async execute({ patientId, category, dcm, label, date, authorizeToken, radioTracerApplicationHours }: ICreateExamServiceDTO): Promise<IExam> {
 
 		if (!this.formValidationProvider.verifyFileType(dcm.name, ["dcm"])) {
 			throw new FormValidationError("Invalid file type", "label");
@@ -34,7 +35,6 @@ export class CreateExamService {
 		if (!this.formValidationProvider.hasLength(label, 1)) {
 			throw new FormValidationError("Label is required", "label");
 		}
-
 
 		let formattedDate = date;
 
@@ -51,6 +51,7 @@ export class CreateExamService {
 		body.append("category", category);
 		body.append("patientId", patientId);
 		body.append("label", label);
+		body.append("radioTracerApplicationHours", String(radioTracerApplicationHours));
 		body.append("date", typeof formattedDate === "string" ? formattedDate : formattedDate.toISOString());
 		body.append("dcm", dcm);
 

@@ -12,6 +12,7 @@ import { CreateExamsServicesFactory } from "../../../domain/modules/exams/factor
 import { withAuth } from "../../../hocs";
 import { useAuthentication } from "../../../hooks/useAuthentication";
 import { ExamStyles } from "../../../styles/pages/patients/exams/examId";
+import { formatPercent } from "../../../utils/formatPercent";
 
 type IVisualizationOptions = "ore" | "oro" | "oeo";
 
@@ -263,15 +264,15 @@ function Exam() {
 			<section className={`report ${(segmentedExam?.affectedArea ?? 0) > 0 ? "negative" : ""}`} ref={reportRef}>
 				<h1>{exam?.patient?.name} - {exam?.patient?.dicomPatientId}</h1>
 				<h2 hidden>RESULTS:</h2>
-				<p hidden>Whole-body images in the anterior and posterior projections obtained after intravenous administration of the radiotracer
+				<p>Whole-body images in the anterior and posterior projections obtained after intravenous administration of the radiotracer after {exam?.radioTracerApplicationHours} hours
 					show focal areas of increased radiotracer fixation:</p>
-				<p hidden>Result image: {exam?.resultImageUrl}</p>
-				<p hidden>Edge image: {exam?.edgedResultImageUrl}</p>
-				<p hidden>Overlay image: {exam?.overlayImageUrl}</p>
+				<p>Result image: <a target="_blank" href={exam?.resultImageUrl || ""} rel="noreferrer">{exam?.resultImageUrl}</a></p>
+				<p>Edge image: <a target="_blank" href={exam?.edgedResultImageUrl || ""} rel="noreferrer">{exam?.edgedResultImageUrl}</a></p>
+				<p>Overlay image: <a target="_blank" href={exam?.overlayImageUrl || ""} rel="noreferrer">{exam?.overlayImageUrl}</a></p>
 				<h2>SUMMARY:</h2>
-				<p>Affected area ratio: <b>{affectedAreaRatio}</b></p>
-				<p>Total affected area: <b>{segmentedExam?.affectedArea ?? "-"}</b> mm²</p>
-				<p>Total classified area: {segmentedExam?.classifiedArea ?? "-"} mm²</p>
+				<p>Affected area ratio: <b>{formatPercent(affectedAreaRatio)}%</b></p>
+				<p>Total affected area: <b>{segmentedExam?.affectedArea.toFixed(2) ?? "-"}</b> mm²</p>
+				<p>Total classified area: {segmentedExam?.classifiedArea.toFixed(2) ?? "-"} mm²</p>
 			</section>
 			<div className="exportReportContainer">
 				<Button ariaLabel="Download report as text file" variant='primary' onClick={() => downloadInnerHtml(exam?.id || "report.txt")}>Export as txt</Button>
