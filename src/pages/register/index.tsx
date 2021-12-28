@@ -12,6 +12,7 @@ import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 import { withAuth } from "../../hocs";
 import { UserServicesFactory } from "../../domain/modules/users/factories/UserServicesFactory";
+import { useTranslation } from "../../hooks/useTranslation";
 
 const createUserService = UserServicesFactory.createCreateUserService();
 
@@ -20,6 +21,7 @@ function Register() {
 	const router = useRouter();
 	const { setToastMessage } = useToastMessage();
 	const { register, handleSubmit } = useForm();
+	const { t } = useTranslation();
 
 	const onSubmit = useCallback(async (data) => {
 		try {
@@ -52,15 +54,15 @@ function Register() {
 					</header>
 					<form onSubmit={handleSubmit(onSubmit)}>
 						<Input {...register("email")} placeholder="Email" type="email" />
-						<Input {...register("password")} placeholder="Password" type="password" />
-						<Input {...register("firstName")} placeholder="Firstname" type="text" />
-						<Input {...register("lastName")} placeholder="Lastname" type="text" />
-						<Input {...register("relatedInstitution")} placeholder="Institution" type="text" />
-						<Input {...register("job")} placeholder="Job" />
+						<Input {...register("password")} placeholder={t("Password")} type="password" />
+						<Input {...register("firstName")} placeholder={t("Firstname")} type="text" />
+						<Input {...register("lastName")} placeholder={t("Lastname")} type="text" />
+						<Input {...register("relatedInstitution")} placeholder={t("Institution")} type="text" />
+						<Input {...register("job")} placeholder={t("Job")} />
 						<Link href={ROUTES.HOME}>
-							<a>Already have an account? SignIn</a>
+							<a>{t("Already have an account? SignIn")}</a>
 						</Link>
-						<Button ariaLabel="Submit sign up form" type='submit'>SignUp</Button>
+						<Button ariaLabel="Submit sign up form" type='submit'>{t("SignUp")}</Button>
 					</form>
 				</section>
 			</RegisterStyles.Container>

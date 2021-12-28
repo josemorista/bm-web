@@ -5,6 +5,7 @@ import { GlobalStyles } from "../styles/GlobalStyles";
 import { ToastMessageProvider } from "../hooks/useToastMessage";
 import { AuthenticationProvider } from "../hooks/useAuthentication";
 import { QueryClientProvider, QueryClient } from "react-query";
+import { TranslationContextProvider } from "../hooks/useTranslation";
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -17,14 +18,16 @@ const queryClient = new QueryClient({
 
 function MyApp({ Component, pageProps }: { Component: React.ElementType, pageProps: unknown }) {
 	return <QueryClientProvider client={queryClient}>
-		<ThemeProvider theme={theme}>
-			<GlobalStyles />
-			<ToastMessageProvider>
-				<AuthenticationProvider>
-					<Component {...pageProps} />
-				</AuthenticationProvider>
-			</ToastMessageProvider>
-		</ThemeProvider>
+		<TranslationContextProvider>
+			<ThemeProvider theme={theme}>
+				<GlobalStyles />
+				<ToastMessageProvider>
+					<AuthenticationProvider>
+						<Component {...pageProps} />
+					</AuthenticationProvider>
+				</ToastMessageProvider>
+			</ThemeProvider>
+		</TranslationContextProvider>
 	</QueryClientProvider>;
 }
 

@@ -13,6 +13,7 @@ import { useAuthentication } from "../../hooks/useAuthentication";
 import { DeletePatientModal, IDeletePatientModalHandle } from "../../components/DeletePatientModal";
 import { IINewOrEditPatientModalHandler, NewOrEditPatientModal } from "../../components/NewOrEditPatientModal";
 import { MyPatientsStyles } from "../../styles/pages/patients";
+import { useTranslation } from "../../hooks/useTranslation";
 
 // Services
 const getPatientsFromUserService = CreatePatientsServicesFactory.createGetPatientsFromUserService();
@@ -20,6 +21,7 @@ const getPatientsFromUserService = CreatePatientsServicesFactory.createGetPatien
 function MyPatients() {
 	const [searchFilter, setSearchFilter] = useState("");
 	const { token } = useAuthentication();
+	const { t } = useTranslation();
 
 	const { data: patients, refetch: refetchPatients } = useQuery("MyPatients-patients", async () => {
 		return (await getPatientsFromUserService.execute({
@@ -59,7 +61,7 @@ function MyPatients() {
 				My patients
 			</h1>
 			<section>
-				<Input type="text" placeholder="Search patient by name..." onChange={e => {
+				<Input type="text" placeholder={t("Search patient by name") + "..."} onChange={e => {
 					if (debouncePatientSearch.current) {
 						clearTimeout(debouncePatientSearch.current);
 					}
@@ -111,7 +113,7 @@ function MyPatients() {
 					newOrEditPatientModalRef.current?.handleOpenModal();
 				}}>
 					<FiPlus />
-					<span>New Patient</span>
+					<span>{t("New Patient")}</span>
 				</Button>
 			</div>
 		</main>

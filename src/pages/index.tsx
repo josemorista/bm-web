@@ -11,12 +11,14 @@ import { useForm } from "react-hook-form";
 import { useCallback } from "react";
 import { useAuthentication } from "../hooks/useAuthentication";
 import { withAuth } from "../hocs";
+import { useTranslation } from "../hooks/useTranslation";
 
 function Home() {
 
 	const { signIn } = useAuthentication();
 	const { setToastMessage } = useToastMessage();
 	const { register, handleSubmit } = useForm();
+	const { t } = useTranslation();
 
 	const onSubmit = useCallback(async (data) => {
 		try {
@@ -43,14 +45,14 @@ function Home() {
 					</header>
 					<form onSubmit={handleSubmit(onSubmit)}>
 						<Input {...register("email")} autoComplete="off" type="email" placeholder="Email" />
-						<Input {...register("password")} autoComplete="off" type="password" placeholder="Password" />
+						<Input {...register("password")} autoComplete="off" type="password" placeholder={t("Password")} />
 						<Link href={ROUTES.REGISTER}>
-							<a>Does not have an account? SignUp</a>
+							<a>{t("Does not have an account? SignUp")}</a>
 						</Link>
 						{/*<Link href={ROUTES.FORGOT_PASSWORD}>
 							<a>Forgot your password?</a>
 	</Link>*/}
-						<Button ariaLabel="Login" type='submit'>SignIn</Button>
+						<Button ariaLabel="Login" type='submit'>{t("SignIn")}</Button>
 					</form>
 				</section>
 				<section className="bg"></section>
