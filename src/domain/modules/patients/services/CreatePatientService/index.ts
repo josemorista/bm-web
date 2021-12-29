@@ -16,7 +16,7 @@ export class CreatePatientService {
 
 	async execute({ authorizeToken, name, birthDate, ...rest }: ICreatePatientServiceDTO): Promise<void> {
 		if (!this.formValidationProvider.hasLength(name, 1)) {
-			throw new FormValidationError("Field name is required", "name");
+			throw new FormValidationError("Missing required field", "name");
 		}
 		let formattedDate = birthDate;
 		if (formattedDate && typeof formattedDate === "string") {

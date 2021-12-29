@@ -16,6 +16,7 @@ import { CreateExamsServicesFactory } from "../../domain/modules/exams/factories
 import { IExam } from "../../domain/modules/exams/entities/IExam";
 import { formatDate } from "../../utils/formatDate";
 import { withAuth } from "../../hocs";
+import { useTranslation } from "../../hooks/useTranslation";
 
 // services 
 const getPatientByIdService = CreatePatientsServicesFactory.createGetPatientByIdService();
@@ -31,6 +32,7 @@ function Patient() {
 	const newExamModalRef = useRef<IINewExamModalHandler>(null);
 	const router = useRouter();
 	const { patientId } = router.query;
+	const { t } = useTranslation();
 
 	const [patient, setPatient] = useState<IPatient | undefined>(undefined);
 	const { token } = useAuthentication();
@@ -96,7 +98,7 @@ function Patient() {
 			<h1>{patient.name}</h1>
 			<h5>dicomId: {patient.dicomPatientId || ""}</h5>
 			<p>
-				Age: {patientAge ?? "-"} years old
+				{t("Age: $1 years old", [patientAge ? String(patientAge) : "-"])}
 			</p>
 			<p>
 				{patient.description}
@@ -106,13 +108,13 @@ function Patient() {
 				<Tabs>
 					<Tab isActive={category === "ant"} onClick={() => {
 						setCategory("ant");
-					}}>Frontscans</Tab>
+					}}>{t("Frontscan")}</Tab>
 					<Tab isActive={category === "post"} onClick={() => {
 						setCategory("post");
-					}}>Backscans</Tab>
+					}}>{t("Backscan")}</Tab>
 					<Tab isActive={category === "cra"} onClick={() => {
 						setCategory("cra");
-					}}>Cranium</Tab>
+					}}>{t("Cranium")}</Tab>
 				</Tabs>
 
 				<ul className="examsList">
@@ -126,9 +128,9 @@ function Patient() {
 
 							</p>
 							<p className="examDates">
-								Realizado em: {exam.formattedDate}
+								{t("Realized at: $1", [exam.formattedDate])}
 								<span>
-									Adicionado em: {exam.formattedCreatedAt}
+									{t("Added at: $1", [exam.formattedCreatedAt])}
 								</span>
 							</p>
 							<p className="detections">
@@ -147,7 +149,7 @@ function Patient() {
 			<section className="newExamButton">
 				<Button ariaLabel="Open create new exam" variant="primary" onClick={() => {
 					newExamModalRef.current?.handleOpenModal();
-				}}>New exam</Button>
+				}}>{t("New exam")}</Button>
 			</section>
 		</main>
 	</PatientStyles.Container>;

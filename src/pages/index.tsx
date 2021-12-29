@@ -25,11 +25,11 @@ function Home() {
 			await signIn(data);
 		} catch (error) {
 			setToastMessage({
-				message: error.message,
+				message: t(error.message),
 				type: "error"
 			});
 		}
-	}, [setToastMessage, signIn]);
+	}, [setToastMessage, signIn, t]);
 
 	return (
 		<div>

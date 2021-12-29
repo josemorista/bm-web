@@ -27,17 +27,17 @@ function Register() {
 		try {
 			await createUserService.execute(data);
 			setToastMessage({
-				message: "User created",
+				message: t("User created"),
 				type: "success"
 			});
 			router.push(ROUTES.HOME);
 		} catch (error) {
 			setToastMessage({
-				message: error.message,
+				message: t(error.message),
 				type: "error"
 			});
 		}
-	}, [setToastMessage, router]);
+	}, [setToastMessage, router, t]);
 
 	return (
 		<div>

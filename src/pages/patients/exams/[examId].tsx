@@ -13,6 +13,7 @@ import { withAuth } from "../../../hocs";
 import { useAuthentication } from "../../../hooks/useAuthentication";
 import { ExamStyles } from "../../../styles/pages/patients/exams/examId";
 import { formatPercent } from "../../../utils/formatPercent";
+import { useTranslation } from "../../../hooks/useTranslation";
 
 type IVisualizationOptions = "ore" | "oro" | "oeo";
 
@@ -35,6 +36,7 @@ function Exam() {
 	const { token } = useAuthentication();
 
 	const router = useRouter();
+	const { t } = useTranslation();
 	const { examId } = router.query;
 
 	const reportRef = useRef<HTMLDivElement>(null);
@@ -177,16 +179,16 @@ function Exam() {
 		<main>
 			<header>
 				<h1>
-					Exam: Posterior01
+					{t("Exam")}: {exam?.label}
 				</h1>
 				<Button ariaLabel="Go back button" variant="secondary" onClick={() => {
 					Router.back();
 				}}>
-					Back
+					{t("Back")}
 				</Button>
 			</header>
 			<h2>
-				Segmentation & Classification
+				{t("Segmentation & Classification")}
 			</h2>
 			<section className="segmentationAndClassification">
 				<ul>
@@ -203,9 +205,9 @@ function Exam() {
 
 				{!loading ? <section className="segmentationOptions">
 					<section className="threshold">
-						<h6>Classifier probability threshold</h6>
+						<h6>{t("Classifier probability threshold")}</h6>
 						<legend>
-							Lower probability allows more detections but with less precision
+							{t("Lower probability allows...")}
 						</legend>
 						<div className="inputRangeContainer">
 							<span>0</span>
@@ -224,7 +226,7 @@ function Exam() {
 						</div>
 					</section>
 					<section className="contrast">
-						<h6>Visualization contrast</h6>
+						<h6>{t("Visualization contrast")}</h6>
 						<div>
 							<span className={`whiteContrast ${pixelDataColorScheme === "wInB" ? "selected" : ""}`} onClick={() => {
 								if (pixelDataColorScheme === "bInW") {
@@ -241,41 +243,41 @@ function Exam() {
 						</div>
 					</section>
 					<section>
-						<h6>Visualizations:</h6>
+						<h6>{t("Visualizations")}:</h6>
 						<ul>
 							<li>
 								<Checkbox checked={visualization === "oro"} onChange={() => {
 									handleChangeVisualization("oro");
-								}} label="Original + segmented + overlay" />
+								}} label={t("Original + segmented + overlay")} />
 								<Checkbox checked={visualization === "ore"} onChange={() => {
 									handleChangeVisualization("ore");
-								}} label="Original + segmented + edged" />
+								}} label={t("Original + segmented + edged")} />
 								<Checkbox checked={visualization === "oeo"} onChange={() => {
 									handleChangeVisualization("oeo");
-								}} label="Original + edged + overlay" />
+								}} label={t("Original + edged + overlay")} />
 							</li>
 						</ul>
 					</section>
-				</section> : <div className="loading"><img src="/assets/imgs/gif/loading.gif" alt="loading" />Loading...</div>}
+				</section> : <div className="loading"><img src="/assets/imgs/gif/loading.gif" alt="loading" />{t("Loading")}...</div>}
 			</section>
 			<h2>
-				Report
+				{t("Report")}
 			</h2>
 			<section className={`report ${(segmentedExam?.affectedArea ?? 0) > 0 ? "negative" : ""}`} ref={reportRef}>
 				<h1>{exam?.patient?.name} - {exam?.patient?.dicomPatientId}</h1>
-				<h2 hidden>RESULTS:</h2>
-				<p>Whole-body images in the anterior and posterior projections obtained after intravenous administration of the radiotracer after {exam?.radioTracerApplicationHours} hours
-					show focal areas of increased radiotracer fixation:</p>
-				<p>Result image: <a target="_blank" href={exam?.resultImageUrl || ""} rel="noreferrer">{exam?.resultImageUrl}</a></p>
-				<p>Edge image: <a target="_blank" href={exam?.edgedResultImageUrl || ""} rel="noreferrer">{exam?.edgedResultImageUrl}</a></p>
-				<p>Overlay image: <a target="_blank" href={exam?.overlayImageUrl || ""} rel="noreferrer">{exam?.overlayImageUrl}</a></p>
-				<h2>SUMMARY:</h2>
-				<p>Affected area ratio: <b>{formatPercent(affectedAreaRatio)}%</b></p>
-				<p>Total affected area: <b>{segmentedExam?.affectedArea.toFixed(2) ?? "-"}</b> mm²</p>
-				<p>Total classified area: {segmentedExam?.classifiedArea.toFixed(2) ?? "-"} mm²</p>
+				<h2 hidden>{t("RESULTS")}</h2>
+				<p>{t("Whole-body images in...", [String(exam?.radioTracerApplicationHours)])}</p>
+				<p>{t("Result image")}: <a target="_blank" href={exam?.resultImageUrl || ""} rel="noreferrer">{exam?.resultImageUrl}</a></p>
+				<p>{t("Edge image")}: <a target="_blank" href={exam?.edgedResultImageUrl || ""} rel="noreferrer">{exam?.edgedResultImageUrl}</a></p>
+				<p>{t("Overlay image")}: <a target="_blank" href={exam?.overlayImageUrl || ""} rel="noreferrer">{exam?.overlayImageUrl}</a></p>
+				<h2>{t("SUMMARY")}:</h2>
+				<p>{t("Total classified area")}: {segmentedExam?.classifiedArea.toFixed(2) ?? "-"} mm²</p>
+				<p>{t("Total affected area")}: <b>{segmentedExam?.affectedArea.toFixed(2) ?? "-"}</b> mm²</p>
+				<p>{t("Affected area ratio")}: <b>{formatPercent(affectedAreaRatio)}%</b></p>
 			</section>
 			<div className="exportReportContainer">
-				<Button ariaLabel="Download report as text file" variant='primary' onClick={() => downloadInnerHtml(exam?.id || "report.txt")}>Export as txt</Button>
+				<Button ariaLabel="Download report as text file" variant='primary' onClick={() => downloadInnerHtml(exam?.id || "report.txt")}>
+					{t("Export as txt")}</Button>
 			</div>
 		</main>
 	</ExamStyles.Container >;

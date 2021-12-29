@@ -9,10 +9,16 @@ const langs: Record<Language, Record<string, string>> = {
 	"br": br
 };
 
-const translate = (key: string, lang: Language): string => langs[lang][key] || key;
+const translate = (key: string, lang: Language, args: Array<string>): string => {
+	let text = langs[lang][key] || key;
+	for (const arg of args) {
+		text = text.replace(/\$\d/, arg);
+	}
+	return text;
+};
 
 interface ITranslationContext {
-	t(key: string): string;
+	t(key: string, args?: Array<string>): string;
 	setLanguage(language: Language): void;
 	language: Language;
 }
@@ -21,7 +27,7 @@ const translationContext = createContext<ITranslationContext>({} as ITranslation
 
 export const TranslationContextProvider: FC = ({ children }) => {
 	const [language, setLanguage] = useState<Language>("en");
-	const t = useCallback((key: string) => translate(key, language), [language]);
+	const t = useCallback((key: string, args: Array<string> = []) => translate(key, language, args), [language]);
 
 	useEffect(() => {
 		const userLanguage = navigator && navigator.language;

@@ -58,7 +58,7 @@ function MyPatients() {
 
 		<main>
 			<h1>
-				My patients
+				{t("My patients")}
 			</h1>
 			<section>
 				<Input type="text" placeholder={t("Search patient by name") + "..."} onChange={e => {
