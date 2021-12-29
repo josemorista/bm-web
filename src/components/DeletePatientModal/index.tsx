@@ -6,6 +6,7 @@ import { CreatePatientsServicesFactory } from "../../domain/modules/patients/fac
 import { AppError } from "../../domain/shared/errors/AppError";
 import { useAuthentication } from "../../hooks/useAuthentication";
 import { MyPatientsStyles } from "../../styles/pages/patients";
+import { useTranslation } from "../../hooks/useTranslation";
 
 interface IDeletePatientModalProps {
 	onCloseAction?: () => void | Promise<void>;
@@ -20,6 +21,7 @@ const deletePatientService = CreatePatientsServicesFactory.createDeletePatientSe
 export const DeletePatientModal = forwardRef<IDeletePatientModalHandle, IDeletePatientModalProps>(({ onCloseAction }, ref) => {
 
 	const modalRef = useRef<IModalHandle>(null);
+	const { t } = useTranslation();
 	const { token } = useAuthentication();
 	const [patient, setPatient] = useState<IPatient | null>(null);
 
@@ -56,18 +58,18 @@ export const DeletePatientModal = forwardRef<IDeletePatientModalHandle, IDeleteP
 	return <Modal ref={modalRef}>
 		<MyPatientsStyles.DeletePatientModal>
 			<h1>
-				Delete patient
+				{t("Delete patient")}
 			</h1>
 			<h3	>
-				Are you sure you want to delete {patient?.name || ""}?
+				{t("Are you sure you want to delete")} {patient?.name || ""}?
 			</h3>
 			<section className='buttonsContainer'>
 				<Button ariaLabel="Cancel delete patient" onClick={() => {
 					modalRef.current?.closeModal();
-				}}>No</Button>
+				}}>{t("No")}</Button>
 				<Button ariaLabel="Confirm delete patient" onClick={() => {
 					handleDeletePatient();
-				}}>Yes</Button>
+				}}>{t("Yes")}</Button>
 			</section>
 		</MyPatientsStyles.DeletePatientModal>
 	</Modal>;

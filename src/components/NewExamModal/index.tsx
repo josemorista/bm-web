@@ -10,6 +10,7 @@ import { CreateExamsServicesFactory } from "../../domain/modules/exams/factories
 import { AppError } from "../../domain/shared/errors/AppError";
 import { useToastMessage } from "../../hooks/useToastMessage";
 import { useAuthentication } from "../../hooks/useAuthentication";
+import { useTranslation } from "../../hooks/useTranslation";
 
 interface INewExamModalProps {
 	patientId: string;
@@ -27,6 +28,7 @@ export const NewExamModal = forwardRef<IINewExamModalHandler, INewExamModalProps
 
 	const modalRef = useRef<IModalHandle>(null);
 	const { token } = useAuthentication();
+	const { t } = useTranslation();
 	const { register, handleSubmit, reset } = useForm();
 	const { setToastMessage } = useToastMessage();
 	const [dcmFile, setDcmFile] = useState<File | null>(null);
@@ -55,12 +57,12 @@ export const NewExamModal = forwardRef<IINewExamModalHandler, INewExamModalProps
 		} catch (error) {
 			if (error.message) {
 				setToastMessage({
-					message: error.message,
+					message: t(error.message),
 					type: "error"
 				});
 			}
 		}
-	}, [onCloseAction, dcmFile, setToastMessage, patientId, token]);
+	}, [onCloseAction, dcmFile, setToastMessage, patientId, token, t]);
 
 	const handleOpenModal: IINewExamModalHandler["handleOpenModal"] = useCallback(async () => {
 		reset();
@@ -77,24 +79,24 @@ export const NewExamModal = forwardRef<IINewExamModalHandler, INewExamModalProps
 	}}>
 		<PatientStyles.NewExamModal>
 			<h1>
-				New Exam
+				{t("New exam")}
 			</h1>
 			<form onSubmit={handleSubmit(onSubmit)}>
-				<Input  {...register("label")} placeholder="Exam label (Unifier identification for search purposes)" />
-				<Select {...register("category")} placeholder="Category">
-					<option value="ant">Frontscan</option>
-					<option value="post">Backscan</option>
-					<option value="cra">Cranium</option>
+				<Input  {...register("label")} placeholder={t("Exam label (Unifier identification for search purposes)")} />
+				<Select {...register("category")} placeholder={t("Category")}>
+					<option value="ant">{t("Frontscan")}</option>
+					<option value="post">{t("Backscan")}</option>
+					<option value="cra">{t("Cranium")}</option>
 				</Select>
-				<Input {...register("radioTracerApplicationHours")} type="number" placeholder="Radio tracer application hours" />
-				<Input  {...register("date")} type='date' placeholder="Exam date" />
+				<Input {...register("radioTracerApplicationHours")} type="number" placeholder={t("Radio tracer application hours")} />
+				<Input  {...register("date")} type='date' placeholder={t("Exam date")} />
 				<div {...getRootProps()} className="dropzoneContainer">
 					<input {...getInputProps()} />
-					{!dcmFile ? <p>Drop the file here ...</p> : <p>{dcmFile.name}</p>}
+					{!dcmFile ? <p>{t("Drop the file here")}...</p> : <p>{dcmFile.name}</p>}
 				</div>
 				<section className="submitButtonContainer">
 					{!!dcmFile && <Button ariaLabel="Submit new exam" type="submit" variant="primary">
-						Add exam
+						{t("Add exam")}
 					</Button>}
 				</section>
 			</form>

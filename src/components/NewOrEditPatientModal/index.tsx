@@ -11,6 +11,7 @@ import { CreatePatientsServicesFactory } from "../../domain/modules/patients/fac
 import { MyPatientsStyles } from "../../styles/pages/patients";
 import { useAuthentication } from "../../hooks/useAuthentication";
 import { useToastMessage } from "../../hooks/useToastMessage";
+import { useTranslation } from "../../hooks/useTranslation";
 
 interface INewOrEditPatientModalProps {
 	onCloseAction?: () => void | Promise<void>;
@@ -29,6 +30,7 @@ export const NewOrEditPatientModal = forwardRef<IINewOrEditPatientModalHandler, 
 
 	const modalRef = useRef<IModalHandle>(null);
 	const { register, handleSubmit, setValue, reset } = useForm();
+	const { t } = useTranslation();
 	const { token } = useAuthentication();
 	const { setToastMessage } = useToastMessage();
 
@@ -96,23 +98,23 @@ export const NewOrEditPatientModal = forwardRef<IINewOrEditPatientModalHandler, 
 	}}>
 		<MyPatientsStyles.NewOrEditPatientModal>
 			<h1>
-				{modalTexts.title}
+				{t(modalTexts.title)}
 			</h1>
 			<form onSubmit={handleSubmit(onSubmit)}>
 
-				<Input  {...register("name")} placeholder="Patient name (Ex: Jhon Doe)" />
-				<Input  {...register("birthDate")} type='date' placeholder="Birth date (Ex: 12-16-2021)" />
+				<Input  {...register("name")} placeholder={t("Patient name") + "(Ex: Jhon Doe)"} />
+				<Input  {...register("birthDate")} type='date' />
 
-				<Select {...register("gender")} defaultValue="M" placeholder="gender">
-					<option value="M">Male</option>
-					<option value="F">Female</option>
+				<Select {...register("gender")} defaultValue="M" placeholder={t("Gender")}>
+					<option value="M">{t("Male")}</option>
+					<option value="F">{t("Female")}</option>
 				</Select>
 
-				<Textarea {...register("description")} placeholder="Description (Free informative text)"></Textarea>
+				<Textarea {...register("description")} placeholder={t("Description")}></Textarea>
 
 				<section className="submitButtonContainer">
 					<Button ariaLabel="Submit or edit new patient" type="submit" variant="primary">
-						{modalTexts.submit}
+						{t(modalTexts.submit)}
 					</Button>
 				</section>
 			</form>
